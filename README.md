@@ -1,31 +1,126 @@
-# Project
-
-- 💯 **Worth**:
-  - **Proposal**: 5%
-  - **Implementation**: 25%
-- 📅 **Due**:
-  - **Proposal**: November 26, 2023 @ 23:59
-  - **Implementation Demo**: TBD @ your demo appointment time
-- 🚫 **Penalty**: Late submissions lose 10% per day to a maximum of 3 days. Nothing is accepted after 3 days and a grade of 0% will be given.
-
-## 🎯 Objectives
-
-- Combine everything you've learned during this course to create your own video game.
+# Project - Lost Soul
 
 ## ✒️ Description
 
-This is it - the culmination of all the skills and knowledge about game development over this past semester. It's like fighting the [final boss](https://img-9gag-fun.9cache.com/photo/awMrL1D_460s.jpg) at the end of a game. I know you have everything it takes to conquer it! 😉
+In this "rogue-like" platformer, the player is a Lost Soul who routinely clears the cave below a village which puts a roof under his head. The player starts off in the village and can either wander around or drop down
+into the cave system, where they will be met with many dangerous monsters. If the player successfully defeats all of the monsters, the Boss appears. The boss is a much more powerful foe than the typical dungeon crawler and the player
+may not survive the fight. If they do make it out alive, they may return to the village where they can be healed and sent off once more to protect the village.
 
-This project can be done, at most, in pairs. The project scope should scale with the number of people. In other words, I expect a bigger game with more features from pairs than from individuals. I will try to ensure this as best as possible based on your proposal. No, you do not have to work with someone from your own section.
+## 📃 Requirements 
 
-The game itself is largely up to you - I want you to get creative!
+1. The player appears on screen.
+2. The player can move.
+3. The player can swing their sword.
+4. The player has animations.
+5. The player has a valid hitbox.
+6. The player has a set amount of health.
+7. The village appears on screen.
+8. The village tiles are collideable.
+9. The village has a parallax background.
+10. The village has a heal station.
+11. The village's heal station heals the player.
+12. The village has a path to the cave.
+13. The cave appears on screen.
+14. The cave tiles are collideable.
+15. The cave has a parallax background.
+16. The cave has entities.
+17. The cave has platforms.
+18. The cave entities have health.
+19. The cave entities have sprites.
+20. The cave entities can move.
+21. The cave entities can attack.
+22. The cave entities can die.
+23. The cave entities have animations.
+24. The cave boss can spawn.
+25. The cave boss has more health than other cave entities.
+26. The cave boss deals more damage than other cave entities.
+27. The cave boss has unique animations.
+28. The cave boss can die.
+29. The player can return to the village.
+    
+## 🤖 State Diagram
 
-> [!tip]
-> If you're having trouble thinking of ideas, try browsing game assets from [itch.io](https://itch.io/game-assets) and [opengameart.org](https://opengameart.org/). Sometimes finding a cool asset pack helps spark ideas!
->
-> Another strategy is to mash 2 genres together and see if that sparks anything. Maybe you'll make a 2D side-scrolling platformer with puzzle elements? Maybe you'll make an endless runner dungeon-crawler with a physics engine?
->
-> [The sky is the limit](https://en.wikipedia.org/wiki/List_of_video_game_genres)!
+### PlayStates
+
+Below are the play states for the game Lost Soul
+
+![PlayStateDiagram](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/9cf1ef54-f1e8-4da6-ad41-f573cda4bf33)
+
+### PlayerStates
+
+Below are the states for the main character of Lost Soul
+
+![PlayerStateDiagram](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/b6970753-0923-4092-9220-a307f01c89d5)
+
+### EntityStates
+
+Below are the states for the enemy entities in Lost Soul
+
+![EntityStateDiagram](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/d2ac2dec-92e1-4aff-ac10-db19a7fe33e3)
+
+
+## 🗺️ Class Diagram
+
+TBD.... (looks so miserable I don't want to do that right now)
+
+## 🧵 Wireframes
+
+### Title Screen
+
+![titleScreen](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/6fee5f14-7b53-44fb-90f5-2fbafaa70499)
+
+Title screen displays a Play & Credits option.
+
+On "Play" selection, the player stands up and appears in the village (shown below).
+
+On "Credits" selection the credits for Code & Assets will be displayed.
+
+
+### In Village
+
+![inVillage](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/c76c9bf8-370c-40e3-bb87-6d2d57afc38b)
+
+The village is a safe-zone for the player. Music will be playing and the player can wander around without worry of enemies.
+
+There will be a building where the player can go to heal after clearing the cave level.
+
+### In Cave
+
+![caveWithMonsters](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/30224805-be2d-4aab-a4d5-1f44d1817c37)
+
+The player will have to fight off all of the enemies. Once the enemies are all dead, a new enemy will appear, initiating the Boss fight.
+
+### Boss Fight
+
+![bossFight](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/92652800/63594e38-5955-49e8-89ea-a97ddb393973)
+
+The boss is a lot more powerful than a normal enemy, he also has more health. 
+
+## 🎨 Assets
+
+### Music (UNCONFIRMED):
+https://xdeviruchi.itch.io/8-bit-fantasy-adventure-music-pack
+
+https://alkakrab.itch.io/free-12-tracks-pixel-rpg-game-music-pack
+
+### Player:
+https://szadiart.itch.io/2d-soulslike-character
+
+### Enemies:
+https://luizmelo.itch.io/monsters-creatures-fantasy
+
+https://ansimuz.itch.io/gothicvania-patreon-collection
+
+### Boss:
+https://chierit.itch.io/boss-demon-slime
+
+### Map:
+Village: https://brullov.itch.io/oak-woods
+
+Cave: https://szadiart.itch.io/pixel-fantasy-caves
+
+### Buffs/Debuffs (UNCONFIRMED):
+https://quintino-pixels.itch.io/free-pixel-art-skill-icons-pack
 
 ## 📐 Proposal
 
