@@ -125,6 +125,10 @@ https://quintino-pixels.itch.io/free-pixel-art-skill-icons-pack
 ### Game Sounds (UNCONFIRMED):
 https://leohpaz.itch.io/rpg-essentials-sfx-free
 
+### Font:
+https://vrtxrry.itch.io/dungeonfont
+
+
 ## 📐 Proposal
 
 I ask that you go about your design and architecture in a meaningful and purpose-driven way. For this reason, I'm asking you to first write a proposal for your game. This will make you think about the different states, classes, relationships, design patterns, etc. that you will have to adhere to when it comes time for the implementation.
