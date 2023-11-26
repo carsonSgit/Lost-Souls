@@ -1,0 +1,31 @@
+@startuml Pokemon TCG
+
+hide empty description
+skinparam monochrome true
+
+state "TitleScreenState" as TSS
+state "PlayState" as PS
+state "OptionsState" as OS
+state "DeckViewState" as DVS
+state "VictoryState" as VS
+state "GameOverState" as GOS
+state Menu <<choice>>
+state PlayAgain <<choice>>
+
+[*] --> TSS
+
+TSS --> Menu
+Menu --> OS
+Menu --> PS
+Menu --> DVS
+
+PS --> VS
+PS --> GOS
+
+VS --> PlayAgain: Play again?
+GOS --> PlayAgain: Play again?
+
+PlayAgain --> TSS: No
+PlayAgain --> PS: Yes
+
+@enduml

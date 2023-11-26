@@ -1,0 +1,101 @@
+@startuml Pokemon TCG
+
+skinparam monochrome true
+hide empty members
+
+class PlayState {
+    players
+    enter()
+    exit()
+    update()
+    render()
+    checkWinner()
+}
+
+class User {
+    name
+    deck
+}
+
+class AI {
+    name
+    deck
+    processMoves()
+}
+
+class Deck {
+    id
+    name
+    update()
+    render()
+}
+
+class Card {
+    name
+    type
+    update()
+    render()
+}
+
+class PokemonCard {
+    retreatCost
+    name
+    type
+    attacks
+    evolutionStage
+    health
+    getPreviousEvolutionCard()
+    getNextEvolutionCard()
+}
+
+class EnergyCard {
+    type
+}
+
+class TrainerCard {
+    name
+    description
+}
+
+class ItemCard {
+    name
+}
+
+class SupportCard {
+    name
+    description
+}
+
+class StadiumCard {
+    name
+    description
+}
+
+class Ability {
+    id
+    name
+}
+
+class AbilityCost {
+    id
+    name
+}
+
+PlayState -- "1" User
+PlayState -- "1" AI
+User "1" -- "*" Deck
+AI "1" -- "1" Deck
+Deck "1" -- "60" Card
+Card <|-- PokemonCard
+Card <|-- EnergyCard
+Card <|-- TrainerCard
+TrainerCard <|-- ItemCard
+TrainerCard <|-- SupportCard
+TrainerCard <|-- StadiumCard
+ItemCard "1" - "0..*" Ability
+SupportCard "1" -- "0..*" Ability
+StadiumCard "1" -- "1" Ability
+PokemonCard "1" -- "0..*" Ability
+AbilityCost "1" -- "0..*" Ability
+
+@enduml
