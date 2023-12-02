@@ -61,7 +61,7 @@ Below are the states for the enemy entities in Lost Soul
 
 ## 🗺️ Class Diagram
 
-TBD.... (looks so miserable I don't want to do that right now)
+![classDiagram](https://github.com/JAC-CS-Game-Programming-F23/project-carson-noah/assets/98351050/4656d675-2cf0-4b95-ad3b-596ea16ed1d8)
 
 ## 🧵 Wireframes
 
