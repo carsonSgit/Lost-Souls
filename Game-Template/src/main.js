@@ -25,6 +25,7 @@ import PlayState from "./states/PlayState.js";
 import GameOverState from "./states/GameOverState.js";
 import VictoryState from "./states/VictoryState.js";
 import TitleScreenState from "./states/TitleScreenState.js";
+import CreditsState from "./states/CreditsState.js";
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
@@ -41,18 +42,27 @@ const {
 	sounds: soundDefinitions,
 } = await fetch('./src/config.json').then((response) => response.json());
 
+// Fetch the level definitions from their JSON files.
+const villageDefinition = await fetch('../config/village.json').then((response) => response.json());
+const caveDefinition = await fetch('../config/cave.json').then((response) => response.json());
+const bossMapDefinition = await fetch('../config/bossMap.json').then((response) => response.json());
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
 fonts.load(fontDefinitions);
 sounds.load(soundDefinitions);
 
 // Add all the states to the state machine.
+
+// stateMachine.add(GameStateName.TitleScreen, new TitleScreenState(villageDefinition, caveDefinition, bossMapDefinition));
+
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
+stateMachine.add(GameStateName.Credits, new CreditsState());
 stateMachine.add(GameStateName.Play, new PlayState());
 
-stateMachine.change(GameStateName.Play);
+// stateMachine.change(GameStateName.TitleScreen);
+stateMachine.change(GameStateName.Play)
 
 // Add event listeners for player input.
 canvas.addEventListener('keydown', event => {

@@ -59,6 +59,6 @@ export default class Game {
 	 */
 	render() {
 		this.context.clearRect(0, 0, this.width, this.height);
-		this.stateMachine.render();
+		this.stateMachine.render(this.context);
 	}
 }
