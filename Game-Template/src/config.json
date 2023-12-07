@@ -95,6 +95,12 @@
 			"path": "./assets/images/Player/Hurt.png",
 			"width": 256,
 			"height": 128
+		},
+		{
+			"name": "cave_tiles",
+			"path": "./assets/images/Tilesets/cave_tiles.png",
+			"width": 1024,
+			"height": 1024
 		}
 
 	],
