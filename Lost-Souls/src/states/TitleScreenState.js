@@ -1,5 +1,6 @@
 import State from "../../lib/State.js";
 import GameStateName from "../enums/GameStateName.js";
+import Map from "../../lib/Map.js";
 import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,

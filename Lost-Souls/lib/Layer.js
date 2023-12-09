@@ -2,8 +2,8 @@ import Tile from "./Tile.js";
 
 export default class Layer {
     static CAVE_COLLISION = 1;
-    static CAVE_MIDGROUND = 6;
-    static CAVE_BACKGROUND = 3;
+    static CAVE_MIDGROUND = 2;
+    static CAVE_BACKGROUND = 0;
 
     //static VILLAGE_COLLISION = 1;
     //static VILLAGE_MIDGROUND = 4;
@@ -20,6 +20,7 @@ export default class Layer {
     @param {array} sprites
     */
     constructor(layerDefinition, sprites) {
+        console.log(layerDefinition)
         this.tiles = Layer.generateTiles(layerDefinition.data, sprites);
         this.width = layerDefinition.width;
         this.height = layerDefinition.height;
@@ -42,7 +43,8 @@ is added to get us to the correct column in that row.*
 @returns The Tile that lives at (x, y) in the layer.
 */
 getTile(x, y) {
-    return this.tiles[x + y * this.width];}
+    return this.tiles[x + y * this.width];
+}
 
     /**
      

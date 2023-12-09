@@ -1,8 +1,8 @@
 import Colour from "../src/enums/Colour.js";
 import Sprite from "./Sprite.js";
 import Vector from "./Vector.js";
-import Player from "../entities/Player.js";
-import ImageName from "../enums/ImageName.js";
+//import Player from "../entities/Player.js";
+import ImageName from "../src/enums/ImageName.js";
 import Tile from "./Tile.js";
 import Layer from "./Layer.js";
 import {
@@ -11,7 +11,7 @@ import {
 	context,
 	DEBUG,
 	images,
-} from "../globals.js";
+} from "../src/globals.js";
 
 export default class Map {
 	/**
@@ -27,22 +27,21 @@ export default class Map {
 			Tile.SIZE,
 		);
 
-		//this.bottomLayer = new Layer(mapDefinition.layers[Layer.CAVE_BOTTOM], sprites);
-		this.bottomLayer = new Layer(mapDefinition.layers[Layer.CAVE_BACKGROUND], sprites);
+		// this.bottomLayer = new Layer(mapDefinition.layers[Layer.CAVE_BACKGROUND], sprites);
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
-		this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
-		this.player = new Player({ position: new Vector(7, 5) }, this);
+		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
+		//this.player = new Player({ position: new Vector(7, 5) }, this);
 	}
 
 	update(dt) {
-		this.player.update(dt);
+		//this.player.update(dt);
 	}
 
 	render() {
-		this.bottomLayer.render();
+		//this.bottomLayer.render();
 		this.collisionLayer.render();
-		this.player.render();
-		this.midgroundLayer.render();
+		//this.player.render();
+		//this.midgroundLayer.render();
 
 		if (DEBUG) {
 			Map.renderGrid();

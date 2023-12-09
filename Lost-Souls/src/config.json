@@ -97,7 +97,7 @@
 			"height": 128
 		},
 		{
-			"name": "cave_tiles",
+			"name": "tiles",
 			"path": "./assets/images/Tilesets/cave_tiles.png",
 			"width": 1024,
 			"height": 1024
