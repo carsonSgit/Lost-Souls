@@ -21,6 +21,7 @@ export default class Map {
 	 * @param {object} mapDefinition JSON from Tiled map editor.
 	 */
 	constructor(mapDefinition) {
+		console.log(mapDefinition.layers)
 		const sprites = Sprite.generateSpritesFromSpriteSheet(
 			images.get(ImageName.Tiles),
 			Tile.SIZE,

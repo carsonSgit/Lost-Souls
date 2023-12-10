@@ -18,7 +18,6 @@ export default class Images {
 	}
 
 	get(name) {
-		console.log(this.images[name])
 		return this.images[name];
 	}
 

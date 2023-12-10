@@ -5,9 +5,9 @@ export default class Layer {
     static CAVE_MIDGROUND = 1;
     static CAVE_BACKGROUND = 0;
 
-    //static VILLAGE_COLLISION = 1;
-    //static VILLAGE_MIDGROUND = 4;
-    //static VILLAGE_BACKGROUND = 3;
+    static VILLAGE_COLLISION = 1;
+    static VILLAGE_MIDGROUND = 2;
+    static VILLAGE_BACKGROUND = 0;
 
     /*
     A collection of tiles that comprises
