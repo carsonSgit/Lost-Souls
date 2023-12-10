@@ -55,7 +55,7 @@ sounds.load(soundDefinitions);
 
 // stateMachine.add(GameStateName.TitleScreen, new TitleScreenState(villageDefinition, caveDefinition, bossMapDefinition));
 
-stateMachine.add(GameStateName.TitleScreen, new TitleScreenState(villageDefinition));
+stateMachine.add(GameStateName.TitleScreen, new TitleScreenState(caveDefinition));
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
 stateMachine.add(GameStateName.Credits, new CreditsState());

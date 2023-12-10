@@ -8,8 +8,8 @@ export const canvas = document.createElement('canvas');
 export const context = canvas.getContext('2d') || new CanvasRenderingContext2D();
 
 // Replace these values according to how big you want your canvas.
-export const CANVAS_WIDTH = 0;
-export const CANVAS_HEIGHT = 0;
+export const CANVAS_WIDTH = 960;
+export const CANVAS_HEIGHT = 480;
 
 export const keys = {};
 export const images = new Images(context);

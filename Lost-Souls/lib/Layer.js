@@ -1,8 +1,8 @@
 import Tile from "./Tile.js";
 
 export default class Layer {
-    static CAVE_COLLISION = 1;
-    static CAVE_MIDGROUND = 2;
+    static CAVE_COLLISION = 2;
+    static CAVE_MIDGROUND = 1;
     static CAVE_BACKGROUND = 0;
 
     //static VILLAGE_COLLISION = 1;
