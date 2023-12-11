@@ -4,6 +4,7 @@ import ImageName from "../enums/ImageName";
 import { DEBUG, images } from "../globals.js";
 import GameEntity from "./GameEntity.js"
 import PlayerStateName from "../enums/PlayerStateName.js";
+import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
 
 export default class Player extends GameEntity{
 
@@ -41,12 +42,13 @@ export default class Player extends GameEntity{
     }
 
     initializeStateMachine(){
+
         const stateMachine = new StateMachine();
+        stateMachine.add(PlayerStateName.Idle, new PlayerIdleState(this));
+        stateMachine.add(PlayerStateName.Walking, new PlayerIdleState(this));
 
-        stateMachine.add(PlayerStateName.Idle, new PlayerWalkingState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
-
-        this.changeState(PlayerStateName.Idle);
+        stateMachine = this.initializeStateMachine();
+        stateMachine.changeState(PlayerStateName.Idle);
 
         return stateMachine;
     }
