@@ -33,8 +33,8 @@ export default class Player extends GameEntity{
         super(dimensions, position, velocityLimit);
 
         this.gravityForce = new Vector(0, 1000);
-        this.speedScalar = 0.5;
-        this.frictionScalar = 0.8;
+        this.speedScalar = 0.7;
+        this.frictionScalar = 0.7;
         this.positionOffset = new Vector(0, 0);
         this.hitboxOffsets = new Hitbox(48, 16, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT);
 
@@ -78,8 +78,8 @@ export default class Player extends GameEntity{
     moveLeft() {
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
-        //console.log(this.position.x)
-        if(this.map.collisionLayer.getTile(Math.floor(this.position.x / 12), Math.floor(this.position.y / 12))){
+
+        if(this.map.collisionLayer.getTile(Math.floor(this.position.x / 12) + 1, Math.floor(this.position.y / 12))){
             this.velocity.x = 0;
         }
 	}
@@ -87,7 +87,7 @@ export default class Player extends GameEntity{
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
-	}
+    }
 
     moveUp(){
         this.direction = Direction.Up;
