@@ -27,7 +27,7 @@ export default class TitleScreenState extends State {
 
 	render(context){
 		context.save();
-		//this.renderTitleWindow(context);
+		this.renderTitleWindow(context);
 		this.map.render();
 		context.restore();
 	}
