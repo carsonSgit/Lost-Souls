@@ -22,6 +22,9 @@ export default class PlayerWalkingState extends State{
         if(!keys.a && !keys.d  && Math.abs(this.player.velocity.x) === 0){
             this.player.changeState(PlayerStateName.Idle);
         }
+        if(keys[" "]){
+            this.player.changeState(PlayerStateName.Attacking);
+        }
         else if(keys.a){
             this.player.moveLeft();
         }

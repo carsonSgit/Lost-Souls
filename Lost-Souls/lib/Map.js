@@ -30,7 +30,7 @@ export default class Map {
 		// this.bottomLayer = new Layer(mapDefinition.layers[Layer.CAVE_BACKGROUND], sprites);
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
-		this.player = new Player(new Vector(128, 64), new Vector(200, 200), new Vector(100, 10), this);
+		this.player = new Player(new Vector(128, 64), new Vector(180, 235), new Vector(100, 10), this);
 	}
 
 	update(dt) {
@@ -43,7 +43,7 @@ export default class Map {
 		this.player.render();
 		//this.midgroundLayer.render();
 
-		if (false){
+		if (DEBUG){
 			Map.renderGrid();
 		}
 	}
