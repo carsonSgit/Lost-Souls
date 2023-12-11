@@ -43,7 +43,7 @@ export default class Map {
 		this.player.render();
 		//this.midgroundLayer.render();
 
-		if (DEBUG) {
+		if (false) {
 			Map.renderGrid();
 		}
 	}

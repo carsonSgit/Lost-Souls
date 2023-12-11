@@ -8,13 +8,19 @@ import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
 import PlayerWalkingState from "../states/Player/PlayerWalkingState.js";
 import Direction from "../enums/Direction.js";
 import Vector from "../../lib/Vector.js";
+import Hitbox from "../../lib/Hitbox.js";
 
 export default class Player extends GameEntity{
 
+    static HEIGHT = 48;
+    static WIDTH = 32;
     static WALKING_SPRITE_WIDTH = 128;
     static WALKING_SPRITE_HEIGHT = 64;
     static IDLE_SPRITE_WIDTH = 128;
     static IDLE_SPRITE_HEIGHT = 64;
+    static OFFSET_WIDTH = 128;
+    static OFFSET_HEIGHT = 64;
+
     
     /** 
     * @param {Vector} dimensions
@@ -24,9 +30,11 @@ export default class Player extends GameEntity{
     constructor(dimensions, position, velocityLimit){
         super(dimensions, position, velocityLimit);
 
+        this.gravityForce = new Vector(0, 1000);
         this.speedScalar = 0.5;
         this.frictionScalar = 0.8;
         this.positionOffset = new Vector(0, 0);
+        this.hitboxOffsets = new Hitbox(48, 16, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT);
 
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerIdle),
@@ -49,7 +57,7 @@ export default class Player extends GameEntity{
         context.save();
 
         super.render(this.positionOffset);
-
+        
         context.restore();
     }
 

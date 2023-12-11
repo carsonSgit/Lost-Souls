@@ -1,7 +1,9 @@
 import Vector from "../../lib/Vector.js";
 import Direction from "../enums/Direction.js";
 import {isAABBCollision} from "../../lib/CollisionHelpers.js";
-import { context } from "../globals.js";
+import { DEBUG, context } from "../globals.js";
+import Hitbox from "../../lib/Hitbox.js";
+import Player from "./Player.js";
 
 
 export default class GameEntity{
@@ -22,9 +24,13 @@ export default class GameEntity{
         this.stateMachine = null;
         this.currentAnimation = null;
         this.direction = Direction.Right;
-        //this.hitbox
-        //this.hitboxOffsets = {x: 0, y: 0};
-        //this.attackHitbox
+        this.hitboxOffsets = new Hitbox();
+		this.hitbox = new Hitbox(
+			this.position.x + this.hitboxOffsets.position.x,
+			this.position.y + this.hitboxOffsets.position.y,
+			this.dimensions.x + this.hitboxOffsets.dimensions.x,
+			this.dimensions.y + this.hitboxOffsets.dimensions.y,
+		);
         this.isDead = false;
         this.cleanUp = false;
         // this.renderPriority
@@ -38,6 +44,12 @@ export default class GameEntity{
         this.stateMachine.update(dt);
         this.currentAnimation.update(dt);
         this.position.add(this.velocity, dt);
+        this.hitbox.set(
+			this.position.x + this.hitboxOffsets.position.x,
+			this.position.y + this.hitboxOffsets.position.y,
+			this.dimensions.x + this.hitboxOffsets.dimensions.x,
+			this.dimensions.y + this.hitboxOffsets.dimensions.y,
+		);
     }
 
     render(offset){
@@ -45,11 +57,14 @@ export default class GameEntity{
         if(this.isDead){
             return;
         }
-
         this.renderEntity(offset);
+    
+        if(DEBUG){
+            this.hitbox.render(context);
+        }
     }
 
-    renderEntity(){
+    renderEntity(offset){
         if (this.direction === Direction.Left) {
 			context.save();
 			context.translate(Math.floor(this.position.x) + this.dimensions.x, Math.floor(this.position.y));
