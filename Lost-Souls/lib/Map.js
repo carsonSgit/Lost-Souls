@@ -1,7 +1,6 @@
 import Colour from "../src/enums/Colour.js";
 import Sprite from "./Sprite.js";
 import Vector from "./Vector.js";
-//import Player from "../entities/Player.js";
 import ImageName from "../src/enums/ImageName.js";
 import Tile from "./Tile.js";
 import Layer from "./Layer.js";
@@ -12,6 +11,7 @@ import {
 	DEBUG,
 	images,
 } from "../src/globals.js";
+import Player from "../src/entities/Player.js";
 
 export default class Map {
 	/**
@@ -30,17 +30,18 @@ export default class Map {
 		// this.bottomLayer = new Layer(mapDefinition.layers[Layer.CAVE_BACKGROUND], sprites);
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
-		//this.player = new Player({ position: new Vector(7, 5) }, this);
+		this.player = new Player({x: 64, y: 64}, new Vector(400, 200), 100);
+		console.log(this.player)
 	}
 
 	update(dt) {
-		//this.player.update(dt);
+		this.player.update(dt);
 	}
 
 	render() {
 		//this.bottomLayer.render();
 		this.collisionLayer.render();
-		//this.player.render();
+		this.player.render();
 		//this.midgroundLayer.render();
 
 		if (DEBUG) {

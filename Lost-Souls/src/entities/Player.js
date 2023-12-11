@@ -1,10 +1,11 @@
 import Sprite from "../../lib/Sprite.js";
-import StateMachine from "../../lib/StateMachine";
-import ImageName from "../enums/ImageName";
-import { DEBUG, images } from "../globals.js";
+import StateMachine from "../../lib/StateMachine.js";
+import ImageName from "../enums/ImageName.js";
+import { DEBUG, images, context} from "../globals.js";
 import GameEntity from "./GameEntity.js"
 import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
+import PlayerWalkingState from "../states/Player/PlayerWalkingState.js";
 
 export default class Player extends GameEntity{
 
@@ -27,7 +28,7 @@ export default class Player extends GameEntity{
             Player.WALKING_SPRITE_HEIGHT,
         );
 
-        this.sprites = this.walkingSprites;
+        this.sprites = this.idleSprites;
 
         this.stateMachine = this.initializeStateMachine();
         
@@ -45,9 +46,9 @@ export default class Player extends GameEntity{
 
         const stateMachine = new StateMachine();
         stateMachine.add(PlayerStateName.Idle, new PlayerIdleState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerIdleState(this));
+        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
 
-        stateMachine.changeState(PlayerStateName.Idle);
+        stateMachine.change(PlayerStateName.Idle);
 
         return stateMachine;
     }

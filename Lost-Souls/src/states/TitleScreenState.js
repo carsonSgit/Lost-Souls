@@ -15,6 +15,7 @@ export default class TitleScreenState extends State {
 
 	}
 	update(dt){
+		this.map.update(dt)
 	}
 
 	enter(){
