@@ -15,6 +15,7 @@ export default class PlayerWalkingState extends State{
     enter(){
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.walkingSprites;
+        console.log("Walking state: enter");
 
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
@@ -31,7 +32,11 @@ export default class PlayerWalkingState extends State{
         }
         else if(keys.d){
             this.player.moveRight();
-        }else
+        }
+        else if (keys.r){
+            this.player.changeState(PlayerStateName.Rolling);
+        }
+        else
         {
             this.player.stop();
         }

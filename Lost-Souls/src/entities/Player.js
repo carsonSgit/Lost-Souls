@@ -7,6 +7,7 @@ import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
 import PlayerWalkingState from "../states/Player/PlayerWalkingState.js";
 import PlayerAttackingState from "../states/Player/PlayerAttackingState.js";
+import PlayerRollingState from "../states/Player/PlayerRollingState.js";
 import Direction from "../enums/Direction.js";
 import Vector from "../../lib/Vector.js";
 import Hitbox from "../../lib/Hitbox.js";
@@ -21,6 +22,10 @@ export default class Player extends GameEntity{
     static WALKING_SPRITE_HEIGHT = 64;
     static IDLE_SPRITE_WIDTH = 128;
     static IDLE_SPRITE_HEIGHT = 64;
+    static ATTACKING_SPRITE_WIDTH = 128;
+    static ATTACKING_SPRITE_HEIGHT = 64;
+    static ROLLING_SPRITE_WIDTH = 32;
+    static ROLLING_SPRITE_HEIGHT = 16;
     static OFFSET_WIDTH = 128;
     static OFFSET_HEIGHT = 64;
 
@@ -38,6 +43,7 @@ export default class Player extends GameEntity{
         this.frictionScalar = 0.7;
         this.positionOffset = new Vector(0, 0);
         this.hitboxOffsets = new Hitbox(48, 16, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT);
+        this.rollingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
 
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
 
@@ -53,9 +59,15 @@ export default class Player extends GameEntity{
         );
         this.attackingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerAttack),
-            Player.WALKING_SPRITE_WIDTH,
-            Player.WALKING_SPRITE_HEIGHT,
+            Player.ATTACKING_SPRITE_WIDTH,
+            Player.ATTACKING_SPRITE_HEIGHT,
         );
+        this.rollingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerRoll),
+            Player.ATTACKING_SPRITE_WIDTH,
+            Player.ATTACKING_SPRITE_HEIGHT,
+        );
+
 
         this.sprites = this.idleSprites;
 
@@ -82,6 +94,7 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Idle, new PlayerIdleState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.Attacking, new PlayerAttackingState(this));
+        stateMachine.add(PlayerStateName.Rolling, new PlayerRollingState(this));
 
         stateMachine.change(PlayerStateName.Idle);
 

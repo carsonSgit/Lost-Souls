@@ -22,7 +22,8 @@ export default class PlayerAttackingState extends State{
 
     update(){
         if(this.player.currentAnimation.isDone()){
-			this.player.currentAnimation.refresh();
+			this.player.currentAnimation.refresh();    
+            this.player.attackHitbox.set(0, 0, 0, 0);
             this.player.changeState(PlayerStateName.Idle);
         }
         if (this.player.currentAnimation.isHalfwayDone()) {
@@ -34,6 +35,7 @@ export default class PlayerAttackingState extends State{
     }
 
     setSwordHitbox(){
+        // Includes magic numbers for left side hitbox
         if(this.player.direction === Direction.Left){
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
@@ -41,9 +43,10 @@ export default class PlayerAttackingState extends State{
 			hitboxHeight = this.player.dimensions.x / 3;
 			hitboxX = this.player.position.x + hitboxWidth / 2 + 14;
 			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
-            console.log(hitboxWidth)
+
             this.player.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
+        // Includes magic numbers for Right side hitbox
         if(this.player.direction === Direction.Right) {
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
@@ -51,7 +54,7 @@ export default class PlayerAttackingState extends State{
 			hitboxHeight = this.player.dimensions.x / 3;
 			hitboxX = this.player.position.x + this.player.dimensions.x / 1.6;
 			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
-            console.log(hitboxWidth)
+
             this.player.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
     }
