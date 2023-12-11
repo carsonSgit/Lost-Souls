@@ -1,10 +1,15 @@
 import Vector from "../../lib/Vector.js";
 import Direction from "../enums/Direction.js";
 import {isAABBCollision} from "../../lib/CollisionHelpers.js";
+import { context } from "../globals.js";
 
 
 export default class GameEntity{
 
+    /*
+    * @param {x:0, y:0} dimensions
+    * @param {x:0, y:0} position
+    */
     constructor(dimensions, position, velocityLimit){
         this.dimensions = dimensions;
         this.position = position;

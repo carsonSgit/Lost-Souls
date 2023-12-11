@@ -6,6 +6,8 @@ import GameEntity from "./GameEntity.js"
 import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
 import PlayerWalkingState from "../states/Player/PlayerWalkingState.js";
+import Direction from "../enums/Direction.js";
+import Vector from "../../lib/Vector.js";
 
 export default class Player extends GameEntity{
 
@@ -14,9 +16,16 @@ export default class Player extends GameEntity{
     static IDLE_SPRITE_WIDTH = 128;
     static IDLE_SPRITE_HEIGHT = 64;
     
+    /** 
+    * @param {Vector} dimensions
+    * @param {Vector} position
+    * @param {Vector} velocityLimit
+    */
     constructor(dimensions, position, velocityLimit){
         super(dimensions, position, velocityLimit);
 
+        this.speedScalar = 0.5;
+        this.frictionScalar = 0.8;
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerIdle),
             Player.IDLE_SPRITE_WIDTH,
@@ -52,4 +61,37 @@ export default class Player extends GameEntity{
 
         return stateMachine;
     }
+
+    moveLeft() {
+		this.direction = Direction.Left;
+		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
+	}
+
+	moveRight() {
+		this.direction = Direction.Right;
+		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
+	}
+
+    moveUp(){
+        this.direction = Direction.Up;
+        this.velocity.y = Math.max(this.velocity.y - this.speedScalar * this.frictionScalar, -this.velocityLimit.y);
+    }
+
+    moveDown(){
+        this.direction = Direction.Down;
+        this.velocity.y = Math.min(this.velocity.y + this.speedScalar * this.frictionScalar, this.velocityLimit.y);
+    }
+
+    stop() {
+        console.log(Math.abs(this.velocity.x))
+		if (Math.abs(this.velocity.x) > 0) {
+			this.velocity.x *= this.frictionScalar;
+		}
+
+		if (Math.abs(this.velocity.x) < 0.1) {
+			this.velocity.x = 0;
+		}
+	}
+
+    
 }

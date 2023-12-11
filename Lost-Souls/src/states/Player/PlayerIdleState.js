@@ -9,19 +9,19 @@ export default class PlayerIdleState extends State{
 
         this.player = player;
 
-        this.sprites = this.player.idleSprites;
 
         this.animation = new Animation([0, 1, 2, 3, 4, 5], 0.1);
     }
 
     enter(){
         this.player.currentAnimation = this.animation;
+        this.player.sprites = this.player.idleSprites;
+        console.log('enter')
     }
 
     update(){
         if (keys.a || keys.d) {
 			this.player.changeState(PlayerStateName.Walking);
-            console.log('here')
 
 		}
         if (keys.w) {
