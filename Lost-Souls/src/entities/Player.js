@@ -47,7 +47,6 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Idle, new PlayerIdleState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerIdleState(this));
 
-        stateMachine = this.initializeStateMachine();
         stateMachine.changeState(PlayerStateName.Idle);
 
         return stateMachine;
