@@ -27,14 +27,17 @@ export default class PlayerWalkingState extends State{
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
+        else if(keys.a && keys.r){
+            this.player.changeState(PlayerStateName.Rolling);
+        }
         else if(keys.a){
             this.player.moveLeft();
         }
+        else if(keys.d && keys.r){
+            this.player.changeState(PlayerStateName.Rolling);
+        }
         else if(keys.d){
             this.player.moveRight();
-        }
-        else if (keys.r){
-            this.player.changeState(PlayerStateName.Rolling);
         }
         else
         {

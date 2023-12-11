@@ -35,12 +35,12 @@ export default class TitleScreenState extends State {
 
 	renderTitleWindow(context) {
 		context.fillRect(30, 30, CANVAS_WIDTH - 60, CANVAS_HEIGHT - 60);
-		context.font = '40px Dungeon';
+		context.font = '60px Dungeon';
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
 		context.fillText('Lost Souls', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20);
-		context.font = '20px Dungeon';
+		context.font = '24px Dungeon';
 		context.fillText('Press Enter', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
 	}
 }
