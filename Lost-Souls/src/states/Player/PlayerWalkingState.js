@@ -16,6 +16,7 @@ export default class PlayerWalkingState extends State{
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.walkingSprites;
 
+        this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
     update(dt){

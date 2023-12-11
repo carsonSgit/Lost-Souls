@@ -95,34 +95,14 @@ export default class Player extends GameEntity{
         if(this.map.collisionLayer.getTile(Math.floor(this.position.x / 12) + 1, Math.floor(this.position.y / 12))){
             this.velocity.x = 0;
         }
-
-        if(this.isAttacking){
-            let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
-
-			hitboxWidth = this.player.dimensions.x / 4;
-			hitboxHeight = this.player.dimensions.x / 3;
-			hitboxX = this.player.position.x + hitboxWidth / 2;
-			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
-
-            this.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
-        }
 	}
+
+
 
     
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
-
-        if(this.isAttacking){
-            let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
-
-            hitboxWidth = this.player.dimensions.x / 4;
-			hitboxHeight = this.player.dimensions.x / 3;
-			hitboxX = this.player.position.x + this.player.dimensions.x / 1.6;
-			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
-
-            this.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
-        }
     }
 
     moveUp(){

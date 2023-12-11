@@ -20,6 +20,9 @@ export default class PlayerIdleState extends State{
     }
 
     update(){
+        if(keys[" "]){
+            this.player.changeState(PlayerStateName.Attacking);
+        }
         if (keys.a || keys.d) {
 			this.player.changeState(PlayerStateName.Walking);
 
