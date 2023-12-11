@@ -10,6 +10,8 @@ import Direction from "../enums/Direction.js";
 import Vector from "../../lib/Vector.js";
 import Hitbox from "../../lib/Hitbox.js";
 
+import Map from "../../lib/Map.js";
+
 export default class Player extends GameEntity{
 
     static HEIGHT = 48;
@@ -27,7 +29,7 @@ export default class Player extends GameEntity{
     * @param {Vector} position
     * @param {Vector} velocityLimit
     */
-    constructor(dimensions, position, velocityLimit){
+    constructor(dimensions, position, velocityLimit, map){
         super(dimensions, position, velocityLimit);
 
         this.gravityForce = new Vector(0, 1000);
@@ -51,6 +53,7 @@ export default class Player extends GameEntity{
 
         this.stateMachine = this.initializeStateMachine();
         
+        this.map = map;
     }
 
     render(){
@@ -75,8 +78,12 @@ export default class Player extends GameEntity{
     moveLeft() {
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
+        //console.log(this.position.x)
+        if(this.map.collisionLayer.getTile(Math.floor(this.position.x / 12), Math.floor(this.position.y / 12))){
+            this.velocity.x = 0;
+        }
 	}
-
+    
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
@@ -93,7 +100,7 @@ export default class Player extends GameEntity{
     }
 
     stop() {
-        console.log(Math.abs(this.velocity.x))
+        //console.log(Math.abs(this.velocity.x))
 		if (Math.abs(this.velocity.x) > 0) {
 			this.velocity.x *= this.frictionScalar;
 		}
