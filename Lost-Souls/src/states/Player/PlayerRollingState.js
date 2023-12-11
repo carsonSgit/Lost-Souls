@@ -12,6 +12,7 @@ export default class PlayerRollingState extends State{
 
 
         this.animation = new Animation([0, 1, 2, 3], 0.1, 3);
+        this.originalHitboxOffsets = this.player.hitboxOffsets;
     }
 
     enter(){
@@ -27,6 +28,7 @@ export default class PlayerRollingState extends State{
         if(this.player.currentAnimation.isDone()){
 			this.player.currentAnimation.refresh();    
             this.player.velocity.x = 0;
+            this.player.hitboxOffsets = this.originalHitboxOffsets;
             this.player.changeState(PlayerStateName.Idle);
         }
         if(this.player.direction === Direction.Left){
