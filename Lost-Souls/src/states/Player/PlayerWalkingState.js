@@ -9,7 +9,7 @@ export default class PlayerWalkingState extends State{
 
         this.player = player;
 
-        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.1);
+        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.09);
     }
 
     enter(){
@@ -27,15 +27,19 @@ export default class PlayerWalkingState extends State{
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
+        // Checking if Left & Roll so that we can roll while moving
         else if(keys.a && keys.r){
             this.player.changeState(PlayerStateName.Rolling);
         }
+        // Done after above check so that above is always hit first
         else if(keys.a){
             this.player.moveLeft();
         }
+        // Checking if Right & Roll so that we can roll while moving
         else if(keys.d && keys.r){
             this.player.changeState(PlayerStateName.Rolling);
         }
+        // Done after above check so that above is always hit first
         else if(keys.d){
             this.player.moveRight();
         }
