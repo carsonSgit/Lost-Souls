@@ -26,6 +26,8 @@ export default class Player extends GameEntity{
 
         this.speedScalar = 0.5;
         this.frictionScalar = 0.8;
+        this.positionOffset = new Vector(0, 0);
+
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerIdle),
             Player.IDLE_SPRITE_WIDTH,
