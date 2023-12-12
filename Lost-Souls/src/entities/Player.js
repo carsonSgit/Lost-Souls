@@ -129,7 +129,6 @@ export default class Player extends GameEntity{
     }
 
     stop() {
-        //console.log(Math.abs(this.velocity.x))
 		if (Math.abs(this.velocity.x) > 0) {
 			this.velocity.x *= this.frictionScalar;
 		}

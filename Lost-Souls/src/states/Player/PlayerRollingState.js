@@ -27,9 +27,15 @@ export default class PlayerRollingState extends State{
     update(){
         if(this.player.currentAnimation.isDone()){
 			this.player.currentAnimation.refresh();    
-            this.player.velocity.x = 0;
             this.player.hitboxOffsets = this.originalHitboxOffsets;
-            this.player.changeState(PlayerStateName.Idle);
+            if(keys.a || keys.d){
+                this.player.changeState(PlayerStateName.Walking);
+            }
+            else
+            {
+                this.player.velocity.x = 0;
+                this.player.changeState(PlayerStateName.Idle);
+            }
         }
         if(this.player.direction === Direction.Left){
             this.player.moveLeft();
