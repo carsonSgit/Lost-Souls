@@ -37,11 +37,13 @@ export default class Map {
 
 	update(dt) {
 		this.player.update(dt);
+		this.platforms.update(dt);
 	}
 
 	render() {
 		//this.bottomLayer.render();
 		this.collisionLayer.render();
+		this.platforms.render();
 		this.player.render();
 		//this.midgroundLayer.render();
 

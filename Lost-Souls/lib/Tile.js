@@ -12,6 +12,6 @@ export default class Tile {
     }
 
     render(x, y) {
-        this.sprites[this.id].render(x * Tile.SIZE, y * Tile.SIZE);
+        this.sprites[this.id]?.render(x * Tile.SIZE, y * Tile.SIZE);
     }
 }
