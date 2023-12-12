@@ -16,16 +16,25 @@ export default class PlayerIdleState extends State{
     enter(){
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.idleSprites;
-        console.log('enter')
+        console.log('Idle State: enter')
+        
+        this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
     update(){
-        if (keys.a || keys.d) {
+        if(keys[" "]){
+            this.player.changeState(PlayerStateName.Attacking);
+        }
+        else if (keys.a || keys.d) {
 			this.player.changeState(PlayerStateName.Walking);
 
 		}
-        if (keys.w) {
+        else if (keys.w) {
 			this.player.changeState(PlayerStateName.Jumping);
 		}
+        else if (keys.r){
+            this.player.changeState(PlayerStateName.Rolling);
+        }
+
     }
 }

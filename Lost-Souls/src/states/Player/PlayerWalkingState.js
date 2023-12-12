@@ -9,25 +9,41 @@ export default class PlayerWalkingState extends State{
 
         this.player = player;
 
-        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.1);
+        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.09);
     }
 
     enter(){
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.walkingSprites;
+        console.log("Walking state: enter");
 
+        this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
     update(dt){
         if(!keys.a && !keys.d  && Math.abs(this.player.velocity.x) === 0){
             this.player.changeState(PlayerStateName.Idle);
         }
+        if(keys[" "]){
+            this.player.changeState(PlayerStateName.Attacking);
+        }
+        // Checking if Left & Roll so that we can roll while moving
+        else if(keys.a && keys.r){
+            this.player.changeState(PlayerStateName.Rolling);
+        }
+        // Done after above check so that above is always hit first
         else if(keys.a){
             this.player.moveLeft();
         }
+        // Checking if Right & Roll so that we can roll while moving
+        else if(keys.d && keys.r){
+            this.player.changeState(PlayerStateName.Rolling);
+        }
+        // Done after above check so that above is always hit first
         else if(keys.d){
             this.player.moveRight();
-        }else
+        }
+        else
         {
             this.player.stop();
         }
