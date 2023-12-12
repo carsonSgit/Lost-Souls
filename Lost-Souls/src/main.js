@@ -1,11 +1,20 @@
 /**
- * Game Name
+ * Lost Souls
  *
  * Authors
+ * Carson Spriggs-Audet
+ * Noah Groleau
  *
  * Brief description
- *
+ *TODO
  * Asset sources
+ * 
+ * Player sprite
+ * @see https://szadiart.itch.io/2d-soulslike-character
+ * Cave map
+ * @see https://szadiart.itch.io/pixel-fantasy-caves
+ * Fonts
+ * @see https://vrtxrry.itch.io/dungeonfont
  */
 
 import GameStateName from "./enums/GameStateName.js";

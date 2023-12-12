@@ -20,7 +20,6 @@ export default class Layer {
     @param {array} sprites
     */
     constructor(layerDefinition, sprites) {
-        console.log(layerDefinition)
         this.tiles = Layer.generateTiles(layerDefinition.data, sprites);
         this.width = layerDefinition.width;
         this.height = layerDefinition.height;
