@@ -119,6 +119,8 @@ Village: https://brullov.itch.io/oak-woods
 
 Cave: https://szadiart.itch.io/pixel-fantasy-caves
 
+Boss Map (background, Cave sprites used for everything else): https://szadiart.itch.io/pixel-platformer-world
+
 ### Buffs/Debuffs (UNCONFIRMED):
 https://quintino-pixels.itch.io/free-pixel-art-skill-icons-pack
 
