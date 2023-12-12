@@ -12,6 +12,7 @@ import {
 	images,
 } from "../src/globals.js";
 import Player from "../src/entities/Player.js";
+import Platform from "../src/objects/Platform.js";
 
 export default class Map {
 	/**
@@ -31,6 +32,7 @@ export default class Map {
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
+		this.platforms = new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 100));
 	}
 
 	update(dt) {
