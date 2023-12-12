@@ -68,7 +68,7 @@ stateMachine.add(GameStateName.TitleScreen, new TitleScreenState(caveDefinition)
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
 stateMachine.add(GameStateName.Credits, new CreditsState());
-stateMachine.add(GameStateName.Play, new PlayState(caveDefinition));
+stateMachine.add(GameStateName.Play, new PlayState());
 
 stateMachine.change(GameStateName.TitleScreen);
 // stateMachine.change(GameStateName.Play)

@@ -11,8 +11,6 @@ import PlayerRollingState from "../states/Player/PlayerRollingState.js";
 import Direction from "../enums/Direction.js";
 import Vector from "../../lib/Vector.js";
 import Hitbox from "../../lib/Hitbox.js";
-
-import Map from "../../lib/Map.js";
 import PlayerPrayingState from "../states/Player/PlayerPrayingState.js";
 
 export default class Player extends GameEntity{
