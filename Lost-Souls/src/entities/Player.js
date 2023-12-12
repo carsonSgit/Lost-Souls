@@ -13,11 +13,16 @@ import Vector from "../../lib/Vector.js";
 import Hitbox from "../../lib/Hitbox.js";
 
 import Map from "../../lib/Map.js";
+import PlayerPrayingState from "../states/Player/PlayerPrayingState.js";
 
 export default class Player extends GameEntity{
 
     static HEIGHT = 48;
     static WIDTH = 32;
+
+    static SPRITE_WIDTH = 128;
+    static SPRITE_HEIGHT = 64;
+
     static WALKING_SPRITE_WIDTH = 128;
     static WALKING_SPRITE_HEIGHT = 64;
     static IDLE_SPRITE_WIDTH = 128;
@@ -26,6 +31,8 @@ export default class Player extends GameEntity{
     static ATTACKING_SPRITE_HEIGHT = 64;
     static ROLLING_SPRITE_WIDTH = 32;
     static ROLLING_SPRITE_HEIGHT = 16;
+    static PRAYING_SPRITE_WIDTH = 128;
+    static PRAYING_SPRITE_HEIGHT = 64;
     static OFFSET_WIDTH = 128;
     static OFFSET_HEIGHT = 64;
 
@@ -67,6 +74,11 @@ export default class Player extends GameEntity{
             Player.ATTACKING_SPRITE_WIDTH,
             Player.ATTACKING_SPRITE_HEIGHT,
         );
+        this.prayingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerPray),
+            Player.ATTACKING_SPRITE_WIDTH,
+            Player.ATTACKING_SPRITE_HEIGHT,
+        )
 
 
         this.sprites = this.idleSprites;
@@ -95,8 +107,9 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.Attacking, new PlayerAttackingState(this));
         stateMachine.add(PlayerStateName.Rolling, new PlayerRollingState(this));
+        stateMachine.add(PlayerStateName.Praying, new PlayerPrayingState(this));
 
-        stateMachine.change(PlayerStateName.Idle);
+        stateMachine.change(PlayerStateName.Praying);
 
         return stateMachine;
     }

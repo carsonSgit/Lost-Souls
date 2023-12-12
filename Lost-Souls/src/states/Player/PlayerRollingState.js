@@ -18,7 +18,7 @@ export default class PlayerRollingState extends State{
     enter(){
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.rollingSprites;
-        console.log('enter')
+        console.log('rolling state: enter')
         //this.player.hitbox.set()
 
         this.player.hitboxOffsets = this.player.rollingHitboxOffsets;

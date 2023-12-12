@@ -16,6 +16,15 @@ export default class TitleScreenState extends State {
 	}
 	update(dt){
 		this.map.update(dt)
+
+		if(keys.Enter){
+			this.map.player.stateMachine.currentState.stopPraying();
+			stateMachine.change(
+				GameStateName.Play,
+				{
+					map: this.map,
+				});
+		}
 	}
 
 	enter(){

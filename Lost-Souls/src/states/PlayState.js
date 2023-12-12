@@ -3,21 +3,19 @@ import Map from "../../lib/Map.js";
 import State from "../../lib/State.js";
 
 export default class PlayState extends State {
-	constructor(caveDefinition) {
+	constructor() {
 		super();
 
-		this.map = new Map(caveDefinition)
 	}
 
 	enter(parameters){
-		this.level = parameters.level;
-		this.player = parameters.player;
+		this.map = parameters.map;
 
-		this.camera = new Camera(
-			this.player,
-			this.level.tilemap.dimensions,
-			new Vector(CANVAS_WIDTH, CANVAS_HEIGHT),
-		);
+		
+	}
+
+	update(dt){
+		this.map.update(dt);
 	}
 
 	render(context){
