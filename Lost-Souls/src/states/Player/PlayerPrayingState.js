@@ -10,7 +10,7 @@ export default class PlayerPrayingState extends State{
 
         this.animation = new Animation([4, 5, 6, 7, 8, 9], 0.1);
         this.standingUpAnimation = new Animation([8, 9, 1, 10, 0, 11], 0.15, 1);
-        this.isEnding =false;
+        this.isEnding = false;
     }
 
     enter(){

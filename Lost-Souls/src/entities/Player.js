@@ -29,8 +29,8 @@ export default class Player extends GameEntity{
     static IDLE_SPRITE_HEIGHT = 64;
     static ATTACKING_SPRITE_WIDTH = 128;
     static ATTACKING_SPRITE_HEIGHT = 64;
-    static ROLLING_SPRITE_WIDTH = 32;
-    static ROLLING_SPRITE_HEIGHT = 16;
+    static ROLLING_SPRITE_WIDTH = 128;
+    static ROLLING_SPRITE_HEIGHT = 64;
     static PRAYING_SPRITE_WIDTH = 128;
     static PRAYING_SPRITE_HEIGHT = 64;
     static OFFSET_WIDTH = 128;
@@ -71,13 +71,13 @@ export default class Player extends GameEntity{
         );
         this.rollingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerRoll),
-            Player.ATTACKING_SPRITE_WIDTH,
-            Player.ATTACKING_SPRITE_HEIGHT,
+            Player.ROLLING_SPRITE_WIDTH,
+            Player.ROLLING_SPRITE_HEIGHT,
         );
         this.prayingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerPray),
-            Player.ATTACKING_SPRITE_WIDTH,
-            Player.ATTACKING_SPRITE_HEIGHT,
+            Player.PRAYING_SPRITE_WIDTH,
+            Player.PRAYING_SPRITE_HEIGHT,
         )
 
 
