@@ -6,20 +6,15 @@ import GameObject from "./GameObject.js";
 export default class Platform extends GameObject{
 
     static PLATFORM_TILE_LOCATIONS = [10, 22]
-    static SUPPORTS_TILE_LOCATIONS = [59, ] //wrong
+    static SUPPORTS_TILE_LOCATIONS = [54] // the spritesheet is killing me
     static PLATFORM_WIDTH = 176;
     static PLATFORM_HEIGHT = 16;
 
-    //TODO: SPRITE SHEET IS 1024x1024, support sprites are 48x48
-    // need to tweak support width and maybe height
-    // so that the spritesheet is cut evenly
-    static SUPPORTS_WIDTH = 48;
-    static SUPPORTS_HEIGHT = 48;
+    static SUPPORTS_WIDTH = 64;
+    static SUPPORTS_HEIGHT = 64;
 
-    static PLATFORM_SPRITE_WIDTH;
-    static PLATFORM_SPRITE_HEIGHT = 32;
-    static SUPPORT_SPRITE_WIDTH = 64;
-    static SUPPORT_SPRITE_HEIGHT = 64;
+    static SUPPORT_SPRITE_WIDTH = 55;
+    static SUPPORT_SPRITE_HEIGHT = 48;
 
     constructor(dimensions, position){
         super(dimensions, position);
@@ -37,8 +32,8 @@ export default class Platform extends GameObject{
 
         this.supportSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Tiles),
-            Platform.SUPPORTS_WIDTH,
-            Platform.SUPPORTS_HEIGHT,
+            Platform.SUPPORT_SPRITE_WIDTH,
+            Platform.SUPPORT_SPRITE_HEIGHT,
         );
         console.log(this.supportSprites);
     }
