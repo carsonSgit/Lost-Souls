@@ -44,9 +44,9 @@
 		},
 		{
 			"name": "player_roll",
-			"path": "./assets/images/Player/Roll.png",
-			"width": 256,
-			"height": 128
+			"path": "./assets/images/Player/Slide.png",
+			"width": 512,
+			"height": 192
 		},
 		{
 			"name": "player_pray",
