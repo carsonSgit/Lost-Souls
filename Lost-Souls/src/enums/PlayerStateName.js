@@ -5,6 +5,7 @@ const PlayerStateName = {
     Rolling: "Rolling",
     Praying: "Praying",
     Falling: "Falling",
+    Jumping: "Jumping",
 }
 
 export default PlayerStateName;

@@ -14,6 +14,7 @@ import Hitbox from "../../lib/Hitbox.js";
 import PlayerPrayingState from "../states/Player/PlayerPrayingState.js";
 import PlayerFallingState from "../states/Player/PlayerFallingState.js";
 import Tile from "../../lib/Tile.js";
+import PlayerJumpingState from "../states/Player/PlayerJumpingState.js";
 
 export default class Player extends GameEntity{
 
@@ -37,6 +38,8 @@ export default class Player extends GameEntity{
     static OFFSET_HEIGHT = 64;
     static FALLING_SPRITE_WIDTH = 128;
     static FALLING_SPRITE_HEIGHT = 64;
+    static JUMPING_SPRITE_WIDTH = 128;
+    static JUMPING_SPRITE_HEIGHT = 64;
 
     
     /** 
@@ -48,6 +51,7 @@ export default class Player extends GameEntity{
         super(dimensions, position, velocityLimit);
 
         this.gravityForce = new Vector(0, 1000);
+        this.negativeGravityForce = new Vector(0, -1500);
         this.speedScalar = 0.7;
         this.frictionScalar = 0.7;
         this.positionOffset = new Vector(0, 0);
@@ -86,6 +90,11 @@ export default class Player extends GameEntity{
             Player.FALLING_SPRITE_WIDTH,
             Player.FALLING_SPRITE_HEIGHT,
         )
+        this.jumpingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerJump),
+            Player.JUMPING_SPRITE_WIDTH,
+            Player.JUMPING_SPRITE_HEIGHT,
+        )
 
 
         this.sprites = this.idleSprites;
@@ -93,6 +102,8 @@ export default class Player extends GameEntity{
         this.stateMachine = this.initializeStateMachine();
         
         this.map = map;
+
+        this.jumpPeaked = false;
     }
 
     render(){
@@ -116,6 +127,7 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Rolling, new PlayerRollingState(this));
         stateMachine.add(PlayerStateName.Praying, new PlayerPrayingState(this));
         stateMachine.add(PlayerStateName.Falling, new PlayerFallingState(this));
+        stateMachine.add(PlayerStateName.Jumping, new PlayerJumpingState(this));
         stateMachine.change(PlayerStateName.Praying);
 
         return stateMachine;
@@ -132,9 +144,6 @@ export default class Player extends GameEntity{
             this.velocity.x = 0;
         }
 	}
-
-
-
     
 	moveRight() {
 		this.direction = Direction.Right;
@@ -146,14 +155,22 @@ export default class Player extends GameEntity{
         }
     }
 
-    moveUp(){
+    moveUp(dt){
         this.direction = Direction.Up;
-        this.velocity.y = Math.max(this.velocity.y - this.speedScalar * this.frictionScalar, -this.velocityLimit.y);
+        console.log(this.velocity.y);
+        if(this.velocity.y <= -600
+            || this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
+            this.velocity.y = 0;
+        }
+        else{
+            this.velocity.add(this.negativeGravityForce, dt);
+        }
     }
 
     moveDown(dt){
         this.direction = Direction.Down;
-        if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Player.HEIGHT) /Tile.SIZE) +1) != null) {
+        if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Player.HEIGHT) /Tile.SIZE) +1) != null
+        && this.map.collisionLayer.getTile(Math.floor((this.position.x + Player.WIDTH) / Tile.SIZE), Math.floor((this.position.y+Player.HEIGHT)/Tile.SIZE) + 1) !== null) {
             this.velocity.y = 0;
         }
         else{

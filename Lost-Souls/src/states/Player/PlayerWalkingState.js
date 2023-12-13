@@ -28,10 +28,15 @@ export default class PlayerWalkingState extends State{
         }
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
-        }else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
+        }
+        else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {
             this.player.changeState(PlayerStateName.Falling);
         }
+        
+        else if (keys.w) {
+			this.player.changeState(PlayerStateName.Jumping);
+		}
         // Checking if Left & Roll so that we can roll while moving
         else if(keys.a && keys.r){
             this.player.changeState(PlayerStateName.Rolling);
