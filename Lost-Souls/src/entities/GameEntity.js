@@ -36,6 +36,15 @@ export default class GameEntity{
         // this.renderPriority
     }
 
+    //TODO: Extract code from player/enemies into moveLeft and moveRight
+    moveLeft(){
+
+    }
+
+    moveRight(){
+
+    }
+
     changeState(state, params){
         this.stateMachine.change(state, params);
     }
@@ -93,4 +102,11 @@ export default class GameEntity{
 			entity.dimensions.y,
 		);
 	}
+
+    receiveDamage(damage){
+        this.currentHealth -= damage;
+        if(this.currentHealth <= 0){
+            this.isDead = true;
+        }
+    }
 }
