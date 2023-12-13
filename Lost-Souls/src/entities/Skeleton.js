@@ -61,14 +61,6 @@ export default class Skeleton extends Enemy{
         this.stateMachine.add(EnemyStateName.Falling, new SkeletonFallingState(this));
         this.stateMachine.change(EnemyStateName.Idle);
     }
-    render(){
-        
-        context.save();
-
-        super.render(this.positionOffset);
-        
-        context.restore();
-    }
 
     moveDown(dt){
         this.direction = Direction.Down;
