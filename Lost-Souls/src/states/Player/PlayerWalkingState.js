@@ -23,9 +23,6 @@ export default class PlayerWalkingState extends State{
     }
 
     update(dt){
-
-        console.log(Math.floor(this.player.position.x/16), Math.floor((this.player.position.y+Player.HEIGHT)/16))
-
         if(!keys.a && !keys.d  && Math.abs(this.player.velocity.x) === 0){
             this.player.changeState(PlayerStateName.Idle);
         }

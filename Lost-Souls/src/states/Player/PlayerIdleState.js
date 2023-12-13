@@ -2,6 +2,8 @@ import State from "../../../lib/State.js";
 import Animation from "../../../lib/Animation.js";
 import { keys } from "../../globals.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
+import Tile from "../../../lib/Tile.js";
+import Player from "../../entities/Player.js";
 
 export default class PlayerIdleState extends State{
     constructor(player){
@@ -24,6 +26,10 @@ export default class PlayerIdleState extends State{
     update(){
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
+        }
+        else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
+        {
+            this.player.changeState(PlayerStateName.Falling);
         }
         else if (keys.a || keys.d) {
 			this.player.changeState(PlayerStateName.Walking);

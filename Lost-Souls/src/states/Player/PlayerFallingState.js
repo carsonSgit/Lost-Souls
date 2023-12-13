@@ -27,7 +27,7 @@ export default class PlayerFallingState extends State{
 
     update(dt){
         this.player.moveDown(dt);
-
+        
         if(keys.a){
             this.player.moveLeft();
         }
