@@ -25,7 +25,7 @@ export default class PlayerIdleState extends State{
 
     update(){
         if(keys[" "]){
-            this.player.changeState(PlayerStateName.Attacking);
+            this.player.changeState(PlayerStateName.Dying);
         }
         else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {

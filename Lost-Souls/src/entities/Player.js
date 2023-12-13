@@ -16,6 +16,7 @@ import PlayerFallingState from "../states/Player/PlayerFallingState.js";
 import Tile from "../../lib/Tile.js";
 import PlayerJumpingState from "../states/Player/PlayerJumpingState.js";
 import PlayerHurtState from "../states/Player/PlayerHurtState.js";
+import PlayerDyingState from "../states/Player/PlayerDyingState.js";
 
 export default class Player extends GameEntity{
 
@@ -43,6 +44,8 @@ export default class Player extends GameEntity{
     static JUMPING_SPRITE_HEIGHT = 64;
     static HURT_SPRITE_WIDTH = 128;
     static HURT_SPRITE_HEIGHT = 64;
+    static DYING_SPRITE_WIDTH = 128;
+    static DYING_SPRITE_HEIGHT = 64;
 
     
     /** 
@@ -103,6 +106,11 @@ export default class Player extends GameEntity{
             Player.JUMPING_SPRITE_WIDTH,
             Player.JUMPING_SPRITE_HEIGHT,
         )
+        this.dyingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerDeath),
+            Player.JUMPING_SPRITE_WIDTH,
+            Player.JUMPING_SPRITE_HEIGHT,
+        )
 
 
         this.sprites = this.idleSprites;
@@ -137,6 +145,7 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Falling, new PlayerFallingState(this));
         stateMachine.add(PlayerStateName.Jumping, new PlayerJumpingState(this));
         stateMachine.add(PlayerStateName.Hurt, new PlayerHurtState(this));
+        stateMachine.add(PlayerStateName.Dying, new PlayerDyingState(this));
         stateMachine.change(PlayerStateName.Praying);
 
         return stateMachine;
