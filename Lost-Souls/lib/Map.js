@@ -14,6 +14,7 @@ import {
 } from "../src/globals.js";
 import Player from "../src/entities/Player.js";
 import Platform from "../src/objects/Platform.js";
+import Skeleton from "../src/entities/Skeleton.js";
 
 export default class Map {
 	/**
@@ -33,11 +34,14 @@ export default class Map {
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
+		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this);
 		this.platforms = new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 100));
+		
 	}
 
 	update(dt) {
 		this.player.update(dt);
+		this.skeletons.update(dt);
 		this.platforms.update(dt);
 	}
 
@@ -47,6 +51,7 @@ export default class Map {
 		this.collisionLayer.render();
 		this.platforms.render();
 		this.player.render();
+		this.skeletons.render();
 		//this.midgroundLayer.render();
 
 		if (false){
