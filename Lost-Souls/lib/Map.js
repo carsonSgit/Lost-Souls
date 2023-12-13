@@ -10,6 +10,7 @@ import {
 	context,
 	DEBUG,
 	images,
+	backgroundImage,
 } from "../src/globals.js";
 import Player from "../src/entities/Player.js";
 import Platform from "../src/objects/Platform.js";
@@ -41,6 +42,7 @@ export default class Map {
 	}
 
 	render() {
+		context.drawImage(backgroundImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		//this.bottomLayer.render();
 		this.collisionLayer.render();
 		this.platforms.render();

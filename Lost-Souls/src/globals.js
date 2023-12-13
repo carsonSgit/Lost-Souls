@@ -18,4 +18,14 @@ export const stateMachine = new StateMachine();
 export const timer = new Timer();
 export const sounds = new Sounds();
 
+
+// Set the background image
+export const BACKGROUND_IMAGE_SRC = "../assets/images/Backgrounds/caveBackground.png";
+
+// Load the background image
+export const backgroundImage = new Image();
+backgroundImage.src = BACKGROUND_IMAGE_SRC;
+
+
+
 export const DEBUG = true;
