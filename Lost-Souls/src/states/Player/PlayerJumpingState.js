@@ -12,12 +12,12 @@ export default class PlayerJumpingState extends State{
         this.player = player;
 
 
-        this.animation = new Animation([0, 1, 2, 3, 4], 0.1, 1);
+        this.animation = new Animation([0, 1, 2, 3], 0.1);
     }
 
     enter(){
         this.player.currentAnimation = this.animation;
-        this.player.sprites = this.player.jumpingSprites;
+        this.player.sprites = this.player.fallingSprites;
         console.log('Jumping State: enter')
         
         //this.player.attackHitbox.set(0, 0, 0, 0);

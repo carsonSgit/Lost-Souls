@@ -23,7 +23,7 @@ export default class PlayerRollingState extends State{
         console.log('rolling state: enter')
         //this.player.hitbox.set()
         this.player.speedScalar = 1;
-        this.player.frictionScalar = .9;
+        //this.player.frictionScalar = .9;
         this.player.hitboxOffsets = this.player.rollingHitboxOffsets;
     }
 

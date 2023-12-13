@@ -25,7 +25,7 @@ export default class PlayerIdleState extends State{
 
     update(){
         if(keys[" "]){
-            this.player.changeState(PlayerStateName.Dying);
+            this.player.changeState(PlayerStateName.Attacking);
         }
         else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {
@@ -40,6 +40,9 @@ export default class PlayerIdleState extends State{
 		}
         else if (keys.r){
             this.player.changeState(PlayerStateName.Rolling);
+        }
+        else if (keys.h){
+            this.player.changeState(PlayerStateName.Healing);
         }
 
     }

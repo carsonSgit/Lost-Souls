@@ -17,6 +17,7 @@ import Tile from "../../lib/Tile.js";
 import PlayerJumpingState from "../states/Player/PlayerJumpingState.js";
 import PlayerHurtState from "../states/Player/PlayerHurtState.js";
 import PlayerDyingState from "../states/Player/PlayerDyingState.js";
+import PlayerHealState from "../states/Player/PlayerHealState.js";
 
 export default class Player extends GameEntity{
 
@@ -46,6 +47,8 @@ export default class Player extends GameEntity{
     static HURT_SPRITE_HEIGHT = 64;
     static DYING_SPRITE_WIDTH = 128;
     static DYING_SPRITE_HEIGHT = 64;
+    static HEAL_SPRITE_WIDTH = 128;
+    static HEAL_SPRITE_HEIGHT = 64;
 
     
     /** 
@@ -58,13 +61,15 @@ export default class Player extends GameEntity{
 
         this.gravityForce = new Vector(0, 1000);
         this.negativeGravityForce = new Vector(0, -1500);
+
         this.speedScalar = 0.7;
         this.frictionScalar = 0.7;
+
         this.positionOffset = new Vector(0, 0);
+        this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
         this.hitboxOffsets = new Hitbox(48, 16, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT);
         this.rollingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
         this.fallingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
-        this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
 
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerIdle),
@@ -111,6 +116,11 @@ export default class Player extends GameEntity{
             Player.JUMPING_SPRITE_WIDTH,
             Player.JUMPING_SPRITE_HEIGHT,
         )
+        this.healSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerHeal),
+            Player.HEAL_SPRITE_WIDTH,
+            Player.HEAL_SPRITE_HEIGHT,
+        )
 
 
         this.sprites = this.idleSprites;
@@ -119,7 +129,8 @@ export default class Player extends GameEntity{
         
         this.map = map;
 
-        this.jumpPeaked = false;
+        this.health = 10;
+        this.strength = 2;
     }
 
     render(){
@@ -146,6 +157,7 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Jumping, new PlayerJumpingState(this));
         stateMachine.add(PlayerStateName.Hurt, new PlayerHurtState(this));
         stateMachine.add(PlayerStateName.Dying, new PlayerDyingState(this));
+        stateMachine.add(PlayerStateName.Healing, new PlayerHealState(this));
         stateMachine.change(PlayerStateName.Praying);
 
         return stateMachine;
@@ -176,7 +188,7 @@ export default class Player extends GameEntity{
     moveUp(dt){
         this.direction = Direction.Up;
         console.log(this.velocity.y);
-        if(this.velocity.y <= -600
+        if(this.velocity.y <= -500
             || this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
             this.velocity.y = 0;
         }
