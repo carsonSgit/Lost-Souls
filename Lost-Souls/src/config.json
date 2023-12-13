@@ -25,16 +25,53 @@
 			"height": 150
 		},
 		{
-			"name": "skeleton",
-			"path": "./assets/images/Skeleton/Attack.png",
+			"name": "skeleton_idle",
+			"path": "./assets/images/Skeleton/Idle.png",
+			"width": 600,
+			"height": 150
+
+		},
+		{
+			"name": "skeleton_death",
+			"path": "./assets/images/Skeleton/Death.png",
+			"width": 600,
+			"height": 150
+		},
+		{
+			"name": "skeleton_shield",
+			"path": "./assets/images/Skeleton/Shield.png",
+			"width": 600,
+			"height": 150
+		},
+		{
+			"name": "skeleton_throw",
+			"path": "./assets/images/Skeleton/Throw.png",
 			"width": 900,
 			"height": 150
 		},
 		{
-			"name": "skeleton_sword",
+			"name": "skeleton_thrown_sword",
 			"path": "./assets/images/Skeleton/Sword_sprite.png",
 			"width": 736,
 			"height": 102
+		},
+		{
+			"name": "skeleton_walk",
+			"path": "./assets/images/Skeleton/Walk.png",
+			"width": 600,
+			"height": 150
+		},
+		{
+			"name": "skeleton_attack",
+			"path": "./assets/images/Skeleton/Attack.png",
+			"width": 1200,
+			"height": 150
+		},
+		{
+			"name": "skeleton_hurt",
+			"path": "./assets/images/Skeleton/Take_hit.png",
+			"width": 600,
+			"height": 150
 		},
 		{
 			"name": "player_idle",
