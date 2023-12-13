@@ -1,5 +1,10 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js"
+import Skeleton from "../../entities/Skeleton.js";
+import { keys } from "../../globals.js";
+import Tile from "../../../lib/Tile.js";
+import Player from "../../entities/Player.js";
+import EnemyStateName from "../../enums/EnemyStateName.js";
 
 export default class SkeletonIdleState extends State{
 
@@ -16,6 +21,9 @@ export default class SkeletonIdleState extends State{
         }
 
         update(dt){
-
+            if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
+            {
+                this.skeleton.changeState(EnemyStateName.Falling);
+            }
         }
 }

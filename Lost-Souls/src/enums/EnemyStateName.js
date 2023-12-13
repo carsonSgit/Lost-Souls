@@ -5,7 +5,7 @@ const EnemyStateName = {
     Chasing: "Chasing",
     Hurt: "Hurt",
     Death: "Death",
-
+    Falling: "Falling",
 };
 
 export default EnemyStateName;
