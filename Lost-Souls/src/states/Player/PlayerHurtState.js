@@ -24,7 +24,7 @@ export default class PlayerHurtState extends State{
     update(){
         if(this.player.currentAnimation.isDone()){
 			this.player.currentAnimation.refresh();  
-            if(this.player.health == 0){
+            if(this.player.isDead){
                 this.player.changeState(PlayerStateName.Dying);
             }  
             else{

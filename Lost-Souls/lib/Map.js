@@ -43,6 +43,10 @@ export default class Map {
 		this.player.update(dt);
 		this.skeletons.update(dt);
 		this.platforms.update(dt);
+
+		if(this.player.hitbox.didCollide(this.skeletons.hitbox)) {
+			this.player.receiveDamage(this.skeletons.strength);
+		}
 	}
 
 	render() {

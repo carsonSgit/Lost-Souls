@@ -105,6 +105,7 @@ export default class GameEntity{
 
     receiveDamage(damage){
         this.currentHealth -= damage;
+        console.log(damage);
         if(this.currentHealth <= 0){
             this.isDead = true;
         }

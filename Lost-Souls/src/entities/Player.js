@@ -129,7 +129,7 @@ export default class Player extends GameEntity{
         
         this.map = map;
 
-        this.health = 10;
+        this.currentHealth = 10;
         this.strength = 2;
     }
 
@@ -217,6 +217,12 @@ export default class Player extends GameEntity{
 			this.velocity.x = 0;
 		}
 	}
-
+    receiveDamage(damage){
+        super.receiveDamage(damage);
+        console.log(this.isDead);
+        if(!this.isDead){
+            this.changeState(PlayerStateName.Hurt);
+        }
+    }
     
 }

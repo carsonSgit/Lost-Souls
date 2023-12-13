@@ -26,7 +26,7 @@ export default class PlayerHealState extends State{
             this.player.changeState(PlayerStateName.Idle);
         }
         if (this.player.currentAnimation.isHalfwayDone()) {
-			this.player.health += 5;
+			this.player.currentHealth += 5;
 		}
     }
 }
