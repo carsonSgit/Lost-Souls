@@ -116,7 +116,10 @@ export default class Player extends GameEntity{
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
 
-        if(this.map.collisionLayer.getTile(Math.floor(this.position.x / 12) + 1, Math.floor(this.position.y / 12))){
+        //console.log(this.position.x/16);
+        if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /16) + 2, Math.ceil(this.position.y /16)) !== null) {
+            
+            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ 16) + 1, Math.floor(this.position.y - 48 / 16)))
             this.velocity.x = 0;
         }
 	}
@@ -127,6 +130,11 @@ export default class Player extends GameEntity{
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
+        if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / 16) + 2, Math.ceil(this.position.y /16)) !== null) {
+            
+            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - 32 / 16) + 1, Math.floor(this.position.y / 16)))
+            this.velocity.x = 0;
+        }
     }
 
     moveUp(){
