@@ -11,21 +11,25 @@ export default class PlayerRollingState extends State{
         this.player = player;
 
 
-        this.animation = new Animation([0, 1, 2, 3], 0.1, 3);
+        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0.1 , 1);
+        console.log(this.animation);
         this.originalHitboxOffsets = this.player.hitboxOffsets;
     }
 
     enter(){
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.rollingSprites;
+        console.log(this.player.sprites);
         console.log('rolling state: enter')
         //this.player.hitbox.set()
-
+        this.player.speedScalar = 1;
+        this.player.frictionScalar = .9;
         this.player.hitboxOffsets = this.player.rollingHitboxOffsets;
     }
 
     update(){
         if(this.player.currentAnimation.isDone()){
+            console.log('uhh')
 			this.player.currentAnimation.refresh();    
             this.player.hitboxOffsets = this.originalHitboxOffsets;
             if(keys.a || keys.d){
@@ -33,6 +37,8 @@ export default class PlayerRollingState extends State{
             }
             else
             {
+                this.player.speedScalar = .7;
+                this.player.frictionScalar = .7;
                 this.player.velocity.x = 0;
                 this.player.changeState(PlayerStateName.Idle);
             }
