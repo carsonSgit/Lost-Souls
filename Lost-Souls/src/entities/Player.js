@@ -12,6 +12,8 @@ import Direction from "../enums/Direction.js";
 import Vector from "../../lib/Vector.js";
 import Hitbox from "../../lib/Hitbox.js";
 import PlayerPrayingState from "../states/Player/PlayerPrayingState.js";
+import PlayerFallingState from "../states/Player/PlayerFallingState.js";
+import Tile from "../../lib/Tile.js";
 
 export default class Player extends GameEntity{
 
@@ -33,6 +35,8 @@ export default class Player extends GameEntity{
     static PRAYING_SPRITE_HEIGHT = 64;
     static OFFSET_WIDTH = 128;
     static OFFSET_HEIGHT = 64;
+    static FALLING_SPRITE_WIDTH = 128;
+    static FALLING_SPRITE_HEIGHT = 64;
 
     
     /** 
@@ -49,7 +53,7 @@ export default class Player extends GameEntity{
         this.positionOffset = new Vector(0, 0);
         this.hitboxOffsets = new Hitbox(48, 16, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT);
         this.rollingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
-
+        this.fallingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
 
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
@@ -76,6 +80,11 @@ export default class Player extends GameEntity{
             images.get(ImageName.PlayerPray),
             Player.PRAYING_SPRITE_WIDTH,
             Player.PRAYING_SPRITE_HEIGHT,
+        );
+        this.fallingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerFall),
+            Player.FALLING_SPRITE_WIDTH,
+            Player.FALLING_SPRITE_HEIGHT,
         )
 
 
@@ -106,7 +115,7 @@ export default class Player extends GameEntity{
         stateMachine.add(PlayerStateName.Attacking, new PlayerAttackingState(this));
         stateMachine.add(PlayerStateName.Rolling, new PlayerRollingState(this));
         stateMachine.add(PlayerStateName.Praying, new PlayerPrayingState(this));
-
+        stateMachine.add(PlayerStateName.Falling, new PlayerFallingState(this));
         stateMachine.change(PlayerStateName.Praying);
 
         return stateMachine;
@@ -117,9 +126,9 @@ export default class Player extends GameEntity{
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
 
         //console.log(this.position.x/16);
-        if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /16) + 2, Math.ceil(this.position.y /16)) !== null) {
+        if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             
-            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ 16) + 1, Math.floor(this.position.y - 48 / 16)))
+            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ Tile.SIZE) + 1, Math.floor(this.position.y - (Tile.SIZE*3) / Tile.SIZE)))
             this.velocity.x = 0;
         }
 	}
@@ -130,9 +139,9 @@ export default class Player extends GameEntity{
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
-        if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / 16) + 2, Math.ceil(this.position.y /16)) !== null) {
+        if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             
-            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - 32 / 16) + 1, Math.floor(this.position.y / 16)))
+            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - (Tile.SIZE*2) / Tile.SIZE) + 1, Math.floor(this.position.y / Tile.SIZE)))
             this.velocity.x = 0;
         }
     }
@@ -142,9 +151,14 @@ export default class Player extends GameEntity{
         this.velocity.y = Math.max(this.velocity.y - this.speedScalar * this.frictionScalar, -this.velocityLimit.y);
     }
 
-    moveDown(){
+    moveDown(dt){
         this.direction = Direction.Down;
-        this.velocity.y = Math.min(this.velocity.y + this.speedScalar * this.frictionScalar, this.velocityLimit.y);
+        if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Player.HEIGHT) /Tile.SIZE) +1) != null) {
+            this.velocity.y = 0;
+        }
+        else{
+            this.velocity.add(this.gravityForce, dt);
+        }
     }
 
     stop() {

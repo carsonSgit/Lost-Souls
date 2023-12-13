@@ -80,9 +80,9 @@
 		},
 		{
 			"name": "player_fall",
-			"path": "./assets/images/Player/attack_from_air.png",
+			"path": "./assets/images/Player/Roll.png",
 			"width": 256,
-			"height": 256
+			"height": 128
 		},
 		{
 			"name": "player_death",

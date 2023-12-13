@@ -37,13 +37,12 @@ export default class TitleScreenState extends State {
 
 	render(context){
 		context.save();
-		this.renderTitleWindow(context);
 		this.map.render();
+		this.renderTitleWindow(context);
 		context.restore();
 	}
 
 	renderTitleWindow(context) {
-		context.fillRect(30, 30, CANVAS_WIDTH - 60, CANVAS_HEIGHT - 60);
 		context.font = '60px Dungeon';
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
