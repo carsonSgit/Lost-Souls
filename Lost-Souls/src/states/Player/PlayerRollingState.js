@@ -30,6 +30,7 @@ export default class PlayerRollingState extends State{
 
     exit(){
         this.player.hitboxOffsets = this.originalHitboxOffsets;
+        this.player.attackHitbox.set(0, 0, 0, 0);
     }
     update(){
         if(this.player.currentAnimation.isDone()){

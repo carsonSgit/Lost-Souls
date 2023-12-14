@@ -24,8 +24,9 @@ export default class PlayerFallingState extends State{
 
     exit(){
         this.player.hitboxOffsets = this.ogHitboxOffsets;
+        this.player.attackHitbox.set(0, 0, 0, 0);
     }
-
+    
     update(dt){
         this.player.moveDown(dt);
         

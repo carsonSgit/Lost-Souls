@@ -24,6 +24,10 @@ export default class PlayerHurtState extends State{
         console.log('Hurt state: enter')
     }
 
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
+    
     update(){
         if(this.player.currentAnimation.isDone()){
 			this.player.currentAnimation.refresh();  

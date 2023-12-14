@@ -24,6 +24,10 @@ export default class PlayerDyingState extends State{
         console.log('Dying state: enter')
     }
 
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
+
     update(){
         if(this.player.currentAnimation.isDone()){
             //this.player.hitboxOffsets.set(0,0,0,0, "red");
