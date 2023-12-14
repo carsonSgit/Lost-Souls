@@ -35,25 +35,41 @@ export default class Map {
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
 		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this);
-		this.platforms = new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 100));
+		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
+			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
 		
 	}
 
 	update(dt) {
 		this.player.update(dt);
 		this.skeletons.update(dt);
-		this.platforms.update(dt);
+		this.platforms.forEach(platform => {
+			platform.update(dt);
+		});
 
 		if(this.player.hitbox.didCollide(this.skeletons.hitbox)) {
 			this.player.receiveDamage(this.skeletons.strength);
 		}
+
+		this.platforms.forEach(platform => {
+			if(platform.didCollideWithEntity(this.player.hitbox)) {
+
+				if(platform.getEntityCollisionDirection(this.player.hitbox) == 0) {
+					this.player.position.y = platform.position.y - this.player.dimensions.y;
+					this.player.velocity.y = 0;
+				}
+				
+			}
+		});
 	}
 
 	render() {
 		context.drawImage(backgroundImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		//this.bottomLayer.render();
+		this.platforms.forEach(platform => {
+			platform.render();
+		});		
 		this.collisionLayer.render();
-		this.platforms.render();
 		this.player.render();
 		this.skeletons.render();
 		//this.midgroundLayer.render();

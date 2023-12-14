@@ -27,6 +27,12 @@ export default class Platform extends GameObject{
         this.isConsumable = false;
         this.wasCollided = false;
         this.wasConsumed = false;
+        this.numOfSupports = this.getRandomNumberOfSupports();
+
+        this.hitbox.position.x = this.position.x+12;
+        this.hitbox.position.y = this.position.y;
+        this.hitbox.dimensions.x = Platform.PLATFORM_WIDTH;
+        this.hitbox.dimensions.y = Platform.PLATFORM_HEIGHT;
 
         this.platformSprites = Sprite.generateSpritesFromSpriteSheet(
 			images.get(ImageName.Tiles),
@@ -50,8 +56,15 @@ export default class Platform extends GameObject{
         const x = this.position.x + offset.x;
 		const y = this.position.y + offset.y;
 
-		this.platformSprites[22].render(Math.floor(x), Math.floor(y));
-        this.supportSprites[54].render(Math.floor(x), Math.floor(y) + Platform.SUPPORT_SPRITE_HEIGHT);
+		// Render platform sprite
+        this.platformSprites[Platform.PLATFORM_TILE_LOCATIONS[0]].render(Math.floor(x), Math.floor(y));
+
+        // Render support sprites
+        for (let i = 0; i < this.numOfSupports; i++) {
+            const supportX = Math.floor(x) + Platform.PLATFORM_WIDTH / 2 - Platform.SUPPORTS_WIDTH / 2;
+            const supportY = Math.floor(y) + Platform.PLATFORM_HEIGHT + i * (Platform.SUPPORTS_HEIGHT - Platform.PLATFORM_HEIGHT);
+            this.supportSprites[Platform.SUPPORTS_TILE_LOCATIONS[0]].render(supportX, supportY);
+        }
 
 		if (DEBUG) {
 			this.hitbox.render(context);
@@ -59,10 +72,30 @@ export default class Platform extends GameObject{
     }
 
     onCollide(entity){
+        console.log('collided')
         this.wasCollided = true;
+        super.onCollision(entity);
     }
 
     onConsume(consumer){
         return;
     }
+
+    getRandomNumberOfSupports() {
+        const CAVE_HEIGHT = 600;
+        // The y-coordinate of the bottom of the platform
+        const bottomOfPlatform = this.position.y + Platform.PLATFORM_HEIGHT;
+    
+        // The space between the bottom of the platform and the ground
+        const spaceToFill = CAVE_HEIGHT - bottomOfPlatform;
+    
+        // Calculate the number of supports needed to fill this space
+        const supportsNeeded = Math.ceil(spaceToFill / Platform.SUPPORTS_HEIGHT);
+    
+        // Ensure at least 1 support is returned and the number of supports does not exceed a maximum limit
+        const minSupports = 1;
+        const maxSupports = 8;
+        return Math.max(minSupports, Math.min(supportsNeeded, maxSupports));
+    }
+    
 }

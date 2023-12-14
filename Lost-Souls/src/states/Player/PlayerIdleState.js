@@ -24,10 +24,13 @@ export default class PlayerIdleState extends State{
     }
 
     update(){
+        const objCollisions = this.player.checkObjectCollisions();
+        console.log(objCollisions);
+
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
-        else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
+        else if(objCollisions <= 0 && this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {
             this.player.changeState(PlayerStateName.Falling);
         }

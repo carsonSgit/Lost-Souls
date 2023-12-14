@@ -204,8 +204,12 @@ export default class Player extends GameEntity{
     }
 
     moveDown(dt){
+        const collisionObjects = this.checkObjectCollisions();
+        console.log(collisionObjects)
+        
+
         this.direction = Direction.Down;
-        if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Player.HEIGHT) /Tile.SIZE) +1) != null
+        if(collisionObjects.length > 0 || this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Player.HEIGHT) /Tile.SIZE) +1) != null
         && this.map.collisionLayer.getTile(Math.floor((this.position.x + Player.WIDTH) / Tile.SIZE), Math.floor((this.position.y+Player.HEIGHT)/Tile.SIZE) + 1) !== null) {
             this.velocity.y = 0;
         }
@@ -259,6 +263,45 @@ export default class Player extends GameEntity{
 		};
 
         return timer.addTask(action, interval, duration, callback);
+    }
+
+    /**
+	 * Loops through all the game objects in the current level and checks
+	 * if the player collided with any of them. If so, run onCollision().
+	 * If no onCollision() function was passed, use the one from this class.
+	 *
+	 * @param {function} onCollision What should happen when the collision occurs.
+	 * @returns The collision objects returned by onCollision().
+	 */
+	checkObjectCollisions(onCollision = object => this.onObjectCollision(object)) {
+		let collisionObjects = [];
+
+		this.map.platforms.forEach((object) => {
+			if (object.didCollideWithEntity(this)) {
+				collisionObjects = onCollision(object);
+			}
+		});
+		return collisionObjects;
+	}
+
+    /**
+	 * Collects the object if the game object is solid or collidable.
+	 * Fires onConsume() if the game object is consumable.
+	 *
+	 * @param {GameObject} object
+	 * @returns All solid and collidable game objects that were collided with.
+	 */
+    onObjectCollision(object){
+        const collisionObjects = [];
+
+		if (object.isSolid || object.isCollidable) {
+			collisionObjects.push(object);
+		}
+		else if (object.isConsumable) {
+			object.onConsume(this);
+		}
+
+		return collisionObjects;
     }
     
 }
