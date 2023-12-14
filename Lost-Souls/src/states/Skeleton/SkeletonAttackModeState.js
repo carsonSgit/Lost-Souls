@@ -24,6 +24,7 @@ export default class SkeletonAttackModeState extends State{
         
         exit(){
             console.log("Skeleton AttackMode State: Exit");
+            this.skeleton.attackHitbox.set(0, 0, 0, 0);
         }
 
         update(dt){

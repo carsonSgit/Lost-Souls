@@ -53,12 +53,14 @@ export default class GameEntity{
         this.stateMachine.update(dt);
         this.currentAnimation.update(dt);
         this.position.add(this.velocity, dt);
-        this.hitbox.set(
-			this.position.x + this.hitboxOffsets.position.x,
-			this.position.y + this.hitboxOffsets.position.y,
-			this.dimensions.x + this.hitboxOffsets.dimensions.x,
-			this.dimensions.y + this.hitboxOffsets.dimensions.y,
-		);
+        if(!this.isDead){
+            this.hitbox.set(
+                this.position.x + this.hitboxOffsets.position.x,
+                this.position.y + this.hitboxOffsets.position.y,
+                this.dimensions.x + this.hitboxOffsets.dimensions.x,
+                this.dimensions.y + this.hitboxOffsets.dimensions.y,
+            );
+        }
     }
 
     render(offset){

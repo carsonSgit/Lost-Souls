@@ -27,6 +27,10 @@ export default class PlayerDyingState extends State{
         console.log('Dying state: enter')
     }
 
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
+
     update(){
         if(this.player.currentAnimation.isDone()){
             // Sound infinitely plays as we are stuck in this state, but when we 

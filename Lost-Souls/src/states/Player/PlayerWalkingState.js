@@ -23,6 +23,9 @@ export default class PlayerWalkingState extends State{
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
     update(dt){
         const objCollisions = this.player.checkObjectCollisions();
 

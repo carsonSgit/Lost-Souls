@@ -23,6 +23,10 @@ export default class PlayerIdleState extends State{
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
+    
     update(){
         const objCollisions = this.player.checkObjectCollisions();
         //console.log(objCollisions);

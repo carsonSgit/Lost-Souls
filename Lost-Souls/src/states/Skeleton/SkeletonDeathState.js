@@ -30,7 +30,7 @@ export default class SkeletonDeathState extends State{
 
     update(dt){
         if(this.skeleton.currentAnimation.isDone()){
-			//this.skeleton.currentAnimation.refresh();  
+            this.skeleton.hitbox.set(0,0,0,0);
             this.skeleton.isDead = true;
             this.skeleton.cleanUp = true;
         }

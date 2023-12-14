@@ -22,6 +22,10 @@ export default class PlayerHealState extends State{
         console.log('Heal State: enter')
     }
 
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
+    
     update(){
         if(this.player.currentAnimation.isDone()){  
             this.player.currentAnimation.refresh();
