@@ -18,6 +18,7 @@ export default class SkeletonIdleState extends State{
         enter(){
             this.skeleton.currentAnimation = this.animation;
             this.skeleton.sprites = this.skeleton.idleSprites;
+            console.log("skeleton idle state: enter");
         }
 
         update(dt){

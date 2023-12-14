@@ -1,7 +1,8 @@
 import Camera from "../../lib/Camera.js";
 import Map from "../../lib/Map.js";
 import State from "../../lib/State.js";
-import { timer } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
+import { sounds, timer } from "../globals.js";
 
 export default class PlayState extends State {
 	constructor() {
@@ -11,7 +12,7 @@ export default class PlayState extends State {
 
 	enter(parameters){
 		this.map = parameters.map;
-
+		sounds.play(SoundName.CaveTheme);
 		
 	}
 

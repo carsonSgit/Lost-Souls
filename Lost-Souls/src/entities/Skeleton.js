@@ -124,13 +124,13 @@ export default class Skeleton extends Enemy{
     }
 
     receiveDamage(damage){
-        sounds.play(SoundName.Sword_Hit)
         super.receiveDamage(damage);
         //console.log(this.isDead);
         if(!this.isDead){
+            sounds.play(SoundName.Sword_Hit)
            // console.log("Entering Skeleton Hurt State")
             this.changeState(EnemyStateName.Hurt);
-        }else{
+        }else if(!this.cleanUp){
             this.changeState(EnemyStateName.Death);
         }
     }

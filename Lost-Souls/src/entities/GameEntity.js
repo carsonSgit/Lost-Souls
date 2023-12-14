@@ -50,6 +50,9 @@ export default class GameEntity{
     }
 
     update(dt){
+        if(this.cleanUp){
+            return;
+        }
         this.stateMachine.update(dt);
         this.currentAnimation.update(dt);
         this.position.add(this.velocity, dt);
@@ -107,7 +110,6 @@ export default class GameEntity{
 
     receiveDamage(damage){
         this.currentHealth -= damage;
-        console.log(damage);
         if(this.currentHealth <= 0){
             this.isDead = true;
         }

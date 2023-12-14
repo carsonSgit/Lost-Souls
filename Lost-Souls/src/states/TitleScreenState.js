@@ -5,8 +5,10 @@ import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
 	keys,
+	sounds,
 	stateMachine,
 } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
 export default class TitleScreenState extends State {
 	constructor(mapDefinition) {
 		super();
@@ -29,11 +31,11 @@ export default class TitleScreenState extends State {
 	}
 
 	enter(){
-
+		sounds.play(SoundName.VillageTheme);
 	}
 
 	exit(){
-
+		sounds.stop(SoundName.VillageTheme);
 	}
 
 	render(context){

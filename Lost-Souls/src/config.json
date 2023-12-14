@@ -207,6 +207,34 @@
 			"path": "./assets/sounds/sfx/Player_Movement_SFX/52_Dive_02.wav",
 			"size": 1,
 			"volume": 0.15
+		},
+		{
+			"name":"Boss_Fight",
+			"path": "./assets/sounds/soundtrack/exploring.wav",
+			"size": 1,
+			"volume": 0.025,
+			"loop": true
+		},
+		{
+			"name":"Cave_Theme",
+			"path": "./assets/sounds/soundtrack/dungeon.wav",
+			"size": 1,
+			"volume": 0.025,
+			"loop": true
+		},
+		{
+			"name": "Credits_Theme",
+			"path": "./assets/sounds/soundtrack/title.wav",
+			"size": 1,
+			"volume": 0.025,
+			"loop": true
+		},
+		{
+			"name": "Village_Theme",
+			"path": "./assets/sounds/soundtrack/finale.wav",
+			"size": 1,
+			"volume": 0.025,
+			"loop": true
 		}
 
 
