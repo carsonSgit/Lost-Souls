@@ -15,6 +15,7 @@ import {
 import Player from "../src/entities/Player.js";
 import Platform from "../src/objects/Platform.js";
 import Skeleton from "../src/entities/Skeleton.js";
+import Door from "../src/objects/Door.js";
 
 export default class Map {
 	/**
@@ -35,9 +36,11 @@ export default class Map {
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
 		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this);
+		
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
 		
+		this.door = new Door(new Vector(Door.DOOR_WIDTH, Door.DOOR_HEIGHT), Door.DOOR_SPAWN);
 	}
 
 	update(dt) {
@@ -46,6 +49,7 @@ export default class Map {
 		this.platforms.forEach(platform => {
 			platform.update(dt);
 		});
+		this.door.update(dt);
 
 		if(this.player.hitbox.didCollide(this.skeletons.hitbox)) {
 			this.player.receiveDamage(this.skeletons.strength);
@@ -69,6 +73,7 @@ export default class Map {
 		this.platforms.forEach(platform => {
 			platform.render();
 		});		
+		this.door.render();
 		this.collisionLayer.render();
 		this.player.render();
 		this.skeletons.render();

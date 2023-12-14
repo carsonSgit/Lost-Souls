@@ -29,7 +29,7 @@ export default class Platform extends GameObject{
         this.wasConsumed = false;
         this.numOfSupports = this.getRandomNumberOfSupports();
 
-        this.hitbox.position.x = this.position.x+12;
+        this.hitbox.position.x = this.position.x + (Platform.PLATFORM_SPRITE_WIDTH - Platform.PLATFORM_WIDTH);
         this.hitbox.position.y = this.position.y;
         this.hitbox.dimensions.x = Platform.PLATFORM_WIDTH;
         this.hitbox.dimensions.y = Platform.PLATFORM_HEIGHT;

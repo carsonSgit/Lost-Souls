@@ -1,7 +1,7 @@
 import Sprite from "../../lib/Sprite.js";
 import StateMachine from "../../lib/StateMachine.js";
 import ImageName from "../enums/ImageName.js";
-import { DEBUG, images, context, timer} from "../globals.js";
+import { DEBUG, images, context, timer, sounds} from "../globals.js";
 import GameEntity from "./GameEntity.js"
 import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
@@ -19,6 +19,7 @@ import PlayerHurtState from "../states/Player/PlayerHurtState.js";
 import PlayerDyingState from "../states/Player/PlayerDyingState.js";
 import PlayerHealState from "../states/Player/PlayerHealState.js";
 import Timer from "../../lib/Timer.js";
+import SoundName from "../enums/SoundName.js";
 
 export default class Player extends GameEntity{
 

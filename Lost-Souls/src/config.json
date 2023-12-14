@@ -148,6 +148,49 @@
 		}
 	],
 	"sounds": [
-		
+		{
+			"name": "Step",
+			"path": "./assets/sounds/sfx/Player_Movement_SFX/Cling_climb.wav",
+			"size": 1,
+			"volume": 0.3
+		},
+		{
+			"name": "Jump",
+			"path": "./assets/sounds/sfx/Player_Movement_SFX/30_Jump_03.wav",
+			"size": 2,
+			"volume": 0.3
+		},
+		{
+			"name": "Land",
+			"path": "./assets/sounds/sfx/Player_Movement_SFX/Landing.wav",
+			"size": 3,
+			"volume": 0.5
+		},
+		{
+			"name": "Hurt",
+			"path": "./assets/sounds/sfx/Battle_SFX/03_Claw_03.wav",
+			"size": 3,
+			"volume": 0.5
+		},
+		{
+			"name": "Heal",
+			"path": "./assets/sounds/sfx/Buffs_Heals_SFX/02_Heal_02.wav",
+			"size": 5,
+			"volume": 0.15
+		},
+		{
+			"name": "Sword_Hit",
+			"path": "./assets/sounds/sfx/Battle_SFX/08_Bite_04.wav",
+			"size": 2,
+			"volume": 0.15
+		},
+		{
+			"name":"Sword_Swing",
+			"path": "./assets/sounds/sfx/Battle_SFX/35_Miss_Evade_02.wav",
+			"size": 2,
+			"volume": 0.15
+		}
+
+
 	]
 }
