@@ -39,7 +39,6 @@ export default class PlayerRollingState extends State{
             else
             {
                 this.player.speedScalar = .7;
-                this.player.frictionScalar = .7;
                 this.player.velocity.x = 0;
                 this.player.changeState(PlayerStateName.Idle);
             }

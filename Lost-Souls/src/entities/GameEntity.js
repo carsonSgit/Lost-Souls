@@ -110,4 +110,12 @@ export default class GameEntity{
             this.isDead = true;
         }
     }
+
+    /**
+	 * @param {Entity} entity
+	 * @returns The horizontal distance between this entity and the specified entity.
+	 */
+	getDistanceBetween(entity) {
+		return Math.abs(this.position.x - entity.position.x);
+	}
 }

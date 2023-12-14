@@ -25,5 +25,12 @@ export default class SkeletonIdleState extends State{
             {
                 this.skeleton.changeState(EnemyStateName.Falling);
             }
+            this.chase();
+        }
+
+        chase(){
+            if(this.skeleton.getDistanceBetween(this.skeleton.map.player) <= Skeleton.CHASE_DISTANCE){
+                this.skeleton.changeState(EnemyStateName.AttackMode)
+            }
         }
 }

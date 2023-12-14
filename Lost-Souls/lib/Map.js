@@ -39,6 +39,7 @@ export default class Map {
 		
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
+
 		
 		this.door = new Door(new Vector(Door.DOOR_WIDTH, Door.DOOR_HEIGHT), Door.DOOR_SPAWN);
 	}
@@ -51,7 +52,10 @@ export default class Map {
 		});
 		this.door.update(dt);
 
-		if(this.player.hitbox.didCollide(this.skeletons.hitbox)) {
+		if(this.player.attackHitbox.didCollide(this.skeletons.hitbox)) {
+			this.skeletons.receiveDamage(this.player.strength);
+		}
+		if(this.skeletons.attackHitbox.didCollide(this.player.hitbox)) {
 			this.player.receiveDamage(this.skeletons.strength);
 		}
 
