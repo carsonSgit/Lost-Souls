@@ -69,6 +69,13 @@ export default class Map {
 				
 			}
 		});
+
+		// Check all enemies are dead for door to spawn
+		if(this.skeletons.isDead) {
+			this.door.isSolid = true;
+			this.door.isCollidable = true;
+			this.door.shouldRender = true;
+		}
 	}
 
 	render() {
@@ -76,8 +83,11 @@ export default class Map {
 		//this.bottomLayer.render();
 		this.platforms.forEach(platform => {
 			platform.render();
-		});		
-		this.door.render();
+		});
+		
+		if(this.door.shouldRender)
+			this.door.render();
+
 		this.collisionLayer.render();
 		this.player.render();
 		this.skeletons.render();
