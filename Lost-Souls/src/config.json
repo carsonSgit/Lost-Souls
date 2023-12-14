@@ -195,6 +195,18 @@
 			"path": "./assets/sounds/sfx/UI_Menu_SFX/070_Equip_10.wav",
 			"size": 2,
 			"volume": 0.15
+		},
+		{
+			"name": "Enemy_Death",
+			"path": "./assets/sounds/sfx/Battle_SFX/69_Enemy_Death_01.wav",
+			"size": 2,
+			"volume": 0.15
+		},
+		{
+			"name": "Player_Death",
+			"path": "./assets/sounds/sfx/Player_Movement_SFX/52_Dive_02.wav",
+			"size": 1,
+			"volume": 0.15
 		}
 
 
