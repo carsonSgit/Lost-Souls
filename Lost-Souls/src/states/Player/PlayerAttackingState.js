@@ -19,6 +19,9 @@ export default class PlayerAttackingState extends State{
         this.player.sprites = this.player.attackingSprites;
         console.log('Attacking State: enter')
     }
+    exit(){
+        this.player.attackHitbox.set(0, 0, 0, 0);
+    }
 
     update(){
         if(this.player.currentAnimation.isDone()){

@@ -4,7 +4,7 @@ import StateMachine from "../../lib/StateMachine.js";
 import Direction from "../enums/Direction.js";
 import EnemyStateName from "../enums/EnemyStateName.js";
 import ImageName from "../enums/ImageName.js";
-import { DEBUG, images, context} from "../globals.js";
+import { DEBUG, images, context, timer} from "../globals.js";
 import SkeletonFallingState from "../states/Skeleton/SkeletonFallingState.js";
 import SkeletonIdleState from "../states/Skeleton/SkeletonIdleState.js";
 import Enemy from "./Enemy.js";
@@ -12,6 +12,8 @@ import Vector from "../../lib/Vector.js";
 import Tile from "../../lib/Tile.js";
 import SkeletonAttackModeState from "../states/Skeleton/SkeletonAttackModeState.js";
 import SkeletonAttackingState from "../states/Skeleton/SkeletonAttackingState.js";
+import SkeletonHurtState from "../states/Skeleton/SkeletonHurtState.js";
+import SkeletonDeathState from "../states/Skeleton/SkeletonDeathState.js";
 
 export default class Skeleton extends Enemy{
 
@@ -36,7 +38,16 @@ export default class Skeleton extends Enemy{
     static ATTACKING_SPRITE_WIDTH = 150;
     static ATTACKING_SPRITE_HEIGHT = 150;
 
+    static HURT_SPRITE_WIDTH = 150;
+    static HURT_SPRITE_HEIGHT = 150;
+
+    static DEATH_SPRITE_WIDTH = 150;
+    static DEATH_SPRITE_HEIGHT = 150;
+
     static CHASE_DISTANCE = 2 * Skeleton.WIDTH;
+
+    static INVULNERABILITY_INTERVAL = 0.1;
+    static INVULNERABILITY_DURATION = 0.5;
 
     constructor(dimensions, position, velocityLimit, map){
         super(dimensions, position, velocityLimit);
@@ -72,28 +83,53 @@ export default class Skeleton extends Enemy{
             Skeleton.ATTACKING_SPRITE_WIDTH,
             Skeleton.ATTACKING_SPRITE_HEIGHT,
         );
+        this.hurtSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.SkeletonHurt),
+            Skeleton.ATTACKING_SPRITE_WIDTH,
+            Skeleton.ATTACKING_SPRITE_HEIGHT,
+        );
+        this.deathSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.SkeletonDeath),
+            Skeleton.ATTACKING_SPRITE_WIDTH,
+            Skeleton.ATTACKING_SPRITE_HEIGHT,
+        );
 
         this.sprites = this.idleSprites;
         
         this.strength = 2;
+        this.isInvulnerable = false;
 
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new SkeletonIdleState(this));
         this.stateMachine.add(EnemyStateName.Falling, new SkeletonFallingState(this));
         this.stateMachine.add(EnemyStateName.AttackMode, new SkeletonAttackModeState(this));
         this.stateMachine.add(EnemyStateName.Attacking, new SkeletonAttackingState(this));
+        this.stateMachine.add(EnemyStateName.Hurt, new SkeletonHurtState(this));
+        this.stateMachine.add(EnemyStateName.Death, new SkeletonDeathState(this));
         this.stateMachine.change(EnemyStateName.Idle);
     }
 
     render(){
         context.save();
-
+        console.log(this.positionOffset);
         super.render(this.positionOffset);
         
         context.restore();
 
         if(DEBUG){
             this.attackHitbox.render(context);
+        }
+    }
+
+    receiveDamage(damage){
+
+        super.receiveDamage(damage);
+        //console.log(this.isDead);
+        if(!this.isDead){
+           // console.log("Entering Skeleton Hurt State")
+            this.changeState(EnemyStateName.Hurt);
+        }else{
+            this.changeState(EnemyStateName.Death);
         }
     }
 

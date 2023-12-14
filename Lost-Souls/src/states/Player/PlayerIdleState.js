@@ -25,7 +25,7 @@ export default class PlayerIdleState extends State{
 
     update(){
         const objCollisions = this.player.checkObjectCollisions();
-        console.log(objCollisions);
+        //console.log(objCollisions);
 
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
