@@ -77,13 +77,13 @@ export default class GameEntity{
     renderEntity(offset){
         if (this.direction === Direction.Left) {
 			context.save();
-			context.translate(Math.floor(this.position.x) + this.dimensions.x, Math.floor(this.position.y));
+			context.translate(Math.floor(this.position.x) + this.dimensions.x, Math.floor(this.position.y + offset.y) );
 			context.scale(-1, 1);
 			this.sprites[this.currentAnimation.getCurrentFrame()].render(0, 0);
 			context.restore();
 		}
 		else {
-			this.sprites[this.currentAnimation.getCurrentFrame()].render(Math.floor(this.position.x), Math.floor(this.position.y));
+			this.sprites[this.currentAnimation.getCurrentFrame()].render(Math.floor(this.position.x), Math.floor(this.position.y  + offset.y));
 		}
     }
 
