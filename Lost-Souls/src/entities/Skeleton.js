@@ -61,6 +61,8 @@ export default class Skeleton extends Enemy{
         this.frictionScalar = 0.1;
 
         this.direction = Direction.Left;
+
+        this.positionOffset =  new Vector(0, 4);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
         this.hitboxOffsets = new Hitbox(Skeleton.WIDTH+8, Skeleton.HEIGHT-8, -Skeleton.OFFSET_WIDTH + Skeleton.WIDTH, -Skeleton.OFFSET_HEIGHT+Skeleton.HEIGHT);
 
@@ -112,7 +114,6 @@ export default class Skeleton extends Enemy{
 
     render(){
         context.save();
-        console.log(this.positionOffset);
         super.render(this.positionOffset);
         
         context.restore();
