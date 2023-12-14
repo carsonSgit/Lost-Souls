@@ -26,11 +26,13 @@ export default class PlayerRollingState extends State{
         this.player.hitboxOffsets = this.player.rollingHitboxOffsets;
     }
 
+    exit(){
+        this.player.hitboxOffsets = this.originalHitboxOffsets;
+    }
     update(){
         if(this.player.currentAnimation.isDone()){
             console.log('uhh')
 			this.player.currentAnimation.refresh();    
-            this.player.hitboxOffsets = this.originalHitboxOffsets;
             if(keys.a || keys.d){
                 this.player.changeState(PlayerStateName.Walking);
             }

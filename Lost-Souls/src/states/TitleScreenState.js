@@ -12,11 +12,12 @@ export default class TitleScreenState extends State {
 		super();
 
 		this.map = new Map(mapDefinition);
+		
+		console.log(this.mapDefinition);
 
 	}
 	update(dt){
 		this.map.update(dt)
-
 		if(keys.Enter){
 			this.map.player.stateMachine.currentState.stopPraying();
 			stateMachine.change(
