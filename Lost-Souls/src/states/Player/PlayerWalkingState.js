@@ -23,13 +23,15 @@ export default class PlayerWalkingState extends State{
     }
 
     update(dt){
+        const objCollisions = this.player.checkObjectCollisions();
+
         if(!keys.a && !keys.d  && Math.abs(this.player.velocity.x) === 0){
             this.player.changeState(PlayerStateName.Idle);
         }
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
-        else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
+        else if(objCollisions.length<= 0 && this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {
             this.player.changeState(PlayerStateName.Falling);
         }

@@ -59,6 +59,7 @@ export default class GameEntity{
 			this.dimensions.x + this.hitboxOffsets.dimensions.x,
 			this.dimensions.y + this.hitboxOffsets.dimensions.y,
 		);
+
     }
 
     render(offset){
