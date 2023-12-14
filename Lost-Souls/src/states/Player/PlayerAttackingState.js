@@ -16,6 +16,7 @@ export default class PlayerAttackingState extends State{
     }
 
     enter(){
+        sounds.play(SoundName.Sword_Swing);
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.attackingSprites;
         console.log('Attacking State: enter')
@@ -31,7 +32,6 @@ export default class PlayerAttackingState extends State{
             this.player.changeState(PlayerStateName.Idle);
         }
         if (this.player.currentAnimation.isHalfwayDone()) {
-            sounds.play(SoundName.SwordOne)
 			this.setSwordHitbox();
 		}
         else{

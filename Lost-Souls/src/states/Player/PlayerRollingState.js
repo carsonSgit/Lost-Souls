@@ -1,8 +1,9 @@
 import State from "../../../lib/State.js";
 import Animation from "../../../lib/Animation.js";
-import { keys } from "../../globals.js";
+import { keys, sounds } from "../../globals.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Direction from "../../enums/Direction.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayerRollingState extends State{
     constructor(player){
@@ -17,6 +18,7 @@ export default class PlayerRollingState extends State{
     }
 
     enter(){
+        sounds.play(SoundName.Slide);
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.rollingSprites;
         console.log(this.player.sprites);

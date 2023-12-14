@@ -187,6 +187,12 @@
 		{
 			"name":"Sword_Swing",
 			"path": "./assets/sounds/sfx/Battle_SFX/35_Miss_Evade_02.wav",
+			"size": 3,
+			"volume": 0.15
+		},
+		{
+			"name": "Slide",
+			"path": "./assets/sounds/sfx/UI_Menu_SFX/070_Equip_10.wav",
 			"size": 2,
 			"volume": 0.15
 		}

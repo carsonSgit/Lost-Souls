@@ -4,7 +4,7 @@ import StateMachine from "../../lib/StateMachine.js";
 import Direction from "../enums/Direction.js";
 import EnemyStateName from "../enums/EnemyStateName.js";
 import ImageName from "../enums/ImageName.js";
-import { DEBUG, images, context, timer} from "../globals.js";
+import { DEBUG, images, context, timer, sounds} from "../globals.js";
 import SkeletonFallingState from "../states/Skeleton/SkeletonFallingState.js";
 import SkeletonIdleState from "../states/Skeleton/SkeletonIdleState.js";
 import Enemy from "./Enemy.js";
@@ -14,6 +14,7 @@ import SkeletonAttackModeState from "../states/Skeleton/SkeletonAttackModeState.
 import SkeletonAttackingState from "../states/Skeleton/SkeletonAttackingState.js";
 import SkeletonHurtState from "../states/Skeleton/SkeletonHurtState.js";
 import SkeletonDeathState from "../states/Skeleton/SkeletonDeathState.js";
+import SoundName from "../enums/SoundName.js";
 
 export default class Skeleton extends Enemy{
 
@@ -122,7 +123,7 @@ export default class Skeleton extends Enemy{
     }
 
     receiveDamage(damage){
-
+        sounds.play(SoundName.Sword_Hit)
         super.receiveDamage(damage);
         //console.log(this.isDead);
         if(!this.isDead){
