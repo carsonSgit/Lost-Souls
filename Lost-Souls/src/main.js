@@ -88,3 +88,19 @@ game.start();
 
 // Focus the canvas so that the player doesn't have to click on it.
 canvas.focus();
+
+function saveGameState(game){
+	const serializedGameState = JSON.stringify(game);
+	localStorage.setItem("gameState", serializedGameState);
+}
+
+function loadGameState(){
+	const serializedGameState = localStorage.getItem("gameState");
+	if(serializedGameState){
+		return JSON.parse(serializedGameState);
+		//would need to assign values to stateMachine, context, canvas.width, canvas.height ...
+		//like const stateMachine = this.game.stateMachine;
+	}
+
+	return new Game(stateMachine, context, canvas.width, canvas.height);
+}
