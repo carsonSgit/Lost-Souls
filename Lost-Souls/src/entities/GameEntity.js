@@ -63,9 +63,9 @@ export default class GameEntity{
 
     render(offset){
         this.stateMachine.render(offset);
-        if(this.isDead){
-            return;
-        }
+        //if(this.isDead){
+        //    return;
+        //}
         this.renderEntity(offset);
     
         if(DEBUG){

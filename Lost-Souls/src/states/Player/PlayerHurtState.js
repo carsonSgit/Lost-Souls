@@ -16,6 +16,7 @@ export default class PlayerHurtState extends State{
     }
 
     enter(){
+        this.player.becomeInvulnerable();
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.hurtSprites;
         console.log('Hurt state: enter')
@@ -26,7 +27,9 @@ export default class PlayerHurtState extends State{
 			this.player.currentAnimation.refresh();  
             if(this.player.isDead){
                 this.player.changeState(PlayerStateName.Dying);
-            }  
+            }else if(keys.a || keys.d){
+                this.player.changeState(PlayerStateName.Walking);
+            }
             else{
                 this.player.changeState(PlayerStateName.Idle);
             }

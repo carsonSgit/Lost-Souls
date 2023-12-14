@@ -1,6 +1,7 @@
 import Camera from "../../lib/Camera.js";
 import Map from "../../lib/Map.js";
 import State from "../../lib/State.js";
+import { timer } from "../globals.js";
 
 export default class PlayState extends State {
 	constructor() {
@@ -15,6 +16,7 @@ export default class PlayState extends State {
 	}
 
 	update(dt){
+		timer.update(dt);
 		this.map.update(dt);
 	}
 

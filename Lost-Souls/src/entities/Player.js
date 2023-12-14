@@ -1,7 +1,7 @@
 import Sprite from "../../lib/Sprite.js";
 import StateMachine from "../../lib/StateMachine.js";
 import ImageName from "../enums/ImageName.js";
-import { DEBUG, images, context} from "../globals.js";
+import { DEBUG, images, context, timer} from "../globals.js";
 import GameEntity from "./GameEntity.js"
 import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
@@ -18,6 +18,7 @@ import PlayerJumpingState from "../states/Player/PlayerJumpingState.js";
 import PlayerHurtState from "../states/Player/PlayerHurtState.js";
 import PlayerDyingState from "../states/Player/PlayerDyingState.js";
 import PlayerHealState from "../states/Player/PlayerHealState.js";
+import Timer from "../../lib/Timer.js";
 
 export default class Player extends GameEntity{
 
@@ -49,6 +50,10 @@ export default class Player extends GameEntity{
     static DYING_SPRITE_HEIGHT = 64;
     static HEAL_SPRITE_WIDTH = 128;
     static HEAL_SPRITE_HEIGHT = 64;
+
+
+    static INVULNERABILITY_INTERVAL = 0.1;
+    static INVULNERABILITY_DURATION = 1.5;
 
     
     /** 
@@ -108,13 +113,13 @@ export default class Player extends GameEntity{
         )
         this.hurtSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerHurt),
-            Player.JUMPING_SPRITE_WIDTH,
-            Player.JUMPING_SPRITE_HEIGHT,
+            Player.HURT_SPRITE_WIDTH,
+            Player.HURT_SPRITE_HEIGHT,
         )
         this.dyingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerDeath),
-            Player.JUMPING_SPRITE_WIDTH,
-            Player.JUMPING_SPRITE_HEIGHT,
+            Player.DYING_SPRITE_WIDTH,
+            Player.DYING_SPRITE_HEIGHT,
         )
         this.healSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerHeal),
@@ -131,6 +136,8 @@ export default class Player extends GameEntity{
 
         this.currentHealth = 10;
         this.strength = 2;
+        this.isInvulnerable = false;
+        this.invulnerabilityTimer = null;
     }
 
     render(){
@@ -216,12 +223,42 @@ export default class Player extends GameEntity{
 			this.velocity.x = 0;
 		}
 	}
+
     receiveDamage(damage){
+        if(this.isInvulnerable || this.isDead){
+            return;
+        }
+
         super.receiveDamage(damage);
         console.log(this.isDead);
         if(!this.isDead){
             this.changeState(PlayerStateName.Hurt);
+        }else{
+            this.changeState(PlayerStateName.Dying);
         }
+    }
+
+    becomeInvulnerable(){
+        this.isInvulnerable = true;
+        console.log('Invulnerability timer started')
+        this.invulnerabilityTimer = this.startInvulnerabilityTimer();
+    }
+
+    startInvulnerabilityTimer(){
+        const interval = Player.INVULNERABILITY_INTERVAL;
+        const duration = Player.INVULNERABILITY_DURATION;
+
+        const action = () => {
+			this.alpha = this.alpha === 1 ? 0.5 : 1;
+		};
+
+		const callback = () => {
+            console.log('Invulnerability timer ended')
+			this.alpha = 1;
+			this.isInvulnerable = false;
+		};
+
+        return timer.addTask(action, interval, duration, callback);
     }
     
 }

@@ -20,6 +20,7 @@ export default class PlayerDyingState extends State{
     enter(){
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.dyingSprites;
+        this.player.velocity.x=0;
         console.log('Dying state: enter')
     }
 
