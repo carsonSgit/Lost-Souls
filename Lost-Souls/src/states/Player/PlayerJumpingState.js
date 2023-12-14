@@ -15,6 +15,8 @@ export default class PlayerJumpingState extends State{
 
 
         this.animation = new Animation([0, 1, 2, 3], 0.1);
+        
+        this.ogHitboxOffsets = this.player.hitboxOffsets;
     }
 
     enter(){
@@ -22,8 +24,12 @@ export default class PlayerJumpingState extends State{
         this.player.sprites = this.player.fallingSprites;
         console.log('Jumping State: enter')
         this.player.velocity.y = this.jumpForce.y;
-        
+        this.player.hitboxOffsets = this.player.jumpingHitboxOffsets;
         //this.player.attackHitbox.set(0, 0, 0, 0);
+    }
+
+    exit(){
+        this.player.hitboxOffsets = this.ogHitboxOffsets;
     }
 
     update(dt){
