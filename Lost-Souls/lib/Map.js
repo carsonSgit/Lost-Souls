@@ -35,8 +35,10 @@ export default class Map {
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
-		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this);
-		
+		this.skeletons = [
+			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this),
+			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(300, 100), new Vector(100, 10), this),
+		];
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
 
@@ -46,18 +48,25 @@ export default class Map {
 
 	update(dt) {
 		this.player.update(dt);
-		this.skeletons.update(dt);
+		this.skeletons.forEach(skeleton => {
+			skeleton.update(dt);
+		});
 		this.platforms.forEach(platform => {
 			platform.update(dt);
 		});
 		this.door.update(dt);
 
-		if(this.player.attackHitbox.didCollide(this.skeletons.hitbox)) {
-			this.skeletons.receiveDamage(this.player.strength);
-		}
-		if(this.skeletons.attackHitbox.didCollide(this.player.hitbox)) {
-			this.player.receiveDamage(this.skeletons.strength);
-		}
+		
+		this.skeletons.forEach(skeleton => {
+			if(this.player.attackHitbox.didCollide(skeleton.hitbox)) {
+				skeleton.receiveDamage(this.player.strength);
+			}
+
+			if(skeleton.attackHitbox.didCollide(this.player.hitbox)) {
+				this.player.receiveDamage(skeleton.strength);
+			}
+		})
+		
 
 		this.platforms.forEach(platform => {
 			if(platform.didCollideWithEntity(this.player.hitbox)) {
@@ -71,11 +80,12 @@ export default class Map {
 		});
 
 		// Check all enemies are dead for door to spawn
-		if(this.skeletons.isDead) {
-			this.door.isSolid = true;
-			this.door.isCollidable = true;
-			this.door.shouldRender = true;
+		if(this.skeletons.every(skeleton => skeleton.isDead)){
+				this.door.isSolid = true;
+				this.door.isCollidable = true;
+				this.door.shouldRender = true;
 		}
+		
 	}
 
 	render() {
@@ -84,13 +94,15 @@ export default class Map {
 		this.platforms.forEach(platform => {
 			platform.render();
 		});
-		
+
 		if(this.door.shouldRender)
 			this.door.render();
 
 		this.collisionLayer.render();
 		this.player.render();
-		this.skeletons.render();
+		this.skeletons.forEach(skeleton => {
+			skeleton.render();
+		});
 		//this.midgroundLayer.render();
 
 		if (false){
