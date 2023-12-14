@@ -30,4 +30,4 @@ backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC;
 
 
 
-export const DEBUG = true;
+export const DEBUG = false;

@@ -13,7 +13,7 @@ export default class Door extends GameObject{
     static DOOR_WIDTH = 46;
     static DOOR_HEIGHT = 64;
 
-    static DOOR_SPAWN = new Vector(800, 355);
+    static DOOR_SPAWN = new Vector(784, 355);
 
     constructor(dimensions, position){
         super(dimensions, position);

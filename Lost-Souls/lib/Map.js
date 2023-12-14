@@ -37,8 +37,8 @@ export default class Map {
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
 		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this);
 		
-		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
-			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
+		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH, Platform.PLATFORM_HEIGHT), new Vector(100, 300 )),
+			new Platform(new Vector(Platform.PLATFORM_WIDTH, Platform.PLATFORM_HEIGHT), new Vector(400, 200 ))];
 
 		
 		this.door = new Door(new Vector(Door.DOOR_WIDTH, Door.DOOR_HEIGHT), Door.DOOR_SPAWN);
@@ -60,6 +60,7 @@ export default class Map {
 		}
 
 		this.platforms.forEach(platform => {
+			console.log(platform.dimensions.x/16);
 			if(platform.didCollideWithEntity(this.player.hitbox)) {
 
 				if(platform.getEntityCollisionDirection(this.player.hitbox) == 0) {

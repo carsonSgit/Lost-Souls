@@ -20,6 +20,8 @@ export default class Platform extends GameObject{
     static SUPPORT_SPRITE_WIDTH = 55;
     static SUPPORT_SPRITE_HEIGHT = 48;
 
+    static SUPPORT_SPRITE_SPAWN_OFFSET = 22;
+
     constructor(dimensions, position){
         super(dimensions, position);
         this.isSolid = true;
@@ -61,13 +63,14 @@ export default class Platform extends GameObject{
 
         // Render support sprites
         for (let i = 0; i < this.numOfSupports; i++) {
-            const supportX = Math.floor(x) + Platform.PLATFORM_WIDTH / 2 - Platform.SUPPORTS_WIDTH / 2;
+            const supportX = Math.floor(x + Platform.SUPPORT_SPRITE_SPAWN_OFFSET) + Platform.PLATFORM_WIDTH / 2 - Platform.SUPPORTS_WIDTH / 2;
             const supportY = Math.floor(y) + Platform.PLATFORM_HEIGHT + i * (Platform.SUPPORTS_HEIGHT - Platform.PLATFORM_HEIGHT);
             this.supportSprites[Platform.SUPPORTS_TILE_LOCATIONS[0]].render(supportX, supportY);
         }
 
 		if (DEBUG) {
 			this.hitbox.render(context);
+            console.log(this.hitbox.dimensions);;
 		}
     }
 

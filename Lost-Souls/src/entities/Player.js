@@ -178,7 +178,7 @@ export default class Player extends GameEntity{
         //console.log(this.position.x/16);
         if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             
-            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ Tile.SIZE) + 1, Math.floor(this.position.y - (Tile.SIZE*3) / Tile.SIZE)))
+           // console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ Tile.SIZE) + 1, Math.floor(this.position.y - (Tile.SIZE*3) / Tile.SIZE)))
             this.velocity.x = 0;
         }
 	}
@@ -188,14 +188,14 @@ export default class Player extends GameEntity{
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
         if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             
-            console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - (Tile.SIZE*2) / Tile.SIZE) + 1, Math.floor(this.position.y / Tile.SIZE)))
+           // console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - (Tile.SIZE*2) / Tile.SIZE) + 1, Math.floor(this.position.y / Tile.SIZE)))
             this.velocity.x = 0;
         }
     }
 
     moveUp(dt){
         this.direction = Direction.Up;
-        console.log(this.velocity.y);
+        //console.log(this.velocity.y);
         if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
             this.velocity.y = 0;
         }
@@ -206,7 +206,7 @@ export default class Player extends GameEntity{
 
     moveDown(dt){
         const collisionObjects = this.checkObjectCollisions();
-        console.log(collisionObjects)
+       // console.log(collisionObjects)
         
 
         this.direction = Direction.Down;

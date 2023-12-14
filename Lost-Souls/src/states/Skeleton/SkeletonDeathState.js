@@ -27,6 +27,9 @@ export default class SkeletonDeathState extends State{
         this.skeleton.velocity.x = 0;
     }
 
+    exit(){
+        this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    }
 
     update(dt){
         if(this.skeleton.currentAnimation.isDone()){

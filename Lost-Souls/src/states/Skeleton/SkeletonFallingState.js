@@ -18,6 +18,10 @@ export default class SkeletonFallingState extends State{
         this.skeleton.sprites = this.skeleton.fallingSprites;
         console.log("Skeleton Falling state: enter");
     }
+    
+    exit(){
+        this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    }
 
     update(dt){
         this.skeleton.moveDown(dt);

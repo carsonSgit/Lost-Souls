@@ -25,6 +25,9 @@ export default class SkeletonHurtState extends State{
         this.skeleton.velocity.x = 0;
     }
 
+    exit(){
+        this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    }
 
     update(dt){
         if(this.skeleton.currentAnimation.isDone()){
@@ -36,8 +39,6 @@ export default class SkeletonHurtState extends State{
                 this.skeleton.changeState(EnemyStateName.Idle);
             }
         
-        }
-        if (this.skeleton.currentAnimation.isHalfwayDone()) {
         }
 
     }

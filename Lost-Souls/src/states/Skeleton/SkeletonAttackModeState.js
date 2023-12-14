@@ -19,6 +19,8 @@ export default class SkeletonAttackModeState extends State{
         enter(){
             this.skeleton.currentAnimation = this.animation;
             this.skeleton.sprites = this.skeleton.walkingSprites;
+            
+            this.skeleton.attackHitbox.set(0, 0, 0, 0);
         }
 
         

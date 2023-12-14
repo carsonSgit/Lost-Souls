@@ -21,6 +21,10 @@ export default class SkeletonIdleState extends State{
             console.log("skeleton idle state: enter");
         }
 
+        exit(){
+            this.skeleton.attackHitbox.set(0, 0, 0, 0);
+        }
+        
         update(dt){
             if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
             {
