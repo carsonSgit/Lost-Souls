@@ -10,6 +10,8 @@ import SkeletonIdleState from "../states/Skeleton/SkeletonIdleState.js";
 import Enemy from "./Enemy.js";
 import Vector from "../../lib/Vector.js";
 import Tile from "../../lib/Tile.js";
+import SkeletonAttackModeState from "../states/Skeleton/SkeletonAttackModeState.js";
+import SkeletonAttackingState from "../states/Skeleton/SkeletonAttackingState.js";
 
 export default class Skeleton extends Enemy{
 
@@ -25,8 +27,16 @@ export default class Skeleton extends Enemy{
     static IDLE_SPRITE_WIDTH = 150;
     static IDLE_SPRITE_HEIGHT = 150;
 
+    static FALLING_SPRITE_WIDTH = 150;
+    static FALLING_SPRITE_HEIGHT = 150;
+
     static WALKING_SPRITE_WIDTH = 150;
     static WALKING_SPRITE_HEIGHT = 150;
+
+    static ATTACKING_SPRITE_WIDTH = 150;
+    static ATTACKING_SPRITE_HEIGHT = 150;
+
+    static CHASE_DISTANCE = 2 * Skeleton.WIDTH;
 
     constructor(dimensions, position, velocityLimit, map){
         super(dimensions, position, velocityLimit);
@@ -34,8 +44,12 @@ export default class Skeleton extends Enemy{
         this.map = map;
 
         this.gravityForce = new Vector(0, 1000);
+        
+        this.speedScalar = 0.15;
+        this.frictionScalar = 0.1;
 
         this.direction = Direction.Left;
+        this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
         this.hitboxOffsets = new Hitbox(Skeleton.WIDTH+8, Skeleton.HEIGHT-8, -Skeleton.OFFSET_WIDTH + Skeleton.WIDTH, -Skeleton.OFFSET_HEIGHT+Skeleton.HEIGHT);
 
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
@@ -45,13 +59,18 @@ export default class Skeleton extends Enemy{
         );
         this.fallingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.SkeletonIdle),
-            Skeleton.IDLE_SPRITE_WIDTH,
-            Skeleton.IDLE_SPRITE_HEIGHT,
+            Skeleton.FALLING_SPRITE_WIDTH,
+            Skeleton.FALLING_SPRITE_HEIGHT,
         );
         this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.SkeletonWalk),
             Skeleton.WALKING_SPRITE_WIDTH,
             Skeleton.WALKING_SPRITE_HEIGHT,
+        );
+        this.attackingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.SkeletonAttack),
+            Skeleton.ATTACKING_SPRITE_WIDTH,
+            Skeleton.ATTACKING_SPRITE_HEIGHT,
         );
 
         this.sprites = this.idleSprites;
@@ -61,7 +80,21 @@ export default class Skeleton extends Enemy{
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new SkeletonIdleState(this));
         this.stateMachine.add(EnemyStateName.Falling, new SkeletonFallingState(this));
+        this.stateMachine.add(EnemyStateName.AttackMode, new SkeletonAttackModeState(this));
+        this.stateMachine.add(EnemyStateName.Attacking, new SkeletonAttackingState(this));
         this.stateMachine.change(EnemyStateName.Idle);
+    }
+
+    render(){
+        context.save();
+
+        super.render(this.positionOffset);
+        
+        context.restore();
+
+        if(DEBUG){
+            this.attackHitbox.render(context);
+        }
     }
 
     moveDown(dt){
@@ -73,6 +106,24 @@ export default class Skeleton extends Enemy{
         }
         else{
             this.velocity.add(this.gravityForce, dt);
+        }
+    }
+
+    moveLeft() {
+		this.direction = Direction.Left;
+		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
+
+        if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+            this.velocity.x = 0;
+        }
+	}
+
+    moveRight() {
+		this.direction = Direction.Right;
+		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
+
+        if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Skeleton.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+            this.velocity.x = 0;
         }
     }
 }

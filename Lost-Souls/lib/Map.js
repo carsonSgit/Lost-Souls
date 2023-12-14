@@ -34,7 +34,7 @@ export default class Map {
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
-		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this);
+		this.skeletons = new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 300), new Vector(100, 10), this);
 		this.platforms = new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 100));
 		
 	}
@@ -44,7 +44,10 @@ export default class Map {
 		this.skeletons.update(dt);
 		this.platforms.update(dt);
 
-		if(this.player.hitbox.didCollide(this.skeletons.hitbox)) {
+		if(this.player.attackHitbox.didCollide(this.skeletons.hitbox)) {
+			this.skeletons.receiveDamage(this.player.strength);
+		}
+		if(this.skeletons.attackHitbox.didCollide(this.player.hitbox)) {
 			this.player.receiveDamage(this.skeletons.strength);
 		}
 	}

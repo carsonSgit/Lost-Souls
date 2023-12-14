@@ -6,6 +6,7 @@ const EnemyStateName = {
     Hurt: "Hurt",
     Death: "Death",
     Falling: "Falling",
+    AttackMode: "AttackMode",
 };
 
 export default EnemyStateName;

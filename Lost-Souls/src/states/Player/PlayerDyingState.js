@@ -26,6 +26,7 @@ export default class PlayerDyingState extends State{
 
     update(){
         if(this.player.currentAnimation.isDone()){
+            //this.player.hitboxOffsets.set(0,0,0,0, "red");
 			//this.player.currentAnimation.refresh();  
             /*stateMachine.change(
 				GameStateName.GameOver,
