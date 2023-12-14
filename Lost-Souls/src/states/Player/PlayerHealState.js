@@ -1,8 +1,9 @@
 import State from "../../../lib/State.js";
 import Animation from "../../../lib/Animation.js";
-import { keys } from "../../globals.js";
+import { keys, sounds } from "../../globals.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayerHealState extends State{
     constructor(player){
@@ -15,6 +16,7 @@ export default class PlayerHealState extends State{
     }
 
     enter(){
+        sounds.play(SoundName.Heal)
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.healSprites;
         console.log('Heal State: enter')

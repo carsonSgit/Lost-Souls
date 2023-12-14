@@ -1,9 +1,10 @@
 import State from "../../../lib/State.js";
 import Animation from "../../../lib/Animation.js";
-import { keys } from "../../globals.js";
+import { keys, sounds } from "../../globals.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Player from "../../entities/Player.js";
 import Tile from "../../../lib/Tile.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayerWalkingState extends State{
     constructor(player){
@@ -45,6 +46,7 @@ export default class PlayerWalkingState extends State{
         }
         // Done after above check so that above is always hit first
         else if(keys.a){
+            sounds.play(SoundName.Step);
             this.player.moveLeft();
         }
         // Checking if Right & Roll so that we can roll while moving
@@ -53,6 +55,7 @@ export default class PlayerWalkingState extends State{
         }
         // Done after above check so that above is always hit first
         else if(keys.d){
+            sounds.play(SoundName.Step);
             this.player.moveRight();
         }
         else

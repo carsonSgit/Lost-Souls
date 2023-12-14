@@ -1,9 +1,10 @@
 import State from "../../../lib/State.js";
 import Animation from "../../../lib/Animation.js";
-import { keys } from "../../globals.js";
+import { keys, sounds } from "../../globals.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Tile from "../../../lib/Tile.js";
 import Player from "../../entities/Player.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayerHurtState extends State{
     constructor(player){
@@ -16,6 +17,7 @@ export default class PlayerHurtState extends State{
     }
 
     enter(){
+        sounds.play(SoundName.Hurt)
         this.player.becomeInvulnerable();
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.hurtSprites;

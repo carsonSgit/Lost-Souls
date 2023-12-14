@@ -1,7 +1,8 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { keys } from "../../globals.js";
+import SoundName from "../../enums/SoundName.js";
+import { keys, sounds } from "../../globals.js";
 
 export default class PlayerFallingState extends State{
 
@@ -39,9 +40,11 @@ export default class PlayerFallingState extends State{
         }
 
         if((keys.a || keys.d) && this.player.velocity.y == 0){
+            sounds.play(SoundName.Land);
             this.player.changeState(PlayerStateName.Walking);
         }
         else if(this.player.velocity.y == 0){
+            sounds.play(SoundName.Land);
             this.player.changeState(PlayerStateName.Idle);
         }
 

@@ -1,10 +1,11 @@
 import State from "../../../lib/State.js";
 import Animation from "../../../lib/Animation.js";
-import { keys } from "../../globals.js";
+import { keys, sounds } from "../../globals.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Tile from "../../../lib/Tile.js";
 import Player from "../../entities/Player.js";
 import Vector from "../../../lib/Vector.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayerJumpingState extends State{
     constructor(player){
@@ -33,6 +34,7 @@ export default class PlayerJumpingState extends State{
     }
 
     update(dt){
+        sounds.play(SoundName.Jump)
         this.player.moveUp(dt);
         if(this.player.velocity.y >= 0){
             this.player.changeState(PlayerStateName.Falling);
