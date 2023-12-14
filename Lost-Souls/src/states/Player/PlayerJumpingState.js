@@ -4,12 +4,14 @@ import { keys } from "../../globals.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Tile from "../../../lib/Tile.js";
 import Player from "../../entities/Player.js";
+import Vector from "../../../lib/Vector.js";
 
 export default class PlayerJumpingState extends State{
     constructor(player){
         super();
 
         this.player = player;
+        this.jumpForce = new Vector(0, -500);
 
 
         this.animation = new Animation([0, 1, 2, 3], 0.1);
@@ -19,13 +21,14 @@ export default class PlayerJumpingState extends State{
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.fallingSprites;
         console.log('Jumping State: enter')
+        this.player.velocity.y = this.jumpForce.y;
         
         //this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
     update(dt){
         this.player.moveUp(dt);
-        if(this.player.velocity.y == 0){
+        if(this.player.velocity.y >= 0){
             this.player.changeState(PlayerStateName.Falling);
         }
         /*else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)

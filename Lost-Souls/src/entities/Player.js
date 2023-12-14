@@ -188,12 +188,11 @@ export default class Player extends GameEntity{
     moveUp(dt){
         this.direction = Direction.Up;
         console.log(this.velocity.y);
-        if(this.velocity.y <= -500
-            || this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
+        if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
             this.velocity.y = 0;
         }
         else{
-            this.velocity.add(this.negativeGravityForce, dt);
+            this.velocity.add(this.gravityForce, dt);
         }
     }
 
