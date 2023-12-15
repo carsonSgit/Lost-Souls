@@ -19,7 +19,7 @@ export default class EyeAttackingState extends State{
     }
 
     exit(){
-        console.log("eye Attacking State: Exit");
+        //console.log("eye Attacking State: Exit");
     }
 
     update(dt){

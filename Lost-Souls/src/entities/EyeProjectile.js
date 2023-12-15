@@ -32,9 +32,10 @@ export default class EyeProjectile extends Enemy{
         this.speedScalar = 0.60;
         this.frictionScalar = 0.05;
 
-        this.positionOffset =  new Vector(0, 0);
+        this.positionOffset =  new Vector(128, 0 );
 
-        this.hitboxOffsets = new Hitbox(EyeProjectile.WIDTH,EyeProjectile.HEIGHT,-EyeProjectile.WIDTH + EyeProjectile.SPRITE_PROJECTILE_WIDTH / 2, -EyeProjectile.HEIGHT + EyeProjectile.SPRITE_PROJECTILE_HEIGHT / 2);
+        this.hitboxOffsets = new Hitbox((EyeProjectile.WIDTH / 4) - EyeProjectile.WIDTH*1.5, EyeProjectile.HEIGHT - (EyeProjectile.HEIGHT / 4),
+                                        -EyeProjectile.HEIGHT + (EyeProjectile.SPRITE_PROJECTILE_WIDTH / 2), -EyeProjectile.HEIGHT + EyeProjectile.SPRITE_PROJECTILE_HEIGHT / 2);
 
         this.projectileSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.EyeProjectile),
@@ -46,6 +47,8 @@ export default class EyeProjectile extends Enemy{
         this.sprites = this.projectileSprites;
 
         this.strength = 3;
+        this.isDead = false;
+
 
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Projectile, new EyeProjectileState(this));
@@ -55,6 +58,12 @@ export default class EyeProjectile extends Enemy{
     render(){
         context.save();
         if(!this.isDead){
+            this.hitbox.set(
+                this.position.x + this.hitboxOffsets.position.x,
+                this.position.y + this.hitboxOffsets.position.y,
+                this.dimensions.x + this.hitboxOffsets.dimensions.x,
+                this.dimensions.y + this.hitboxOffsets.dimensions.y,
+            );
             super.render(this.positionOffset);
         }
     
