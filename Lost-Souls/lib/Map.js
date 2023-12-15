@@ -26,7 +26,6 @@ export default class Map {
 	 * @param {object} mapDefinition JSON from Tiled map editor.
 	 */
 	constructor(mapDefinition) {
-		console.log(mapDefinition.layers)
 		const sprites = Sprite.generateSpritesFromSpriteSheet(
 			images.get(ImageName.Tiles),
 			Tile.SIZE,
@@ -37,8 +36,8 @@ export default class Map {
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
 		this.skeletons = [
-			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this),
-			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(300, 100), new Vector(100, 10), this),
+			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 330), new Vector(100, 10), this),
+			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(500, 330), new Vector(100, 10), this),
 		];
 
 		this.eyes = [
@@ -88,7 +87,6 @@ export default class Map {
 		
 
 		this.platforms.forEach(platform => {
-			console.log(platform.dimensions.x/16);
 			if(platform.didCollideWithEntity(this.player.hitbox)) {
 
 				if(platform.getEntityCollisionDirection(this.player.hitbox) == 0) {

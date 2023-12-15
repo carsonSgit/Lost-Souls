@@ -62,7 +62,7 @@ export default class Skeleton extends Enemy{
 
         this.direction = Direction.Left;
 
-        this.positionOffset =  new Vector(0, 4);
+        this.positionOffset =  new Vector(0, 3);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
         this.hitboxOffsets = new Hitbox(Skeleton.WIDTH+8, Skeleton.HEIGHT-8, -Skeleton.OFFSET_WIDTH + Skeleton.WIDTH, -Skeleton.OFFSET_HEIGHT+Skeleton.HEIGHT);
 

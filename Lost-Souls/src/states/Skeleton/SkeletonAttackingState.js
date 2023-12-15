@@ -21,8 +21,6 @@ export default class SkeletonAttackingState extends State{
         }
 
         exit(){
-            console.log("Skeleton Attacking State: Exit");
-             
             this.skeleton.attackHitbox.set(0, 0, 0, 0);
         }
 
