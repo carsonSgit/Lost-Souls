@@ -86,6 +86,12 @@ export default class Map {
 			if(eye.hitbox.didCollide(this.player.hitbox)){
 				this.player.receiveDamage(eye.strength);
 			}
+			if(eye.projectile != null){
+				if(this.player.hitbox.didCollide(eye.projectile.hitbox)){
+					this.player.receiveDamage(eye.projectile.strength);
+					eye.projectile = null;
+				}
+			}
 		});
 		
 

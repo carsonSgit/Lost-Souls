@@ -33,6 +33,9 @@ export default class EyeAttackModeState extends State{
 
     decideDirection() {
         if (this.eye.getDistanceBetween(this.eye.map.player) < (Eye.CHASE_DISTANCE - 35)) {
+            if(Math.floor(Math.random() * 3) + 1 === 1 && this.eye.projectile == null){
+                this.eye.shootProjectile();
+            }
             this.eye.changeState(EnemyStateName.Attacking);
         }
         else if (this.eye.map.player.position.x < this.eye.position.x) {
