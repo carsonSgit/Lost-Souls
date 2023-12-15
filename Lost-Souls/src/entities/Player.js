@@ -252,7 +252,7 @@ export default class Player extends GameEntity{
         super.receiveDamage(damage);
         if(!this.isDead){
             this.changeState(PlayerStateName.Hurt);
-        }else{
+        }else if(!this.cleanUp){
             this.changeState(PlayerStateName.Dying);
         }
     }
