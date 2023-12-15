@@ -13,6 +13,7 @@ import EyeAttackingState from "../states/Eye/EyeAttackingState.js";
 import EyeDeathState from "../states/Eye/EyeDeathState.js";
 import EyeIdleState from "../states/Eye/EyeIdleState.js";
 import Enemy from "./Enemy.js";
+import EyeProjectile from "./EyeProjectile.js";
 
 export default class Eye extends Enemy{
 
@@ -76,6 +77,8 @@ export default class Eye extends Enemy{
         this.sprites = this.idleSprites;
 
         this.strength = 1;
+        this.projectile = null;
+
 
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new EyeIdleState(this));
@@ -91,19 +94,13 @@ export default class Eye extends Enemy{
 
         super.render(this.positionOffset);
     
-        context.restore();
-
-        
-
-        
+        context.restore(); 
     }
 
     moveLeft(dt) {
         this.direction = Direction.Left;
         this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
         this.flap(dt);
-
-        
     }
 
     moveRight(dt) {
@@ -127,6 +124,16 @@ export default class Eye extends Enemy{
         sounds.play(SoundName.Sword_Hit)
 
         this.changeState(EnemyStateName.Death);
-        
+    }
+
+    shootProjectile(){
+        this.projectile = new EyeProjectile(
+            new Vector(EyeProjectile.WIDTH, EyeProjectile.HEIGHT),
+            new Vector(this.position.x, this.position.y),
+            new Vector(0, 0),
+            this.map,
+            this.direction,
+            this
+        );
     }
 }

@@ -58,6 +58,9 @@ export default class Map {
 
 		this.eyes.forEach(eye => {
 			eye.update(dt);
+			if(eye.projectile != null){
+				eye.projectile.update(dt);
+			}
 		})
 		this.platforms.forEach(platform => {
 			platform.update(dt);
@@ -124,6 +127,9 @@ export default class Map {
 
 		this.eyes.forEach(eye => {
 			eye.render();
+			if(eye.projectile != null){
+				eye.projectile.render();
+			}
 		})
 		//this.midgroundLayer.render();
 
