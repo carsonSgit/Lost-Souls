@@ -127,7 +127,7 @@ export default class Eye extends Enemy{
     shootProjectile(){
         this.projectile = new EyeProjectile(
             new Vector(EyeProjectile.WIDTH, EyeProjectile.HEIGHT),
-            new Vector(this.position.x + (Tile.SIZE), this.position.y + (Tile.SIZE * 3)),
+            new Vector(this.position.x + (Tile.SIZE*3), this.position.y + (Tile.SIZE * 4)),
             new Vector(0, 0),
             this.map,
             this.direction,
