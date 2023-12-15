@@ -9,6 +9,7 @@ export default class EyeDeathState extends State{
         super();
 
         this.eye = eye;
+        this.firstCall = true;
 
         this.animation = new Animation([0, 1, 2, 3], 0.3, 1);
     }
@@ -21,15 +22,18 @@ export default class EyeDeathState extends State{
         this.eye.currentAnimation = this.animation;
         this.eye.sprites = this.eye.deathSprites;
         console.log('Eye Death state: enter');
-        this.isDead = true;
-        timer.tween(this.eye.position, ['y'], [330], 0.6, ()=> {
-            sounds.play(SoundName.Land);
-        });
+        this.eye.isDead = true;
+
+        if(this.firstCall){
+            this.firstCall = false;
+            sounds.play(SoundName.Sword_Hit);
+            timer.tween(this.eye.position, ['y'], [330], 0.6, ()=> {
+                sounds.play(SoundName.Land);
+            });
+        }
     }
 
     update(dt){
-        if(this.eye.currentAnimation.isDone()){
-        }
     }
 
     
