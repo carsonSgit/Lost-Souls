@@ -28,6 +28,8 @@ export default class EyeProjectileState extends State{
         console.log("Eye projectile state: enter");
 
         timer.tween(this.projectile.position, ['x','y'], [this.projectile.map.player.position.x, this.projectile.map.player.position.y], 0.6, ()=> {
+            this.projectile.isDead = true;
+            this.projectile.cleanUp = true;
             sounds.play(SoundName.Land);
         });
     }
