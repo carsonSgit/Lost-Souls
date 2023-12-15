@@ -27,9 +27,7 @@ export default class EyeProjectileState extends State{
         this.projectile.sprites = this.projectile.projectileSprites;
         console.log("Eye projectile state: enter");
 
-        const destinationX = this.projectile.position.x + 64;
-
-        timer.tween(this.projectile.position, ['x'], [destinationX], 0.6, ()=> {
+        timer.tween(this.projectile.position, ['x','y'], [this.projectile.map.player.position.x, this.projectile.map.player.position.y], 0.6, ()=> {
             sounds.play(SoundName.Land);
         });
     }

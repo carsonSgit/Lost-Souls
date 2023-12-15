@@ -34,7 +34,7 @@ export default class EyeProjectile extends Enemy{
 
         this.positionOffset =  new Vector(0, 0);
 
-        this.hitboxOffsets = new Hitbox(EyeProjectile.WIDTH,EyeProjectile.HEIGHT,-EyeProjectile.WIDTH + EyeProjectile.SPRITE_PROJECTILE_WIDTH, -EyeProjectile.HEIGHT + EyeProjectile.SPRITE_PROJECTILE_HEIGHT);
+        this.hitboxOffsets = new Hitbox(EyeProjectile.WIDTH,EyeProjectile.HEIGHT,-EyeProjectile.WIDTH + EyeProjectile.SPRITE_PROJECTILE_WIDTH / 2, -EyeProjectile.HEIGHT + EyeProjectile.SPRITE_PROJECTILE_HEIGHT / 2);
 
         this.projectileSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.EyeProjectile),
@@ -54,19 +54,16 @@ export default class EyeProjectile extends Enemy{
 
     render(){
         context.save();
-
-        super.render(this.positionOffset);
+        if(!this.isDead){
+            super.render(this.positionOffset);
+        }
     
         context.restore(); 
     }
 
-    moveLeft(dt) {
-        this.direction = Direction.Left;
-        this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
-    }
-
-    moveRight(dt) {
-        this.direction = Direction.Right;
-        this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
+    receiveDamage(damage){
+        super.receiveDamage(damage);
+    
+        sounds.play(SoundName.Sword_Hit)
     }
 }

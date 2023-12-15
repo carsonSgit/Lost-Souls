@@ -25,6 +25,11 @@ export default class EyeAttackingState extends State{
     update(dt){
         
         if(this.eye.currentAnimation.isDone()){
+            // 1 in 3 chance if eye does not have a projectile shot yet 
+            if(Math.floor(Math.random() * 3) + 1 === 1 && this.eye.projectile == null){
+                this.eye.shootProjectile();
+            }
+
             this.eye.currentAnimation.refresh();    
             this.eye.changeState(EnemyStateName.AttackMode);
         }
