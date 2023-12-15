@@ -206,15 +206,30 @@ export default class Player extends GameEntity{
 
     moveDown(dt){
         const collisionObjects = this.checkObjectCollisions();
-       // console.log(collisionObjects)
-        
-
         this.direction = Direction.Down;
-        if(collisionObjects.length > 0 || this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Player.HEIGHT) /Tile.SIZE) +1) != null
-        && this.map.collisionLayer.getTile(Math.floor((this.position.x + Player.WIDTH) / Tile.SIZE), Math.floor((this.position.y+Player.HEIGHT)/Tile.SIZE) + 1) !== null) {
+
+        // Check for collision with objects
+        let collisionWithObjects = collisionObjects.length > 0;
+
+        // Calculate tile positions for collision checking
+        let bottomLeftTile = this.map.collisionLayer.getTile(
+            Math.floor(this.position.x / Tile.SIZE) + 2,
+            Math.floor((this.position.y + Player.HEIGHT) / Tile.SIZE) + 1
+        );
+
+        let bottomRightTile = this.map.collisionLayer.getTile(
+            Math.floor((this.position.x + Player.WIDTH) / Tile.SIZE),
+            Math.floor((this.position.y + Player.HEIGHT) / Tile.SIZE) + 1
+        );
+
+        // Check for collision with the map
+        let collisionWithMap = bottomLeftTile !== null && bottomRightTile !== null;
+
+        // Apply collision logic        ->> COMMENTED COLLISION LOGIC BELOW SEMI FUNCTIONAL, OTHER COLLISION CHECKS NEED
+        //if((collisionObjects.length > 0 && collisionWithMap)) {
+        if((collisionWithMap || collisionObjects.length > 0 )){
             this.velocity.y = 0;
-        }
-        else{
+        } else {
             this.velocity.add(this.gravityForce, dt);
         }
     }
@@ -235,7 +250,6 @@ export default class Player extends GameEntity{
         }
 
         super.receiveDamage(damage);
-        console.log(this.isDead);
         if(!this.isDead){
             this.changeState(PlayerStateName.Hurt);
         }else{

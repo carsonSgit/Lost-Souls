@@ -25,7 +25,6 @@ export default class Map {
 	 * @param {object} mapDefinition JSON from Tiled map editor.
 	 */
 	constructor(mapDefinition) {
-		console.log(mapDefinition.layers)
 		const sprites = Sprite.generateSpritesFromSpriteSheet(
 			images.get(ImageName.Tiles),
 			Tile.SIZE,
@@ -69,7 +68,6 @@ export default class Map {
 		
 
 		this.platforms.forEach(platform => {
-			console.log(platform.dimensions.x/16);
 			if(platform.didCollideWithEntity(this.player.hitbox)) {
 
 				if(platform.getEntityCollisionDirection(this.player.hitbox) == 0) {

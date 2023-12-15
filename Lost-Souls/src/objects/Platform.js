@@ -47,7 +47,6 @@ export default class Platform extends GameObject{
             Platform.SUPPORT_SPRITE_WIDTH,
             Platform.SUPPORT_SPRITE_HEIGHT,
         );
-        console.log(this.platformSprites)
     }
 
     update(dt){
@@ -70,12 +69,10 @@ export default class Platform extends GameObject{
 
 		if (DEBUG) {
 			this.hitbox.render(context);
-            console.log(this.hitbox.dimensions);;
 		}
     }
 
     onCollide(entity){
-        console.log('collided')
         this.wasCollided = true;
         super.onCollision(entity);
     }
