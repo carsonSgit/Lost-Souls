@@ -120,7 +120,9 @@ export default class Eye extends Enemy{
         super.receiveDamage(damage);
     
         this.isDead = true;
+        if(!this.cleanUp){
         this.changeState(EnemyStateName.Death);
+        }
     }
 
     shootProjectile(){
