@@ -7,9 +7,39 @@
 			"height": 800
 		},
 		{
-			"name": "bat",
+			"name": "eye_attack",
 			"path": "./assets/images/Flying_eye/Attack.png",
 			"width": 900,
+			"height": 150
+		},
+		{
+			"name":"eye_death",
+			"path": "./assets/images/Flying_eye/Death.png",
+			"width": 600,
+			"height": 150
+		},
+		{
+			"name": "eye_flight",
+			"path": "./assets/images/Flying_eye/Flight.png",
+			"width": 1200,
+			"height": 150
+		},
+		{
+			"name": "eye_projectile",
+			"path": "./assets/images/Flying_eye/Projectile_sprite.png",
+			"width": 384,
+			"height": 48
+		},
+		{
+			"name": "eye_spin",
+			"path": "./assets/images/Flying_eye/Spin_attack.png",
+			"width": 1200,
+			"height": 150
+		},
+		{
+			"name": "eye_hit",
+			"path": "./assets/images/Flying_eye/Take_hit.png",
+			"width": 600,
 			"height": 150
 		},
 		{

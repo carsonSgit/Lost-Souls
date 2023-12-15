@@ -70,7 +70,6 @@ export default class Platform extends GameObject{
 
 		if (DEBUG) {
 			this.hitbox.render(context);
-            console.log(this.hitbox.dimensions);;
 		}
     }
 

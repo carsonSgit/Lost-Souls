@@ -100,7 +100,6 @@ export default class Skeleton extends Enemy{
         this.sprites = this.idleSprites;
         
         this.strength = 2;
-        this.isInvulnerable = false;
 
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new SkeletonIdleState(this));

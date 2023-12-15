@@ -18,6 +18,12 @@ const ImageName = {
 	SkeletonThrow: 'skeleton_throw',
 	SkeletonThrownSword: 'Skeleton_thrown_sword',
 	SkeletonShield: 'skeleton_shield',
+	EyeAttack: 'eye_attack',
+	EyeDeath: 'eye_death',
+	EyeFlight: 'eye_flight',
+	EyeProjectile: 'eye_projectile',
+	EyeSpin: 'eye_spin',
+	EyeHit: 'eye_hit',
 };
 
 export default ImageName;

@@ -16,6 +16,7 @@ import Player from "../src/entities/Player.js";
 import Platform from "../src/objects/Platform.js";
 import Skeleton from "../src/entities/Skeleton.js";
 import Door from "../src/objects/Door.js";
+import Eye from "../src/entities/Eye.js";
 
 export default class Map {
 	/**
@@ -39,6 +40,10 @@ export default class Map {
 			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 100), new Vector(100, 10), this),
 			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(300, 100), new Vector(100, 10), this),
 		];
+
+		this.eyes = [
+			new Eye(new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(300, 100), new Vector(100, 10), this),
+		]
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
 
@@ -51,6 +56,10 @@ export default class Map {
 		this.skeletons.forEach(skeleton => {
 			skeleton.update(dt);
 		});
+
+		this.eyes.forEach(eye => {
+			eye.update(dt);
+		})
 		this.platforms.forEach(platform => {
 			platform.update(dt);
 		});
@@ -65,7 +74,17 @@ export default class Map {
 			if(skeleton.attackHitbox.didCollide(this.player.hitbox)) {
 				this.player.receiveDamage(skeleton.strength);
 			}
-		})
+		});
+
+		this.eyes.forEach(eye => {
+			if(this.player.attackHitbox.didCollide(eye.hitbox)){
+				eye.receiveDamage(this.player.strength);
+			}
+
+			if(eye.hitbox.didCollide(this.player.hitbox)){
+				this.player.receiveDamage(eye.strength);
+			}
+		});
 		
 
 		this.platforms.forEach(platform => {
@@ -104,6 +123,10 @@ export default class Map {
 		this.skeletons.forEach(skeleton => {
 			skeleton.render();
 		});
+
+		this.eyes.forEach(eye => {
+			eye.render();
+		})
 		//this.midgroundLayer.render();
 
 		if (false){
