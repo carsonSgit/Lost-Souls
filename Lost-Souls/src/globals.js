@@ -1,4 +1,5 @@
 import Fonts from "../lib/Fonts.js";
+import Game from "../lib/Game.js";
 import Images from "../lib/Images.js";
 import Sounds from "../lib/Sounds.js";
 import StateMachine from "../lib/StateMachine.js";
@@ -31,3 +32,23 @@ backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC;
 
 
 export const DEBUG = true;
+
+//Saving functions
+
+export function saveGameState(){
+    const game = new Game(stateMachine, context, canvas.width, canvas.height);
+	const serializedGameState = JSON.stringify(game);
+	localStorage.setItem("gameState", serializedGameState);
+}
+
+export function loadGameState(){
+	const serializedGameState = localStorage.getItem("gameState");
+    console.log(serializedGameState);
+	if(serializedGameState){
+		return JSON.parse(serializedGameState);
+		//would need to assign values to stateMachine, context, canvas.width, canvas.height ...
+		//like const stateMachine = this.game.stateMachine;
+	}
+
+	return new Game(stateMachine, context, canvas.width, canvas.height);
+}

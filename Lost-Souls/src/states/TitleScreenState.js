@@ -5,6 +5,7 @@ import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
 	keys,
+	loadGameState,
 	sounds,
 	stateMachine,
 } from "../globals.js";
@@ -28,6 +29,17 @@ export default class TitleScreenState extends State {
 					map: this.map,
 				});
 		}
+		/*Game loading is disabled for now
+		if(keys.l || keys.L){
+			loadGameState();
+			keys.l = false;
+			keys.L = false;
+			stateMachine.change(
+				GameStateName.Play,
+				{
+					map: this.map,
+				});
+		}*/
 	}
 
 	enter(){
@@ -52,6 +64,7 @@ export default class TitleScreenState extends State {
 		context.textAlign = 'center';
 		context.fillText('Lost Souls', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20);
 		context.font = '24px Dungeon';
-		context.fillText('Press Enter', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
+		context.fillText('Press Enter to Start', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
+		//context.fillText('Press L to load game', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 80);
 	}
 }

@@ -35,6 +35,7 @@ import GameOverState from "./states/GameOverState.js";
 import VictoryState from "./states/VictoryState.js";
 import TitleScreenState from "./states/TitleScreenState.js";
 import CreditsState from "./states/CreditsState.js";
+import PauseState from "./states/PauseState.js";
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
@@ -69,6 +70,7 @@ stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
 stateMachine.add(GameStateName.Credits, new CreditsState());
 stateMachine.add(GameStateName.Play, new PlayState());
+stateMachine.add(GameStateName.Pause, new PauseState());
 
 stateMachine.change(GameStateName.TitleScreen);
 // stateMachine.change(GameStateName.Play)
@@ -89,18 +91,4 @@ game.start();
 // Focus the canvas so that the player doesn't have to click on it.
 canvas.focus();
 
-function saveGameState(game){
-	const serializedGameState = JSON.stringify(game);
-	localStorage.setItem("gameState", serializedGameState);
-}
 
-function loadGameState(){
-	const serializedGameState = localStorage.getItem("gameState");
-	if(serializedGameState){
-		return JSON.parse(serializedGameState);
-		//would need to assign values to stateMachine, context, canvas.width, canvas.height ...
-		//like const stateMachine = this.game.stateMachine;
-	}
-
-	return new Game(stateMachine, context, canvas.width, canvas.height);
-}

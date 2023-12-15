@@ -4,6 +4,7 @@ const GameStateName = {
 	Victory: 'victory',
 	TitleScreen: 'title-screen',
 	Credits: 'credits',
+	Pause: 'pause',
 };
 
 export default GameStateName;
