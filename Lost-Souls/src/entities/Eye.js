@@ -125,8 +125,9 @@ export default class Eye extends Enemy{
         super.receiveDamage(damage);
     
         sounds.play(SoundName.Sword_Hit)
-
+        this.isDead = true;
         this.changeState(EnemyStateName.Death);
+    
         
     }
 }

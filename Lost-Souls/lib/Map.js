@@ -17,6 +17,9 @@ import Platform from "../src/objects/Platform.js";
 import Skeleton from "../src/entities/Skeleton.js";
 import Door from "../src/objects/Door.js";
 import Eye from "../src/entities/Eye.js";
+import EnemyFactory from "../src/services/EnemyFactory.js";
+import EnemyType from "../src/enums/EnemyType.js";
+import Enemy from "../src/entities/Enemy.js";
 
 export default class Map {
 	/**
@@ -35,14 +38,15 @@ export default class Map {
 		this.collisionLayer = new Layer(mapDefinition.layers[Layer.CAVE_COLLISION], sprites);
 		// this.midgroundLayer = new Layer(mapDefinition.layers[Layer.CAVE_MIDGROUND], sprites);
 		this.player = new Player(new Vector(Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT), new Vector(180, 235), new Vector(100, 10), this);
-		this.skeletons = [
-			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 330), new Vector(100, 10), this),
-			new Skeleton(new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(500, 330), new Vector(100, 10), this),
-		];
-
-		this.eyes = [
-			new Eye(new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(300, 100), new Vector(100, 10), this),
+		
+		this.skeletons = [EnemyFactory.createInstance(EnemyType.Skeleton, new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 330), new Vector(100, 10), this),
+			EnemyFactory.createInstance(EnemyType.Skeleton, new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(500, 330), new Vector(100, 10), this)
 		]
+		
+		this.eyes = [EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(300, 100), new Vector(100, 10), this),
+			EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(500, 200), new Vector(100, 10), this),
+		]
+
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
 
@@ -98,7 +102,7 @@ export default class Map {
 		});
 
 		// Check all enemies are dead for door to spawn
-		if(this.skeletons.every(skeleton => skeleton.isDead)){
+		if(this.skeletons.every(skeleton => skeleton.isDead) && this.eyes.every(eye => eye.isDead)){
 				this.door.isSolid = true;
 				this.door.isCollidable = true;
 				this.door.shouldRender = true;

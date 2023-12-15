@@ -20,7 +20,8 @@ export default class EyeDeathState extends State{
         sounds.play(SoundName.EnemyDeath);
         this.eye.currentAnimation = this.animation;
         this.eye.sprites = this.eye.deathSprites;
-        console.log('Eye Death state: enter')
+        console.log('Eye Death state: enter');
+        this.isDead = true;
         timer.tween(this.eye.position, ['y'], [330], 0.6, ()=> {
             sounds.play(SoundName.Land);
         });
