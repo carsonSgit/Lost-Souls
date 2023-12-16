@@ -29,7 +29,10 @@ export default class GameOverState extends State {
 
 	renderGameOverScreen(context){
 		context.font = '60px Pixeloid';
-		context.fillStyle = 'red';
+		context.fillStyle = 'black';
+		context.shadowColor = 'rgb(255, 0, 0)';
+		context.shadowOffset = {x: 2, y: 2};
+		context.shadowBlur = 15;
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
 		context.fillText('Game Over', CANVAS_WIDTH/2, CANVAS_HEIGHT/ 2 - 20);
