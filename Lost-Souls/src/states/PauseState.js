@@ -1,6 +1,7 @@
 import State from "../../lib/State.js";
 import GameStateName from "../enums/GameStateName.js";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, saveGameState, stateMachine } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, saveGameState, sounds, stateMachine } from "../globals.js";
 
 export default class PauseState extends State{
 
@@ -15,10 +16,13 @@ export default class PauseState extends State{
     update(dt){
         // If Escape key, Re-enter play-state
         if(keys.Escape){
+            sounds.play(SoundName.Unpause);
+            sounds.stop(SoundName.Unpause);
             keys.Escape = false;
             stateMachine.change(
                 GameStateName.Play,{
-                    map: this.map
+                    map: this.map,
+                    fromPause: true
                 }
             );
         }

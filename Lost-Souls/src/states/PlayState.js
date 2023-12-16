@@ -13,8 +13,11 @@ export default class PlayState extends State {
 
 	enter(parameters){
 		this.map = parameters.map;
+		this.fromPause = parameters.fromPause;
+
 		// Play Village Theme sound
-		sounds.play(SoundName.VillageTheme);
+		if(!this.fromPause)
+			sounds.play(SoundName.VillageTheme);
 	}
 
 	update(dt){
@@ -24,6 +27,8 @@ export default class PlayState extends State {
 		// If key p is pressed, change to Pause state
 		if(keys.p || keys.P){
 			keys.p = false;
+			sounds.play(SoundName.Pause);
+			sounds.stop(SoundName.Pause);
 			stateMachine.change(
 				GameStateName.Pause, {
 					map: this.map

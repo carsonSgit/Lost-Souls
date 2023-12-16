@@ -3,6 +3,10 @@ const SoundName = {
 
     //Effects
     Menu: 'Menu',
+    Hover: 'Hover',
+    Confirm: 'Confirm',
+    Pause: 'Pause',
+    Unpause: 'Unpause',
     Step: 'Step',
     Jump: 'Jump',
     Land: 'Land',
