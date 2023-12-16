@@ -91,12 +91,14 @@ export default class Map {
 				this.player.receiveDamage(eye.strength);
 			}
 			if(eye.projectile != null){
-				if(this.player.hitbox.didCollide(eye.projectile.hitbox)){
-					this.player.receiveDamage(eye.projectile.strength);
-					eye.projectile.isDead = true;
-					eye.projectile.cleanUp = true;
+				if(eye.projectile.isDead){
+					eye.projectile = null;
 				}
-				if(this.player.attackHitbox.didCollide(eye.projectile.hitbox)){
+				else if(this.player.hitbox.didCollide(eye.projectile.hitbox)){
+					this.player.receiveDamage(eye.projectile.strength);
+					eye.projectile = null;
+				}
+				else if(this.player.attackHitbox.didCollide(eye.projectile.hitbox)){
 					eye.projectile = null;
 				}
 			}

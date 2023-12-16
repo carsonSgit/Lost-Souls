@@ -36,6 +36,8 @@ export default class PlayerDyingState extends State{
             // Sound infinitely plays as we are stuck in this state, but when we 
             // change gamestate should be fixed.
             sounds.play(SoundName.Land);
+            this.player.cleanUp = true;
+            this.player.hitbox.set(0, 0, 0, 0);
             //this.player.hitboxOffsets.set(0,0,0,0, "red");
 			//this.player.currentAnimation.refresh();  
             stateMachine.change(
