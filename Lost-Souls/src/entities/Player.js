@@ -1,7 +1,7 @@
 import Sprite from "../../lib/Sprite.js";
 import StateMachine from "../../lib/StateMachine.js";
 import ImageName from "../enums/ImageName.js";
-import { DEBUG, images, context, timer, sounds} from "../globals.js";
+import { DEBUG, images, context, timer, sounds, CANVAS_WIDTH} from "../globals.js";
 import GameEntity from "./GameEntity.js"
 import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdleState from "../../src/states/Player/PlayerIdleState.js";
@@ -180,7 +180,7 @@ export default class Player extends GameEntity{
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
 
         //console.log(this.position.x/16);
-        if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+        if(this.position.x <= -Tile.SIZE  || this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             
            // console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ Tile.SIZE) + 1, Math.floor(this.position.y - (Tile.SIZE*3) / Tile.SIZE)))
             this.velocity.x = 0;
@@ -190,7 +190,7 @@ export default class Player extends GameEntity{
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
-        if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+        if(this.position.x + Player.WIDTH >= CANVAS_WIDTH -Tile.SIZE*3 ||this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             
            // console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - (Tile.SIZE*2) / Tile.SIZE) + 1, Math.floor(this.position.y / Tile.SIZE)))
             this.velocity.x = 0;
@@ -231,7 +231,7 @@ export default class Player extends GameEntity{
 
         // Apply collision logic        ->> COMMENTED COLLISION LOGIC BELOW SEMI FUNCTIONAL, OTHER COLLISION CHECKS NEED
         //if((collisionObjects.length > 0 && collisionWithMap)) {
-        if((collisionWithMap || collisionObjects.length > 0 )){
+        if((collisionWithMap || collisionObjects.length > 0)){
             this.velocity.y = 0;
         } else {
             this.velocity.add(this.gravityForce, dt);
