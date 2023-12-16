@@ -39,8 +39,6 @@ export default class EyeDeathState extends State{
         }
     }
 
-
-
     update(dt){
         if(this.eye.currentAnimation.isDone()){
             // Eye data should be cleaned up by the map (not sprite)
@@ -49,6 +47,4 @@ export default class EyeDeathState extends State{
             this.eye.map.player.score += this.eye.scoreValue;
         }
     }
-
-    
 }

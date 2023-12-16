@@ -50,7 +50,7 @@ export default class SkeletonAttackingState extends State{
      * Sets the sword hitbox based on the skeleton's direction
      * 
      * Inspired by Vikram Singh's Zelda code
-     * @see https://github.com/JAC-CS-Game-Programming-F23/4-zelda-carsonSgit/blob/main/src/states/entity/player/PlayerSwordSwingingState.js 
+     * @see https://github.com/JAC-CS-Game-Programming-F23/4-Zelda/blob/main/src/Zelda-5/src/states/entity/player/PlayerSwordSwingingState.js 
      */
     setSwordHitbox(){
         /*

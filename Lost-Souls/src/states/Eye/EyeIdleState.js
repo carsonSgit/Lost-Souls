@@ -25,7 +25,7 @@ export default class EyeIdleState extends State{
      * Checks if the player is within the chase distance
      * 
      * Taken from Vikram Singh's Mario code
-     * @see https://github.com/JAC-CS-Game-Programming-F23/3-mario-carsonSgit/blob/main/src/states/entity/snail/SnailIdleState.js 
+     * @see https://github.com/JAC-CS-Game-Programming-F23/3-Mario/blob/main/src/Mario-9/src/states/entity/snail/SnailIdleState.js 
      */
     chase(){
         if(this.eye.getDistanceBetween(this.eye.map.player) <= Eye.CHASE_DISTANCE){

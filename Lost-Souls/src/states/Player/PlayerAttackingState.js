@@ -19,7 +19,7 @@ export default class PlayerAttackingState extends State{
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.attackingSprites;
     }
-    
+
     exit(){
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
@@ -42,7 +42,7 @@ export default class PlayerAttackingState extends State{
      * Sets the sword hitbox based on the player's direction
      * 
      * Inspired by Vikram Singh's Zelda code
-     * @see https://github.com/JAC-CS-Game-Programming-F23/4-zelda-carsonSgit/blob/main/src/states/entity/player/PlayerSwordSwingingState.js 
+     * @see https://github.com/JAC-CS-Game-Programming-F23/4-Zelda/blob/main/src/Zelda-5/src/states/entity/player/PlayerSwordSwingingState.js
      */
     setSwordHitbox(){
         /*

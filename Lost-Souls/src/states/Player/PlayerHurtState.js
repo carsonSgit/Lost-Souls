@@ -52,6 +52,5 @@ export default class PlayerHurtState extends State{
         {
             this.player.changeState(PlayerStateName.Falling);
         }
-
     }
 }

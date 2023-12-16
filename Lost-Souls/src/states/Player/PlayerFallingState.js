@@ -58,6 +58,5 @@ export default class PlayerFallingState extends State{
             sounds.play(SoundName.Land);
             this.player.changeState(PlayerStateName.Idle);
         }
-
     }
 }
