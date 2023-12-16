@@ -66,6 +66,7 @@ export default class Skeleton extends Enemy{
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
         this.hitboxOffsets = new Hitbox(Skeleton.WIDTH+8, Skeleton.HEIGHT-8, -Skeleton.OFFSET_WIDTH + Skeleton.WIDTH, -Skeleton.OFFSET_HEIGHT+Skeleton.HEIGHT);
 
+        // Sprites
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.SkeletonIdle),
             Skeleton.IDLE_SPRITE_WIDTH,
@@ -102,6 +103,7 @@ export default class Skeleton extends Enemy{
         this.strength = 2;
         this.scoreValue = this.scoreValue;
 
+        // State machines
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new SkeletonIdleState(this));
         this.stateMachine.add(EnemyStateName.Falling, new SkeletonFallingState(this));
@@ -124,24 +126,27 @@ export default class Skeleton extends Enemy{
     }
 
     receiveDamage(damage){
+        // Take damage
         super.receiveDamage(damage);
-        //console.log(this.isDead);
+
+        // Is it alive? ...
         if(!this.isDead){
             sounds.play(SoundName.Sword_Hit)
-           // console.log("Entering Skeleton Hurt State")
             this.changeState(EnemyStateName.Hurt);
-        }else if(!this.cleanUp){
+        }
+        // It is dead, change state
+        else if(!this.cleanUp){
             this.changeState(EnemyStateName.Death);
-            //this.map.player.score += this.scoreValue;
         }
     }
 
     moveDown(dt){
         this.direction = Direction.Down;
+
+        // Collision detection
         if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor((this.position.y+Skeleton.HEIGHT) /Tile.SIZE) +3) != null
         && this.map.collisionLayer.getTile(Math.floor((this.position.x + Skeleton.WIDTH) / Tile.SIZE), Math.floor((this.position.y+Skeleton.HEIGHT)/Tile.SIZE) + 3) !== null) {
             this.velocity.y = 0;
-            console.log("hi")
         }
         else{
             this.velocity.add(this.gravityForce, dt);
@@ -152,6 +157,7 @@ export default class Skeleton extends Enemy{
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
 
+        // Collision detection
         if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             this.velocity.x = 0;
         }
@@ -161,6 +167,7 @@ export default class Skeleton extends Enemy{
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
 
+        // Collision detection
         if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Skeleton.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             this.velocity.x = 0;
         }

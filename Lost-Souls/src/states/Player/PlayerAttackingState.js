@@ -11,7 +11,6 @@ export default class PlayerAttackingState extends State{
 
         this.player = player;
 
-
         this.animation = new Animation([0, 1, 2, 3, 4, 5], 0.1, 1);
     }
 
@@ -19,8 +18,8 @@ export default class PlayerAttackingState extends State{
         sounds.play(SoundName.Sword_Swing);
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.attackingSprites;
-        console.log('Attacking State: enter')
     }
+    
     exit(){
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
@@ -39,8 +38,20 @@ export default class PlayerAttackingState extends State{
         }
     }
 
+    /**
+     * Sets the sword hitbox based on the player's direction
+     * 
+     * Inspired by Vikram Singh's Zelda code
+     * @see https://github.com/JAC-CS-Game-Programming-F23/4-zelda-carsonSgit/blob/main/src/states/entity/player/PlayerSwordSwingingState.js 
+     */
     setSwordHitbox(){
-        // Includes magic numbers for left side hitbox
+        /*
+        * The sword hitbox is set using many magic numbers....
+        *
+        * So miserable to get right...
+        */
+        
+        // Left side hitbox
         if(this.player.direction === Direction.Left){
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
@@ -51,7 +62,7 @@ export default class PlayerAttackingState extends State{
 
             this.player.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
-        // Includes magic numbers for Right side hitbox
+        // Right side hitbox
         if(this.player.direction === Direction.Right) {
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 

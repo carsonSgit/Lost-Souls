@@ -77,6 +77,8 @@ export default class Player extends GameEntity{
         this.rollingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
         this.fallingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
         this.jumpingHitboxOffsets = new Hitbox(48, 34, -Player.OFFSET_WIDTH + Player.WIDTH, -Player.OFFSET_HEIGHT+Player.HEIGHT - 18);
+
+        // Sprites
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerIdle),
             Player.IDLE_SPRITE_WIDTH,
@@ -136,8 +138,10 @@ export default class Player extends GameEntity{
         this.map = map;
 
         this.currentHealth = 10;
+        this.maxHealth = 10;
         this.strength = 2;
 
+        // Score Loads from Local Storage
         const savedScore = localStorage.getItem('playerScore');
         this.score = savedScore !== null ? parseInt(savedScore, 10) : 0;
 
@@ -154,8 +158,6 @@ export default class Player extends GameEntity{
         super.render(this.positionOffset);
         
         context.restore();
-
-        console.log(this.score);
 
         if(DEBUG){
             this.attackHitbox.render(context);
@@ -184,10 +186,8 @@ export default class Player extends GameEntity{
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
 
-        //console.log(this.position.x/16);
+        // Did we collide with a tile on our left? ...
         if(this.position.x <= -Tile.SIZE  || this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
-            
-           // console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x/ Tile.SIZE) + 1, Math.floor(this.position.y - (Tile.SIZE*3) / Tile.SIZE)))
             this.velocity.x = 0;
         }
 	}
@@ -195,19 +195,21 @@ export default class Player extends GameEntity{
 	moveRight() {
 		this.direction = Direction.Right;
 		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
+
+        // Did we collide with a tile on our right? ...
         if(this.position.x + Player.WIDTH >= CANVAS_WIDTH -Tile.SIZE*3 ||this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
-            
-           // console.log(this.map.collisionLayer.getTile(Math.floor(this.position.x - (Tile.SIZE*2) / Tile.SIZE) + 1, Math.floor(this.position.y / Tile.SIZE)))
-            this.velocity.x = 0;
+           this.velocity.x = 0;
         }
     }
 
     moveUp(dt){
         this.direction = Direction.Up;
-        //console.log(this.velocity.y);
+
+        // Did we collide with a tile above? ...
         if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
             this.velocity.y = 0;
         }
+        // If no collision, move upwards
         else{
             this.velocity.add(this.gravityForce, dt);
         }
@@ -217,15 +219,13 @@ export default class Player extends GameEntity{
         const collisionObjects = this.checkObjectCollisions();
         this.direction = Direction.Down;
 
-        // Check for collision with objects
-        let collisionWithObjects = collisionObjects.length > 0;
-
         // Calculate tile positions for collision checking
         let bottomLeftTile = this.map.collisionLayer.getTile(
             Math.floor(this.position.x / Tile.SIZE) + 2,
             Math.floor((this.position.y + Player.HEIGHT) / Tile.SIZE) + 1
         );
 
+        // Calculate tile positions for collision checking
         let bottomRightTile = this.map.collisionLayer.getTile(
             Math.floor((this.position.x + Player.WIDTH) / Tile.SIZE),
             Math.floor((this.position.y + Player.HEIGHT) / Tile.SIZE) + 1
@@ -234,16 +234,18 @@ export default class Player extends GameEntity{
         // Check for collision with the map
         let collisionWithMap = bottomLeftTile !== null && bottomRightTile !== null;
 
-        // Apply collision logic        ->> COMMENTED COLLISION LOGIC BELOW SEMI FUNCTIONAL, OTHER COLLISION CHECKS NEED
-        //if((collisionObjects.length > 0 && collisionWithMap)) {
+        // Are we colliding with the map or a platform? ...
         if((collisionWithMap || collisionObjects.length > 0)){
             this.velocity.y = 0;
-        } else {
+        } 
+        // If not, move downwards
+        else {
             this.velocity.add(this.gravityForce, dt);
         }
     }
 
     stop() {
+        
 		if (Math.abs(this.velocity.x) > 0) {
 			this.velocity.x *= this.frictionScalar;
 		}
@@ -254,38 +256,48 @@ export default class Player extends GameEntity{
 	}
 
     receiveDamage(damage){
+
+        // Are we in I-Frame state or Dead? If so, negate damage
         if(this.isInvulnerable || this.isDead){
             return;
         }
 
+        // Take damage
         super.receiveDamage(damage);
+
+        // If if didn't kill us ...
         if(!this.isDead){
             this.changeState(PlayerStateName.Hurt);
-        }else if(!this.cleanUp){
+        }
+        // If we died ...
+        else if(!this.cleanUp){
             this.changeState(PlayerStateName.Dying);
         }
     }
 
     becomeInvulnerable(){
+        // Set invulnerable state to true
         this.isInvulnerable = true;
-        console.log('Invulnerability timer started')
         this.invulnerabilityTimer = this.startInvulnerabilityTimer();
     }
 
     startInvulnerabilityTimer(){
+        // Use set values ...
         const interval = Player.INVULNERABILITY_INTERVAL;
         const duration = Player.INVULNERABILITY_DURATION;
 
+        // Create the action
         const action = () => {
 			this.alpha = this.alpha === 1 ? 0.5 : 1;
 		};
 
+        // Create the callback
 		const callback = () => {
-            console.log('Invulnerability timer ended')
 			this.alpha = 1;
 			this.isInvulnerable = false;
 		};
 
+        // Return the created timer task
         return timer.addTask(action, interval, duration, callback);
     }
 

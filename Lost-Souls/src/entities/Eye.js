@@ -56,6 +56,7 @@ export default class Eye extends Enemy{
         this.hitboxOffsets = new Hitbox(Eye.WIDTH+4,Eye.HEIGHT+14,-Eye.OFFSET_WIDTH + Eye.WIDTH-4, -Eye.OFFSET_HEIGHT+Eye.HEIGHT)
 
 
+        // Sprites
         this.idleSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.EyeFlight),
             Eye.FLIGHT_SPRITE_WIDTH,
@@ -80,7 +81,7 @@ export default class Eye extends Enemy{
         this.projectile = null;
         this.scoreValue = this.scoreValue * 2;
 
-
+        // States
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new EyeIdleState(this));
         this.stateMachine.add(EnemyStateName.AttackMode, new EyeAttackModeState(this));
@@ -100,33 +101,44 @@ export default class Eye extends Enemy{
 
     moveLeft(dt) {
         this.direction = Direction.Left;
+
+        // Movement
         this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
         this.flap(dt);
     }
 
     moveRight(dt) {
         this.direction = Direction.Right;
+        
+        // Movement
         this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
         this.flap(dt);
     }
 
     flap(dt) {
         this.flapTimer += dt;
+
+        // Flap up and down in a Sin Wave
         if(this.stateMachine.currentState.name === EnemyStateName.AttackMode){
             this.velocity.y = this.flapAmplitude * Math.sin(this.flapFrequency * this.flapTimer);
         }
     }
 
     receiveDamage(damage){
+        // Take damage
         super.receiveDamage(damage);
-    
+        
+        // Instant kill
         this.isDead = true;
+
+        // Change to death state
         if(!this.cleanUp){
             this.changeState(EnemyStateName.Death);
         }
     }
 
     shootProjectile(){
+        // Set projectile property
         this.projectile = new EyeProjectile(
             new Vector(EyeProjectile.WIDTH, EyeProjectile.HEIGHT),
             new Vector(this.position.x + (Tile.SIZE*3), this.position.y + (Tile.SIZE * 4)),

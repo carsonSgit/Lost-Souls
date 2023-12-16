@@ -29,6 +29,7 @@ export default class Door extends GameObject{
 
         this.hitbox.position.y = this.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT);
 
+        // Sprites
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Tiles),
             Door.DOOR_SPRITE_WIDTH,
@@ -38,13 +39,11 @@ export default class Door extends GameObject{
 
     update(dt){
         super.update(dt);
-        // if enemies are dead 
-        //this.isSolid = true;
-        //this.isCollidable = true;
-        //render door
     }
 
     render(offset = { x: 0, y: 0 }){
+        // Render Spawn position of door
+
         const x = this.position.x + offset.x;
         const y = this.position.y + offset.y;
 

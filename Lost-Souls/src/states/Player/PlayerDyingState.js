@@ -15,16 +15,19 @@ export default class PlayerDyingState extends State{
 
         this.player = player;
 
-
         this.animation = new Animation([0, 1, 2, 3], 0.4, 1);
     }
 
     enter(){
+        // Play death sound
         sounds.play(SoundName.PlayerDeath);
+
+        // Set death animation & sprites
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.dyingSprites;
+
+        // Stop movement
         this.player.velocity.x=0;
-        console.log('Dying state: enter')
     }
 
     exit(){
@@ -33,16 +36,27 @@ export default class PlayerDyingState extends State{
 
     update(){
         if(this.player.currentAnimation.isDone()){
+            // Play land sound for sprite's ground collision
             sounds.play(SoundName.Land);
+
+            // Set high score as this current score
             this.player.highScore = this.player.score;
+
+            // If this run's high score is higher than the local storage high score, store it as a high score
             if(this.player.highScore > localStorage.getItem('playerHighScore')){
                 localStorage.setItem('playerHighScore', this.player.highScore);
             }
+
+            // Reset player score to 0
             this.player.score = 0;
+            // Store resetted score in local storage (this run is over, all saved data is reset)
             localStorage.setItem('playerScore', this.player.score);
 
             this.player.cleanUp = true;
+            // Remove player hitbox
             this.player.hitbox.set(0, 0, 0, 0); 
+
+            // Change Game State to GameOver
             stateMachine.change(
 				GameStateName.GameOver,
 				{

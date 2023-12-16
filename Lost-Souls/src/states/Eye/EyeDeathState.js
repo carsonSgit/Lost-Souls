@@ -15,18 +15,24 @@ export default class EyeDeathState extends State{
     }
 
     enter(){
+        // Remove hitbox
         this.eye.hitbox.set(0,0,0,0);
-
+        // Stop all movement
         this.eye.velocity = new Vector(0, 0);
+
+        // Play death sound
         sounds.play(SoundName.EnemyDeath);
+
+        // Give death animation
         this.eye.currentAnimation = this.animation;
         this.eye.sprites = this.eye.deathSprites;
-        console.log('Eye Death state: enter');
+        // Set death flag
         this.eye.isDead = true;
 
         if(this.firstCall){
             this.firstCall = false;
             sounds.play(SoundName.Sword_Hit);
+            // Tweens so he kersplats on the ground on death
             timer.tween(this.eye.position, ['y'], [330], 0.6, ()=> {
                 sounds.play(SoundName.Land);
             });
@@ -37,9 +43,9 @@ export default class EyeDeathState extends State{
 
     update(dt){
         if(this.eye.currentAnimation.isDone()){
-            console.log("Eye is dead");
-            this.eye.hitbox.set(0,0,0,0);
+            // Eye data should be cleaned up by the map (not sprite)
             this.eye.cleanUp = true;
+            // Increment player score
             this.eye.map.player.score += this.eye.scoreValue;
         }
     }

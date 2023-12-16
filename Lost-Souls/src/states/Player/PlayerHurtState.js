@@ -22,6 +22,7 @@ export default class PlayerHurtState extends State{
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.hurtSprites;
         console.log('Hurt state: enter')
+        console.log(this.player.currentHealth)
     }
 
     exit(){

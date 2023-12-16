@@ -17,19 +17,20 @@ export default class EyeAttackModeState extends State{
     enter(){
         this.eye.currentAnimation = this.animation;
         this.eye.sprites = this.eye.idleSprites;
-
-        //console.log('Eye Attack mode state: enter')
     }
 
-    exit(){
-        //console.log("eye AttackMode State: Exit");
-    }
 
     update(dt){
         this.decideDirection();
         this.move(dt);
     }
 
+    /**
+     * Decides which direction the eye should move
+     * 
+     * Taken / tweaked from Vikram Singh's Mario code
+     * @see: https://github.com/JAC-CS-Game-Programming-F23/3-mario-carsonSgit/blob/main/src/states/entity/snail/SnailChasingState.js 
+     */
     decideDirection() {
         if (this.eye.getDistanceBetween(this.eye.map.player) < (Eye.CHASE_DISTANCE - 35)) {
             this.eye.changeState(EnemyStateName.Attacking);
@@ -42,7 +43,9 @@ export default class EyeAttackModeState extends State{
         }
     }
 
+
     move(dt) {
+        // Simple movement
         if (this.eye.direction === Direction.Left) {
             this.eye.moveLeft(dt);
         }

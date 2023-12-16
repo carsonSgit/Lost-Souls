@@ -33,10 +33,8 @@ export default class GameEntity{
 		);
         this.isDead = false;
         this.cleanUp = false;
-        // this.renderPriority
     }
 
-    //TODO: Extract code from player/enemies into moveLeft and moveRight
     moveLeft(){
 
     }
@@ -50,12 +48,16 @@ export default class GameEntity{
     }
 
     update(dt){
+        // If entity has been killed and all animations have finished, do not update
         if(this.cleanUp){
             return;
         }
+
+        // Call updates on entity's self
         this.stateMachine.update(dt);
         this.currentAnimation.update(dt);
         this.position.add(this.velocity, dt);
+        // If still alive, keep tracking hitbox
         if(!this.isDead){
             this.hitbox.set(
                 this.position.x + this.hitboxOffsets.position.x,
@@ -68,9 +70,7 @@ export default class GameEntity{
 
     render(offset){
         this.stateMachine.render(offset);
-        //if(this.isDead){
-        //    return;
-        //}
+
         this.renderEntity(offset);
     
         if(DEBUG){

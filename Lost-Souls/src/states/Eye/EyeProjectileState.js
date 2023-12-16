@@ -25,8 +25,8 @@ export default class EyeProjectileState extends State{
     enter(){
         this.projectile.currentAnimation = this.animation;
         this.projectile.sprites = this.projectile.projectileSprites;
-        console.log("Eye projectile state: enter");
 
+        // Tween projectile to player's position and then kill it once it reaches that original value
         timer.tween(this.projectile.position, ['x','y'], [this.projectile.map.player.position.x, this.projectile.map.player.position.y], 0.8, ()=> {
             this.projectile.isDead = true;
             this.projectile.cleanUp = true;
@@ -37,7 +37,6 @@ export default class EyeProjectileState extends State{
     update(dt){
         if(this.projectile.currentAnimation.isDone()){
             this.projectile.cleanUp = true;
-            
             console.log(this.projectile);
         }
     }

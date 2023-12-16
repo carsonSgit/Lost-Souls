@@ -41,12 +41,14 @@ export default class Platform extends GameObject{
         this.hitbox.dimensions.x = Platform.PLATFORM_WIDTH;
         this.hitbox.dimensions.y = Platform.PLATFORM_HEIGHT;
 
+        // Platform top (collidable part) Sprites
         this.platformSprites = Sprite.generateSpritesFromSpriteSheet(
 			images.get(ImageName.Tiles),
             Platform.PLATFORM_SPRITE_WIDTH,
             Platform.PLATFORM_SPRITE_HEIGHT,
         );
 
+        // Platform supports (non-collidable part) Sprites
         this.supportSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Tiles),
             Platform.SUPPORT_SPRITE_WIDTH,

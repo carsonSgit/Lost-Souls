@@ -1,6 +1,7 @@
 import State from "../../lib/State.js";
 import GameStateName from "../enums/GameStateName.js";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, stateMachine } from "../globals.js";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, stateMachine, sounds } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
 
 export default class GameOverState extends State {
 	constructor() {

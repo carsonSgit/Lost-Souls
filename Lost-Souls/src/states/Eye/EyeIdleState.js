@@ -15,13 +15,18 @@ export default class EyeIdleState extends State{
     enter(){
         this.eye.currentAnimation = this.animation;
         this.eye.sprites = this.eye.idleSprites;
-        console.log("Eye idle state: enter");
     }
 
     update(dt){
         this.chase();
     }
 
+    /**
+     * Checks if the player is within the chase distance
+     * 
+     * Taken from Vikram Singh's Mario code
+     * @see https://github.com/JAC-CS-Game-Programming-F23/3-mario-carsonSgit/blob/main/src/states/entity/snail/SnailIdleState.js 
+     */
     chase(){
         if(this.eye.getDistanceBetween(this.eye.map.player) <= Eye.CHASE_DISTANCE){
             this.eye.changeState(EnemyStateName.AttackMode)

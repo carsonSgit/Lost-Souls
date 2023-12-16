@@ -18,10 +18,6 @@ export default class EyeAttackingState extends State{
         this.eye.sprites = this.eye.attackSprites;
     }
 
-    exit(){
-        //console.log("eye Attacking State: Exit");
-    }
-
     update(dt){
         
         if(this.eye.currentAnimation.isDone()){

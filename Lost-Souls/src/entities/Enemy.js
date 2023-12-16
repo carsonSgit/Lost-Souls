@@ -5,6 +5,7 @@ export default class Enemy extends GameEntity{
     constructor(dimensions, position, velocityLimit){
         super(dimensions, position, velocityLimit);
 
+        // Default score value of an enemy
         this.scoreValue = 5;
     }
 

@@ -37,6 +37,7 @@ export default class EyeProjectile extends Enemy{
         this.hitboxOffsets = new Hitbox((EyeProjectile.WIDTH / 4) - EyeProjectile.WIDTH*1.5, EyeProjectile.HEIGHT - (EyeProjectile.HEIGHT / 4),
                                         -EyeProjectile.HEIGHT + (EyeProjectile.SPRITE_PROJECTILE_WIDTH / 2), -EyeProjectile.HEIGHT + EyeProjectile.SPRITE_PROJECTILE_HEIGHT / 2);
 
+        // Sprites
         this.projectileSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.EyeProjectile),
             EyeProjectile.SPRITE_PROJECTILE_WIDTH,
@@ -49,7 +50,7 @@ export default class EyeProjectile extends Enemy{
         this.strength = 3;
         this.isDead = false;
 
-
+        // States
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Projectile, new EyeProjectileState(this));
         this.stateMachine.change(EnemyStateName.Projectile);
@@ -57,6 +58,8 @@ export default class EyeProjectile extends Enemy{
 
     render(){
         context.save();
+
+        // Hitbox tracks tweening position
         if(!this.isDead){
             this.hitbox.set(
                 this.position.x + this.hitboxOffsets.position.x,
@@ -73,10 +76,13 @@ export default class EyeProjectile extends Enemy{
 
     update(dt){
         super.update(dt);
+
+        // Force update animation
         this.currentAnimation.update(dt);
     }
 
     receiveDamage(damage){
+        // Can kill projectile
         super.receiveDamage(damage);
     
         sounds.play(SoundName.Sword_Hit)
