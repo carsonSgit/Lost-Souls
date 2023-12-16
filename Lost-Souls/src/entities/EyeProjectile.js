@@ -70,6 +70,12 @@ export default class EyeProjectile extends Enemy{
         context.restore(); 
     }
 
+
+    update(dt){
+        super.update(dt);
+        this.currentAnimation.update(dt);
+    }
+
     receiveDamage(damage){
         super.receiveDamage(damage);
     

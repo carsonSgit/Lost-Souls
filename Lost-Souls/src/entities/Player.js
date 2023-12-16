@@ -137,7 +137,11 @@ export default class Player extends GameEntity{
 
         this.currentHealth = 10;
         this.strength = 2;
-        this.score = 0;
+
+        const savedScore = localStorage.getItem('playerScore');
+        this.score = savedScore !== null ? parseInt(savedScore, 10) : 0;
+
+        this.highScore = 0;
 
         this.isInvulnerable = false;
         this.invulnerabilityTimer = null;

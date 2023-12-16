@@ -30,13 +30,16 @@ export default class GameOverState extends State {
 	renderGameOverScreen(context){
 		context.font = '60px Pixeloid';
 		context.fillStyle = 'black';
-		context.shadowColor = 'rgb(255, 0, 0)';
+		context.shadowColor = 'rgb(255, 20, 20)';
 		context.shadowOffset = {x: 2, y: 2};
-		context.shadowBlur = 15;
+		context.shadowBlur = 3;
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
 		context.fillText('Game Over', CANVAS_WIDTH/2, CANVAS_HEIGHT/ 2 - 20);
+		context.shadowBlur = 1;
 		context.font = '24px Pixeloid';
-		context.fillText('Press Enter to return to title screen', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
+		context.fillText('High Score: ' + this.map.player.highScore, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50);
+		context.font = '18px Pixeloid';
+		context.fillText('Press Enter to return to title screen', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 90);
 	}
 }

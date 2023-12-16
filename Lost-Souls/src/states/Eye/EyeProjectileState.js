@@ -19,7 +19,7 @@ export default class EyeProjectileState extends State{
             this.projectile.velocity.x = 75;
         }
         
-        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.06);
+        this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.04);
     }
 
     enter(){
@@ -27,7 +27,7 @@ export default class EyeProjectileState extends State{
         this.projectile.sprites = this.projectile.projectileSprites;
         console.log("Eye projectile state: enter");
 
-        timer.tween(this.projectile.position, ['x','y'], [this.projectile.map.player.position.x, this.projectile.map.player.position.y], 0.6, ()=> {
+        timer.tween(this.projectile.position, ['x','y'], [this.projectile.map.player.position.x, this.projectile.map.player.position.y], 0.8, ()=> {
             this.projectile.isDead = true;
             this.projectile.cleanUp = true;
             sounds.play(SoundName.Land);

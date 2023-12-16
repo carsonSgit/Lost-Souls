@@ -33,13 +33,13 @@ export default class PlayerDyingState extends State{
 
     update(){
         if(this.player.currentAnimation.isDone()){
-            // Sound infinitely plays as we are stuck in this state, but when we 
-            // change gamestate should be fixed.
             sounds.play(SoundName.Land);
+            this.player.highScore = this.player.score;
+            this.player.score = 0;
+            localStorage.setItem('playerScore', this.player.score);
+
             this.player.cleanUp = true;
-            this.player.hitbox.set(0, 0, 0, 0);
-            //this.player.hitboxOffsets.set(0,0,0,0, "red");
-			//this.player.currentAnimation.refresh();  
+            this.player.hitbox.set(0, 0, 0, 0); 
             stateMachine.change(
 				GameStateName.GameOver,
 				{

@@ -20,12 +20,17 @@ export default class PauseState extends State{
                 }
             );
         }
-        /* saving is disabled for now
+        // Saving is enabled when the 's' key is pressed
         if(keys.s || keys['S']){
             keys.s = false;
             keys['S'] = false;
-            saveGameState();
-        }*/
+
+            // Save player score to localStorage
+            localStorage.setItem('playerScore', this.map.player.score);
+
+            // Optionally, you can also log a message to indicate that the score has been saved
+            console.log('Player score saved to localStorage');
+        }
     }
 
     render(context){
