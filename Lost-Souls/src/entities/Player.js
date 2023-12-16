@@ -292,7 +292,7 @@ export default class Player extends GameEntity{
 		let collisionObjects = [];
 
 		this.map.platforms.forEach((object) => {
-			if (object.didCollideWithEntity(this)) {
+			if (object.didCollideWithEntity(this.hitbox)) {
 				collisionObjects = onCollision(object);
 			}
 		});

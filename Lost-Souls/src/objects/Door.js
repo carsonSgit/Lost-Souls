@@ -13,13 +13,19 @@ export default class Door extends GameObject{
     static DOOR_WIDTH = 46;
     static DOOR_HEIGHT = 64;
 
-    static DOOR_SPAWN = new Vector(784, 355);
+    static DOOR_SPAWN_VILLAGE = new Vector(784, 368);
+    static DOOR_SPAWN_CAVE = new Vector(784, 352);
+    static DOOR_SPAWN_BOSS = new Vector(784, 288);
 
-    constructor(dimensions, position){
+    constructor(dimensions, position, map){
         super(dimensions, position);
         
         this.wasCollided = false;
         this.wasConsumed = false;
+
+        this.map = map;
+
+        this.shouldRender = this.map.collisionLayer === this.map.villageCollisionLayer;
 
         this.hitbox.position.y = this.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT);
 
@@ -28,8 +34,6 @@ export default class Door extends GameObject{
             Door.DOOR_SPRITE_WIDTH,
             Door.DOOR_SPRITE_HEIGHT,
         );
-
-        console.log(this.sprites);
     }
 
     update(dt){

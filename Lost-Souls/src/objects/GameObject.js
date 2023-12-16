@@ -43,7 +43,6 @@ export default class GameObject {
     }
 
     update(dt){
-
     }
 
     render(offset = { x: 0, y: 0 }) {

@@ -4,6 +4,8 @@ import Map from "../../lib/Map.js";
 import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
+	VILLAGE_BACKGROUND_IMAGE_SRC,
+	backgroundImage,
 	keys,
 	loadGameState,
 	sounds,
@@ -11,12 +13,16 @@ import {
 } from "../globals.js";
 import SoundName from "../enums/SoundName.js";
 export default class TitleScreenState extends State {
-	constructor(mapDefinition) {
+	constructor(caveDefinition, villageDefinition, bossDefinition) {
 		super();
 
-		this.map = new Map(mapDefinition);
+		this.caveDefinition = caveDefinition;
+		this.villageDefinition = villageDefinition;
+		this.bossDefinition = bossDefinition;
+
+		this.map = new Map(caveDefinition, villageDefinition, bossDefinition);
 		
-		this.mapDefinition = mapDefinition;
+		
 	}
 	update(dt){
 		this.map.update(dt)
@@ -43,8 +49,9 @@ export default class TitleScreenState extends State {
 
 	enter(){
 		sounds.stop(SoundName.CaveTheme);
-		this.map = new Map(this.mapDefinition);
+		this.map = new Map(this.caveDefinition, this.villageDefinition, this.bossDefinition);
 		sounds.play(SoundName.VillageTheme);
+		backgroundImage.src = VILLAGE_BACKGROUND_IMAGE_SRC;
 	}
 
 	exit(){

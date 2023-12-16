@@ -27,7 +27,7 @@ export const BOSS_ARENA_BACKGROUND_IMAGE_SRC = "../assets/images/Backgrounds/fin
 
 // Load the background image
 export const backgroundImage = new Image();
-backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC;
+backgroundImage.src = VILLAGE_BACKGROUND_IMAGE_SRC;
 
 
 
