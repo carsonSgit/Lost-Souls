@@ -25,7 +25,8 @@ export default class BossSpawnState extends State{
     }
 
     exit(){
-        this.boss.positionOffset = new Vector(0,0);
+        this.boss.positionOffset =  new Vector(-Boss.SPRITE_WIDTH,0);
+
 
         console.log('Boss spawning state: exit');
     }

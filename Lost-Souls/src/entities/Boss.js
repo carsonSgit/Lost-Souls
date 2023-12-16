@@ -7,6 +7,8 @@ import Direction from "../enums/Direction.js";
 import EnemyStateName from "../enums/EnemyStateName.js";
 import ImageName from "../enums/ImageName.js";
 import { DEBUG, context, images } from "../globals.js";
+import BossAttackModeState from "../states/Boss/BossAttackModeState.js";
+import BossAttackingState from "../states/Boss/BossAttackingState.js";
 import BossIdleSate from "../states/Boss/BossIdleState.js";
 import BossSpawnState from "../states/Boss/BossSpawnState.js";
 import Enemy from "./Enemy.js";
@@ -16,7 +18,7 @@ export default class Boss extends Enemy{
     static WIDTH = 96;
     static HEIGHT = 96;
 
-    static SPAWN_OFFSET_WIDTH = -110;
+    static SPAWN_OFFSET_WIDTH = -178;
     static OFFSET_WIDTH = 0;
     static OFFSET_HEIGHT = 0;
 
@@ -33,7 +35,7 @@ export default class Boss extends Enemy{
     static SPRITE_WIDTH = 288;
     static SPRITE_HEIGHT = 160;
 
-    static CHASE_DISTANCE = Boss.WIDTH * 2;
+    static CHASE_DISTANCE = Boss.WIDTH * 3;
 
 
     constructor(dimensions, position, velocityLimit, map){
@@ -49,7 +51,7 @@ export default class Boss extends Enemy{
 
         this.direction = Direction.Left;
 
-        this.positionOffset =  new Vector(0,0);
+        this.positionOffset =  new Vector(-Boss.SPRITE_WIDTH,0);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
         this.hitboxOffsets = new Hitbox(Boss.WIDTH - Boss.SPRITE_WIDTH, Boss.HEIGHT-Tile.SIZE*2, -Boss.OFFSET_WIDTH + Boss.WIDTH, -Boss.OFFSET_HEIGHT+Boss.HEIGHT);        
 
@@ -66,6 +68,8 @@ export default class Boss extends Enemy{
             Boss.SPRITE_HEIGHT,
         );
 
+        console.log(this.allSprites)
+
         this.sprites = this.allSprites;
 
         this.strength = 4;
@@ -73,12 +77,16 @@ export default class Boss extends Enemy{
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Spawn, new BossSpawnState(this));
         this.stateMachine.add(EnemyStateName.Idle, new BossIdleSate(this));
+        this.stateMachine.add(EnemyStateName.AttackMode, new BossAttackModeState(this));
+        this.stateMachine.add(EnemyStateName.Attacking, new BossAttackingState(this));
+
         this.stateMachine.change(EnemyStateName.Idle);
     }
 
     update(dt){
         super.update(dt);
 
+        // FOR TESTING  REMOVE COMMENT BELOW AFTER
         if(//this.map.collisionLayer == this.map.bossCollisionLayer && 
         this.spawning){
             this.stateMachine.change(EnemyStateName.Spawn);
@@ -94,6 +102,54 @@ export default class Boss extends Enemy{
 
         if(DEBUG){
             this.attackHitbox.render(context);
+        }
+    }
+
+    moveLeft() {
+        console.log('moving left')
+		this.direction = Direction.Left;
+		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
+
+        // Collision detection
+        if(this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+            this.velocity.x = 0;
+        }
+	}
+
+    moveRight() {
+		this.direction = Direction.Right;
+		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
+
+        // Collision detection
+        if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Boss.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+            this.velocity.x = 0;
+        }
+    }
+
+    /**
+	 * @param {Entity} entity
+	 * @returns The horizontal distance between this entity and the specified entity.
+	 */
+	getDistanceBetween(entity) {
+        // changing to use boss's hitbox
+		return Math.abs(this.hitbox.position.x - entity.position.x);
+	}
+
+    //Boss sprite sheet is facing left, so we need to flip it
+    renderEntity(offset){
+        let renderX = Math.floor(this.position.x + offset.x);
+        let renderY = Math.floor(this.position.y + offset.y);
+    
+        if (this.direction === Direction.Left) {
+            this.sprites[this.currentAnimation.getCurrentFrame()].render(renderX, renderY);
+        }
+        else {
+            this.sprites[this.currentAnimation.getCurrentFrame()].render(renderX, renderY);
+            context.save();
+            context.translate(renderX + this.dimensions.x, renderY);
+            context.scale(-1, 1);
+            this.sprites[this.currentAnimation.getCurrentFrame()].render(0, 0);
+            context.restore();
         }
     }
 }

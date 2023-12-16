@@ -22,10 +22,14 @@ export default class BossIdleSate extends State{
     }
 
     update(dt){
+        // Chase the player
+        this.chase();
     }
 
     chase(){
-        if(this.boss.getDistanceBetween(this.boss.map.player) <= Boss.CHASE_DISTANCE && this.boss.map.collisionLayer == this.boss.map.bossCollisionLayer){
+        if(this.boss.getDistanceBetween(this.boss.map.player) <= Boss.CHASE_DISTANCE
+        //&& this.boss.map.collisionLayer == this.boss.map.bossCollisionLayer
+        ){
             this.boss.changeState(EnemyStateName.AttackMode)
         }
     }
