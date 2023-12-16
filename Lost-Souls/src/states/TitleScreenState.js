@@ -16,8 +16,7 @@ export default class TitleScreenState extends State {
 
 		this.map = new Map(mapDefinition);
 		
-		console.log(this.mapDefinition);
-
+		this.mapDefinition = mapDefinition;
 	}
 	update(dt){
 		this.map.update(dt)
@@ -43,6 +42,8 @@ export default class TitleScreenState extends State {
 	}
 
 	enter(){
+		sounds.stop(SoundName.CaveTheme);
+		this.map = new Map(this.mapDefinition);
 		sounds.play(SoundName.VillageTheme);
 	}
 

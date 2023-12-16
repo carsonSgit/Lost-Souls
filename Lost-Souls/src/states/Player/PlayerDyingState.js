@@ -38,11 +38,11 @@ export default class PlayerDyingState extends State{
             sounds.play(SoundName.Land);
             //this.player.hitboxOffsets.set(0,0,0,0, "red");
 			//this.player.currentAnimation.refresh();  
-            /*stateMachine.change(
+            stateMachine.change(
 				GameStateName.GameOver,
 				{
 					map: this.player.map,
-				});*/
+				});
         }
     }
 }

@@ -175,6 +175,10 @@
 		{
 			"name": "Dungeon",
 			"path": "./assets/fonts/DungeonFont.ttf"
+		},
+		{
+			"name": "Pixeloid",
+			"path": "./assets/fonts/Pixeloid.ttf"
 		}
 	],
 	"sounds": [
