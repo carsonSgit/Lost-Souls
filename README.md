@@ -124,12 +124,15 @@ Boss Map (background, Cave sprites used for everything else): https://szadiart.i
 ### Buffs/Debuffs (UNCONFIRMED):
 https://quintino-pixels.itch.io/free-pixel-art-skill-icons-pack
 
-### Game Sounds (UNCONFIRMED):
+### Game Sounds:
 https://leohpaz.itch.io/rpg-essentials-sfx-free
 
 ### Font:
 https://vrtxrry.itch.io/dungeonfont
 
+https://somepx.itch.io/humble-fonts-free
+
+https://ggbot.itch.io/pixeloid-font
 
 ## 📐 Proposal
 
