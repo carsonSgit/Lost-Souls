@@ -130,6 +130,9 @@ https://leohpaz.itch.io/rpg-essentials-sfx-free
 ### Font:
 https://vrtxrry.itch.io/dungeonfont
 
+https://somepx.itch.io/humble-fonts-free
+
+https://ggbot.itch.io/pixeloid-font
 
 ## 📐 Proposal
 
