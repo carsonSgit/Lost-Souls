@@ -26,6 +26,7 @@ import EnemyType from "../src/enums/EnemyType.js";
 import Enemy from "../src/entities/Enemy.js";
 import Sounds from "./Sounds.js";
 import SoundName from "../src/enums/SoundName.js";
+import Boss from "../src/entities/Boss.js";
 
 export default class Map {
 	/**
@@ -58,7 +59,7 @@ export default class Map {
 			EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(600, 200), new Vector(100, 10), this),
 		]
 
-		this.boss = EnemyFactory.createInstance(EnemyType.Boss, new Vector(Enemy.SPRITE_WIDTH, Enemy.SPRITE_HEIGHT), new Vector(784, 208), new Vector(100, 10), this);
+		this.boss = EnemyFactory.createInstance(EnemyType.Boss, new Vector(Boss.SPRITE_WIDTH, Boss.SPRITE_HEIGHT), new Vector(784, 208), new Vector(100, 10), this);
 
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 ), this),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(300, 200 ), this)];

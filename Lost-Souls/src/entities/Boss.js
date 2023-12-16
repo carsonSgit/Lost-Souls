@@ -19,8 +19,8 @@ export default class Boss extends Enemy{
     static HEIGHT = 96;
 
     static SPAWN_OFFSET_WIDTH = -178;
-    static OFFSET_WIDTH = 0;
-    static OFFSET_HEIGHT = 0;
+    static OFFSET_WIDTH = 288;
+    static OFFSET_HEIGHT = 160;
 
     static SPAWN_SPRITE_WIDTH = 74;
     static SPAWN_SPRITE_HEIGHT = 160;
@@ -41,6 +41,9 @@ export default class Boss extends Enemy{
     constructor(dimensions, position, velocityLimit, map){
         super(dimensions, position, velocityLimit);
 
+        console.log(dimensions)
+        console.log(this.dimensions)
+
         this.map = map;
         this.spawning = true;
 
@@ -53,7 +56,7 @@ export default class Boss extends Enemy{
 
         this.positionOffset =  new Vector(-Boss.SPRITE_WIDTH,0);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
-        this.hitboxOffsets = new Hitbox(Boss.WIDTH - Boss.SPRITE_WIDTH, Boss.HEIGHT-Tile.SIZE*2, -Boss.OFFSET_WIDTH + Boss.WIDTH, -Boss.OFFSET_HEIGHT+Boss.HEIGHT);        
+        this.hitboxOffsets = new Hitbox(Boss.WIDTH - Boss.SPRITE_WIDTH, Boss.HEIGHT-Tile.SIZE * 2, -Boss.OFFSET_WIDTH + Boss.WIDTH, -Boss.OFFSET_HEIGHT+Boss.HEIGHT);        
 
         
         this.spawnSprites = Sprite.generateSpritesFromSpriteSheet(

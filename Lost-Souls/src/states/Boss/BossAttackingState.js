@@ -35,6 +35,7 @@ export default class BossAttackingState extends State{
         }
         // Is boss halfway through animation? If so, set attack hitbox
         if (this.boss.currentAnimation.isHalfwayDone()) {
+            console.log('here')
             this.setSwordHitbox();
         }
         else{
@@ -59,10 +60,13 @@ export default class BossAttackingState extends State{
         if(this.boss.direction === Direction.Left){
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
-            hitboxWidth = this.boss.dimensions.x / 12 ;
-            hitboxHeight = this.boss.dimensions.x / 3;
+            console.log(this.boss.dimensions)
+            hitboxWidth = this.boss.dimensions.x;
+            hitboxHeight = this.boss.dimensions.x;
             hitboxX = this.boss.position.x + hitboxWidth + this.boss.dimensions.x / 5;
             hitboxY = this.boss.position.y + this.boss.dimensions.y / 3;
+
+            console.log(hitboxX, hitboxY, hitboxWidth, hitboxHeight)
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }else if(this.boss.direction === Direction.Right) {// Right side hitbox
@@ -75,5 +79,7 @@ export default class BossAttackingState extends State{
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
+
+        console.log(this.boss.attackHitbox)
     }
 }
