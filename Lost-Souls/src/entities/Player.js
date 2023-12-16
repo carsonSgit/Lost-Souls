@@ -141,7 +141,8 @@ export default class Player extends GameEntity{
         const savedScore = localStorage.getItem('playerScore');
         this.score = savedScore !== null ? parseInt(savedScore, 10) : 0;
 
-        this.highScore = 0;
+        const savedHighScore = localStorage.getItem('playerHighScore');
+        this.highScore = savedHighScore !== null ? parseInt(savedHighScore, 10) : 0;
 
         this.isInvulnerable = false;
         this.invulnerabilityTimer = null;

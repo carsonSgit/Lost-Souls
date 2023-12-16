@@ -38,7 +38,7 @@ export default class GameOverState extends State {
 		context.fillText('Game Over', CANVAS_WIDTH/2, CANVAS_HEIGHT/ 2 - 20);
 		context.shadowBlur = 1;
 		context.font = '24px Pixeloid';
-		context.fillText('High Score: ' + this.map.player.highScore, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50);
+		context.fillText('Score: ' + this.map.player.highScore, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50);
 		context.font = '18px Pixeloid';
 		context.fillText('Press Enter to return to title screen', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 90);
 	}

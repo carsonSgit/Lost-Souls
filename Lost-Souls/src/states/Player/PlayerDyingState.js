@@ -35,6 +35,9 @@ export default class PlayerDyingState extends State{
         if(this.player.currentAnimation.isDone()){
             sounds.play(SoundName.Land);
             this.player.highScore = this.player.score;
+            if(this.player.highScore > localStorage.getItem('playerHighScore')){
+                localStorage.setItem('playerHighScore', this.player.highScore);
+            }
             this.player.score = 0;
             localStorage.setItem('playerScore', this.player.score);
 

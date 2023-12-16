@@ -53,7 +53,9 @@ export default class PauseState extends State{
         // Renders player score
         context.font = '32px Dungeon';
         context.textAlign = 'right';
-        context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH - 50, CANVAS_HEIGHT - 20);
+        context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH - 40, CANVAS_HEIGHT - 20);
+        context.textAlign = 'left';
+        context.fillText('High Score: ' + this.map.player.highScore, 20, CANVAS_HEIGHT - 20);
     }
     
 }
