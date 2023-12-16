@@ -8,34 +8,44 @@ import EnemyStateName from "../../enums/EnemyStateName.js";
 
 export default class SkeletonIdleState extends State{
 
-        constructor(skeleton){
-            super();
-            this.skeleton = skeleton;
+    constructor(skeleton){
+        super();
+        this.skeleton = skeleton;
 
-            this.animation = new Animation([0, 1, 2, 3], 0.15);
-        }
+        this.animation = new Animation([0, 1, 2, 3], 0.15);
+    }
 
-        enter(){
-            this.skeleton.currentAnimation = this.animation;
-            this.skeleton.sprites = this.skeleton.idleSprites;
-            console.log("skeleton idle state: enter");
-        }
+    enter(){
+        // Skeleton Idle animation & sprites
+        this.skeleton.currentAnimation = this.animation;
+        this.skeleton.sprites = this.skeleton.idleSprites;
+    }
 
-        exit(){
-            this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    exit(){
+        this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    }
+    
+    update(dt){
+        // Is the skeleton floating? If so, change to falling state
+        if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
+        {
+            this.skeleton.changeState(EnemyStateName.Falling);
         }
-        
-        update(dt){
-            if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
-            {
-                this.skeleton.changeState(EnemyStateName.Falling);
-            }
-            this.chase();
-        }
+        // Chase the player
+        this.chase();
+    }
 
-        chase(){
-            if(this.skeleton.getDistanceBetween(this.skeleton.map.player) <= Skeleton.CHASE_DISTANCE){
-                this.skeleton.changeState(EnemyStateName.AttackMode)
-            }
+
+    /**
+     * Checks if the player is within the chase distance
+     * 
+     * Taken from Vikram Singh's Mario code
+     * @see https://github.com/JAC-CS-Game-Programming-F23/3-mario-carsonSgit/blob/main/src/states/entity/snail/SnailIdleState.js 
+     */
+    chase(){
+        // If the player is within chase distance, change state to attack mode
+        if(this.skeleton.getDistanceBetween(this.skeleton.map.player) <= Skeleton.CHASE_DISTANCE){
+            this.skeleton.changeState(EnemyStateName.AttackMode)
         }
+    }
 }

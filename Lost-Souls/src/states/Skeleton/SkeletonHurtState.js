@@ -19,9 +19,11 @@ export default class SkeletonHurtState extends State{
     }
 
     enter(){
+        // Set skeleton hurt animation & sprites
         this.skeleton.currentAnimation = this.animation;
         this.skeleton.sprites = this.skeleton.hurtSprites;
-        console.log('Skeleton Hurt state: enter')
+
+        // Stop movement
         this.skeleton.velocity.x = 0;
     }
 
@@ -30,16 +32,17 @@ export default class SkeletonHurtState extends State{
     }
 
     update(dt){
+        // Is the hurt animation done?
         if(this.skeleton.currentAnimation.isDone()){
 			this.skeleton.currentAnimation.refresh();  
+            // Is the skeleton dead? If so, change state to dying
             if(this.skeleton.isDead){
                 this.skeleton.changeState(EnemyStateName.Dying);
             }
+            // If it isn't dead, change state to idle
             else{
                 this.skeleton.changeState(EnemyStateName.Idle);
             }
-        
         }
-
     }
 }

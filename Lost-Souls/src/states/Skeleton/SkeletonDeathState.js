@@ -20,10 +20,13 @@ export default class SkeletonDeathState extends State{
     }
 
     enter(){
+        // Play death sound effect
         sounds.play(SoundName.EnemyDeath);
+        // Set skeleton death animation & sprites
         this.skeleton.currentAnimation = this.animation;
         this.skeleton.sprites = this.skeleton.deathSprites;
-        console.log('Skeleton Death state: enter')
+
+        // Stop skeleton movement
         this.skeleton.velocity.x = 0;
     }
 
@@ -32,10 +35,12 @@ export default class SkeletonDeathState extends State{
     }
 
     update(dt){
+        // If death animation is done ...
         if(this.skeleton.currentAnimation.isDone()){
-            console.log("Skeleton is dead");
+            // Set hitbox to Zero
             this.skeleton.hitbox.set(0,0,0,0);
             this.skeleton.cleanUp = true;
+            // Add score to player
             this.skeleton.map.player.score += this.skeleton.scoreValue;
         }
     }

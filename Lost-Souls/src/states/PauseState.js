@@ -21,9 +21,9 @@ export default class PauseState extends State{
             );
         }
         // Saving is enabled when the 's' key is pressed
-        if(keys.s || keys['S']){
+        if(keys.s || keys.S){
             keys.s = false;
-            keys['S'] = false;
+            keys.S = false;
 
             // Save player score to localStorage
             localStorage.setItem('playerScore', this.map.player.score);

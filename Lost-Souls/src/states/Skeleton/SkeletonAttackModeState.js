@@ -9,57 +9,69 @@ import Direction from "../../enums/Direction.js";
 
 export default class SkeletonAttackModeState extends State{
 
-        constructor(skeleton){
-            super();
-            this.skeleton = skeleton;
+    constructor(skeleton){
+        super();
+        this.skeleton = skeleton;
 
-            this.animation = new Animation([0, 1, 2, 3], 0.2);
-        }
+        this.animation = new Animation([0, 1, 2, 3], 0.2);
+    }
 
-        enter(){
-            this.skeleton.currentAnimation = this.animation;
-            this.skeleton.sprites = this.skeleton.walkingSprites;
-            
-            this.skeleton.attackHitbox.set(0, 0, 0, 0);
-        }
-
+    enter(){
+        // Set skeleton movement animation & sprites
+        this.skeleton.currentAnimation = this.animation;
+        this.skeleton.sprites = this.skeleton.walkingSprites;
         
-        exit(){
-            this.skeleton.attackHitbox.set(0, 0, 0, 0);
-        }
+        this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    }
 
-        update(dt){
-            if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
-            {
-                this.skeleton.changeState(EnemyStateName.Falling);
-            }
-            this.decideDirection();
-            this.move();
-        }
+    exit(){
+        this.skeleton.attackHitbox.set(0, 0, 0, 0);
+    }
 
-        decideDirection() {
-            if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
-            {
-                this.skeleton.changeState(EnemyStateName.Falling);
-            }
-
-            else if (this.skeleton.getDistanceBetween(this.skeleton.map.player) < (Skeleton.CHASE_DISTANCE - 35)) {
-                this.skeleton.changeState(EnemyStateName.Attacking);
-            }
-            else if (this.skeleton.map.player.position.x < this.skeleton.position.x) {
-                this.skeleton.direction = Direction.Left;
-            }
-            else {
-                this.skeleton.direction = Direction.Right;
-            }
+    update(dt){
+        // If skeleton is floating, change to fall state
+        if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
+        {
+            this.skeleton.changeState(EnemyStateName.Falling);
         }
+        // Decide direction & move accordingly
+        this.decideDirection();
+        this.move();
+    }
 
-        move(dt) {
-            if (this.skeleton.direction === Direction.Left) {
-                this.skeleton.moveLeft();
-            }
-            else if (this.skeleton.direction === Direction.Right) {
-                this.skeleton.moveRight();
-            }
+    /**
+     * Decides which direction the skeleton should move
+     * 
+     * Taken / tweaked from Vikram Singh's Mario code
+     * @see: https://github.com/JAC-CS-Game-Programming-F23/3-mario-carsonSgit/blob/main/src/states/entity/snail/SnailChasingState.js 
+     */
+    decideDirection() {
+        // If skeleton is floating, fall
+        if(this.skeleton.map.collisionLayer.getTile(Math.floor(this.skeleton.position.x /Tile.SIZE) + 2, Math.floor((this.skeleton.position.y + Skeleton.HEIGHT) /Tile.SIZE)+ 3) == null)
+        {
+            this.skeleton.changeState(EnemyStateName.Falling);
         }
+        // If player is within attack distance, change to attacking state
+        else if (this.skeleton.getDistanceBetween(this.skeleton.map.player) < (Skeleton.CHASE_DISTANCE - 35)) {
+            this.skeleton.changeState(EnemyStateName.Attacking);
+        }
+        // If the player is on the left of the skeleton, set skeleton direction to left
+        else if (this.skeleton.map.player.position.x < this.skeleton.position.x) {
+            this.skeleton.direction = Direction.Left;
+        }
+        // If the player is on the right of the skeleton, set skeleton direction to right
+        else {
+            this.skeleton.direction = Direction.Right;
+        }
+    }
+
+    move(dt) {
+        // Simple movement based on direction
+        if (this.skeleton.direction === Direction.Left) {
+            this.skeleton.moveLeft();
+        }
+        else if (this.skeleton.direction === Direction.Right) {
+            this.skeleton.moveRight();
+        }
+    }
 }
