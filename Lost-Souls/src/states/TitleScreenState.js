@@ -12,6 +12,7 @@ import {
 	stateMachine,
 } from "../globals.js";
 import SoundName from "../enums/SoundName.js";
+
 export default class TitleScreenState extends State {
 	constructor(caveDefinition, villageDefinition, bossDefinition) {
 		super();

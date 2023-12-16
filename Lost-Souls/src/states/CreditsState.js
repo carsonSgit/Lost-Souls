@@ -1,17 +1,33 @@
 import State from "../../lib/State.js";
 import GameStateName from "../enums/GameStateName.js";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, stateMachine } from "../globals.js";
-
+import {
+	CANVAS_HEIGHT,
+	CANVAS_WIDTH,
+	VILLAGE_BACKGROUND_IMAGE_SRC,
+	backgroundImage,
+	keys,
+	loadGameState,
+	sounds,
+	stateMachine,
+} from "../globals.js";
+import SoundName from "../enums/SoundName.js";
 export default class CreditsState extends State {
 	constructor() {
 		super();
 	}
 	enter(parameters){
 		console.log('Credits State: Enter');
+		sounds.stop(SoundName.VillageTheme);
+		sounds.play(SoundName.CreditsTheme);
 		this.map = parameters.map;
 	}
 
+	exit(){
+		sounds.stop(SoundName.CreditsTheme);
+	}
+
 	update(dt){
+		this.map.update(dt)
 		if(keys.Enter){
 			keys.Enter = false;
 			console.log('Credits State: Exit');
@@ -65,7 +81,6 @@ export default class CreditsState extends State {
 		context.fillText('GGBotNet', CANVAS_WIDTH / 2 + 210, CANVAS_HEIGHT / 2 + 111);
 
 		
-		//context.fillText('Press Enter to Start', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
 		//context.fillText('Press L to load game', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 80);
 	}
 }
