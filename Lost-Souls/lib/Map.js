@@ -139,7 +139,7 @@ export default class Map {
 			}
 		}
 
-		if(this.player.hitbox.didCollide(this.door.hitbox)){
+		if(this.player.hitbox.didCollide(this.door.hitbox) && this.door.shouldRender) {
 			// ternary? mess
 			//check collision layer, if village, change to cave, if cave, change to boss, if boss, change to village
 			// update player position and background image
