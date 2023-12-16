@@ -16,9 +16,9 @@ export default class PlayerWalkingState extends State{
     }
 
     enter(){
+        // Set to walking animation & sprites
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.walkingSprites;
-        console.log("Walking state: enter");
 
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
@@ -26,43 +26,50 @@ export default class PlayerWalkingState extends State{
     exit(){
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
+
     update(dt){
+        // Store object collision check result
         const objCollisions = this.player.checkObjectCollisions();
 
-        if(!keys.a && !keys.d  && Math.abs(this.player.velocity.x) === 0){
+        // If no movement keys are being pressed, change to idle state
+        if(((!keys.a && !keys.d) || (!keys.A && !keys.D))  && Math.abs(this.player.velocity.x) === 0){
             this.player.changeState(PlayerStateName.Idle);
         }
+        // If we hit space-bar, change to attacking state
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
+        // Are we floating? If so, change to falling state
         else if(objCollisions.length<= 0 && this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {
             this.player.changeState(PlayerStateName.Falling);
         }
-        
-        else if (keys.w) {
+        // If we hit jump button, change to jumping state
+        else if (keys.w || keys.W) {
 			this.player.changeState(PlayerStateName.Jumping);
 		}
-        // Checking if Left & Roll so that we can roll while moving
-        else if(keys.a && keys.r){
+        // Checking if Left Movement & Slide button pressed so that we can roll while moving
+        else if((keys.a && keys.r) || keys.A && keys.R){
             this.player.changeState(PlayerStateName.Rolling);
         }
         // Done after above check so that above is always hit first
-        else if(keys.a){
+            // Are we moving left? Play movement audio & move leftwards
+        else if(keys.a || keys.A){
             sounds.play(SoundName.Step);
             this.player.moveLeft();
         }
-        // Checking if Right & Roll so that we can roll while moving
-        else if(keys.d && keys.r){
+        // Checking if Right Movement & Slide button pressed so that we can roll while moving
+        else if((keys.d && keys.r) || keys.D && keys.R){
             this.player.changeState(PlayerStateName.Rolling);
         }
         // Done after above check so that above is always hit first
-        else if(keys.d){
+            // Are we moving right? Play movement audio & move rightwards
+        else if(keys.d || keys.D){
             sounds.play(SoundName.Step);
             this.player.moveRight();
         }
-        else
-        {
+        // No movement keys pressed, stop moving
+        else {
             this.player.stop();
         }
     }

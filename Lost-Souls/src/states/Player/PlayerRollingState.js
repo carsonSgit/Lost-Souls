@@ -11,44 +11,51 @@ export default class PlayerRollingState extends State{
 
         this.player = player;
 
-
         this.animation = new Animation([0, 1, 2, 3, 4, 6, 7, 8, 9], 0.1 , 1);
-        console.log(this.animation);
+
         this.originalHitboxOffsets = this.player.hitboxOffsets;
     }
 
     enter(){
+        // Play sliding sound effect
         sounds.play(SoundName.Slide);
+
+        // Set sliding animation & sprites
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.rollingSprites;
-        console.log(this.player.sprites);
-        console.log('rolling state: enter')
-        //this.player.hitbox.set()
+
+        // Increase speed
         this.player.speedScalar = 1;
+
+        // Shrink hitbox
         this.player.hitboxOffsets = this.player.rollingHitboxOffsets;
     }
 
     exit(){
+        // Reset hitbox
         this.player.hitboxOffsets = this.originalHitboxOffsets;
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
     update(){
+        // Animation finished? 
         if(this.player.currentAnimation.isDone()){
-            console.log('uhh')
-			this.player.currentAnimation.refresh();    
-            if(keys.a || keys.d){
+			this.player.currentAnimation.refresh();   
+            // Are we trying to move? If so, change to walking state
+            if((keys.a || keys.d) || (keys.A || keys.D)){
                 this.player.changeState(PlayerStateName.Walking);
             }
-            else
-            {
+            // No movement input detected, reset to idle state (no speed boost)
+            else {
                 this.player.speedScalar = .7;
                 this.player.velocity.x = 0;
                 this.player.changeState(PlayerStateName.Idle);
             }
         }
+        // Were we facing left? Slide leftwards
         if(this.player.direction === Direction.Left){
             this.player.moveLeft();
         }
+        // Were we facing right? Slide rightwards
         if(this.player.direction === Direction.Right){
             this.player.moveRight();
         }

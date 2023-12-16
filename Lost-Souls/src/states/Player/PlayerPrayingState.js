@@ -14,22 +14,22 @@ export default class PlayerPrayingState extends State{
     }
 
     enter(){
+        // Set praying animation & sprites
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.prayingSprites;
-        console.log('Pray State: enter');
-        
     }
 
     stopPraying(){
+        // Change to standing up animation
         this.player.currentAnimation = this.standingUpAnimation;
         this.player.currentAnimation.refresh();
         this.isEnding = true;
     }
 
     update(){
+        // When we are stood up, change to idle state
         if(this.isEnding && this.player.currentAnimation.isDone()){
             this.player.changeState(PlayerStateName.Idle);
         }
-
     }
 }

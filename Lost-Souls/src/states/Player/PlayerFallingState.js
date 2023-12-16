@@ -36,11 +36,11 @@ export default class PlayerFallingState extends State{
         this.player.moveDown(dt);
         
         // Move left while falling
-        if(keys.a){
+        if(keys.a || keys.A){
             this.player.moveLeft();
         }
         // Move right while falling
-        else if(keys.d){
+        else if(keys.d || keys.D){
             this.player.moveRight();
         }
         // Do not move if no lateral movement
@@ -49,7 +49,7 @@ export default class PlayerFallingState extends State{
         }
 
         // If lateral movement on landing, straight to walking to keep velocity
-        if((keys.a || keys.d) && this.player.velocity.y == 0){
+        if(((keys.a || keys.d) || (keys.A || keys.D)) && this.player.velocity.y == 0){
             sounds.play(SoundName.Land);
             this.player.changeState(PlayerStateName.Walking);
         }

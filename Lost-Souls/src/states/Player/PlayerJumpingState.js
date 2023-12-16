@@ -14,42 +14,46 @@ export default class PlayerJumpingState extends State{
         this.player = player;
         this.jumpForce = new Vector(0, -500);
 
-
         this.animation = new Animation([0, 1, 2, 3], 0.1);
         
         this.ogHitboxOffsets = this.player.hitboxOffsets;
     }
 
     enter(){
+        // Set jumping animation & sprites
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.fallingSprites;
-        console.log('Jumping State: enter')
+
+        // Set our velocity to the jumping velocity
         this.player.velocity.y = this.jumpForce.y;
+        // Shrink our hitbox
         this.player.hitboxOffsets = this.player.jumpingHitboxOffsets;
-        //this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
     exit(){
+        // Reset our hitbox
         this.player.hitboxOffsets = this.ogHitboxOffsets;
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
     update(dt){
+        // Play the jump sound effect
         sounds.play(SoundName.Jump)
+
+        // Move up
         this.player.moveUp(dt);
+
+        // Did we reach the peak of our jump?
         if(this.player.velocity.y >= 0){
             this.player.changeState(PlayerStateName.Falling);
         }
-        /*else if(this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
-        {
-            this.player.changeState(PlayerStateName.Falling);
-        }*/
-        if (keys.a) {
+        // Move left while jumping
+        if (keys.a || keys.A) {
 			this.player.moveLeft();
 		}
-        else if (keys.d){
+        // Move right while jumping
+        else if (keys.d || keys.D){
 			this.player.moveRight();
         }
-
     }
 }

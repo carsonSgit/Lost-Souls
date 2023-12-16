@@ -11,14 +11,13 @@ export default class PlayerIdleState extends State{
 
         this.player = player;
 
-
         this.animation = new Animation([0, 1, 2, 3, 4, 5], 0.1);
     }
 
     enter(){
+        // Set idle animation & sprites
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.idleSprites;
-        console.log('Idle State: enter')
         
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
@@ -28,29 +27,33 @@ export default class PlayerIdleState extends State{
     }
     
     update(){
+        // Store object collision check results
         const objCollisions = this.player.checkObjectCollisions();
-        //console.log(objCollisions);
 
+        // Did we hit space-bar? ... Attack!!!
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
+        // Are we floating? ... Then fall!!!
         else if(objCollisions <= 0 && this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
         {
             this.player.changeState(PlayerStateName.Falling);
         }
-        else if (keys.a || keys.d) {
+        // Are movement keys being pressed? If so, walk
+        else if (keys.a || keys.d || keys.A || keys.D) {
 			this.player.changeState(PlayerStateName.Walking);
-
 		}
-        else if (keys.w) {
+        // Are we pressing the jump key? If so, jump
+        else if (keys.w || keys.W) {
 			this.player.changeState(PlayerStateName.Jumping);
 		}
-        else if (keys.r){
+        // Are we pressing the roll key? If so, roll
+        else if (keys.r || keys.R){
             this.player.changeState(PlayerStateName.Rolling);
         }
-        else if (keys.h){
+        // Are we pressing the heal key? If so, heal
+        else if (keys.h || keys.H){
             this.player.changeState(PlayerStateName.Healing);
         }
-
     }
 }
