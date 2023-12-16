@@ -24,6 +24,8 @@ const ImageName = {
 	EyeProjectile: 'eye_projectile',
 	EyeSpin: 'eye_spin',
 	EyeHit: 'eye_hit',
+	Boss: 'boss',
+	BossSpawn: 'boss_spawn',
 };
 
 export default ImageName;

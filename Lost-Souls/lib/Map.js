@@ -58,6 +58,8 @@ export default class Map {
 			EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(600, 200), new Vector(100, 10), this),
 		]
 
+		this.boss = EnemyFactory.createInstance(EnemyType.Boss, new Vector(Enemy.SPRITE_WIDTH, Enemy.SPRITE_HEIGHT), new Vector(400, 100), new Vector(100, 10), this);
+
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 ), this),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(300, 200 ), this)];
 
@@ -71,7 +73,8 @@ export default class Map {
 		this.platforms.forEach(platform => {
 			platform.update(dt);
 		});
-
+		
+		this.boss.update(dt);
 		
 		if(this.collisionLayer == this.caveCollisionLayer){
 			this.skeletons.forEach(skeleton => {
@@ -201,6 +204,10 @@ export default class Map {
 					eye.projectile.render();
 				}
 			})
+		}
+
+		if(this.collisionLayer == this.bossCollisionLayer){
+			this.boss.render();
 		}
 		
 		if(this.door.shouldRender)
