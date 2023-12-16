@@ -17,7 +17,6 @@ export default class BossAttackingState extends State{
         console.log("Boss attacking state: enter");
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.allSprites;
-        this.boss.currentAnimation.refresh();
 
     }
 
@@ -34,7 +33,7 @@ export default class BossAttackingState extends State{
             this.boss.attackHitbox.set(0, 0, 0, 0);
             this.boss.changeState(EnemyStateName.AttackMode);
         }
-        // Is skeleton halfway through animation? If so, set attack hitbox
+        // Is boss halfway through animation? If so, set attack hitbox
         if (this.boss.currentAnimation.isHalfwayDone()) {
             this.setSwordHitbox();
         }
