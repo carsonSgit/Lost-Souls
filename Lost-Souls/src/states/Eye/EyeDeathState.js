@@ -34,13 +34,13 @@ export default class EyeDeathState extends State{
     }
 
 
-    
+
     update(dt){
         if(this.eye.currentAnimation.isDone()){
             console.log("Eye is dead");
             this.eye.hitbox.set(0,0,0,0);
-            this.eye.isDead = true;
             this.eye.cleanUp = true;
+            this.eye.map.player.score += this.eye.scoreValue;
         }
     }
 

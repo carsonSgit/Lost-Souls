@@ -43,6 +43,12 @@ export default class PauseState extends State{
         context.fillText('Paused', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20);
         context.font = '24px Dungeon';
         context.fillText('Press Escape to resume', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
-        //context.fillText('Press S to save game', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 80);
+        
+
+        // Renders player score
+        context.font = '32px Dungeon';
+        context.textAlign = 'right';
+        context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH - 50, CANVAS_HEIGHT - 20);
     }
+    
 }

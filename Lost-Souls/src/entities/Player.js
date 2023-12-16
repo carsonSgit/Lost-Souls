@@ -137,6 +137,8 @@ export default class Player extends GameEntity{
 
         this.currentHealth = 10;
         this.strength = 2;
+        this.score = 0;
+
         this.isInvulnerable = false;
         this.invulnerabilityTimer = null;
     }
@@ -147,6 +149,8 @@ export default class Player extends GameEntity{
         super.render(this.positionOffset);
         
         context.restore();
+
+        console.log(this.score);
 
         if(DEBUG){
             this.attackHitbox.render(context);
