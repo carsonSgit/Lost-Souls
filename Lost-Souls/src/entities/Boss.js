@@ -1,6 +1,7 @@
 import Hitbox from "../../lib/Hitbox.js";
 import Sprite from "../../lib/Sprite.js";
 import StateMachine from "../../lib/StateMachine.js";
+import Tile from "../../lib/Tile.js";
 import Vector from "../../lib/Vector.js";
 import Direction from "../enums/Direction.js";
 import EnemyStateName from "../enums/EnemyStateName.js";
@@ -15,6 +16,7 @@ export default class Boss extends Enemy{
     static WIDTH = 96;
     static HEIGHT = 96;
 
+    static SPAWN_OFFSET_WIDTH = -110;
     static OFFSET_WIDTH = 0;
     static OFFSET_HEIGHT = 0;
 
@@ -31,6 +33,9 @@ export default class Boss extends Enemy{
     static SPRITE_WIDTH = 288;
     static SPRITE_HEIGHT = 160;
 
+    static CHASE_DISTANCE = Boss.WIDTH * 2;
+
+
     constructor(dimensions, position, velocityLimit, map){
         super(dimensions, position, velocityLimit);
 
@@ -44,18 +49,9 @@ export default class Boss extends Enemy{
 
         this.direction = Direction.Left;
 
-        this.positionOffset =  new Vector(0, 0);
+        this.positionOffset =  new Vector(0,0);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
-        this.hitboxOffsets = new Hitbox(Boss.WIDTH+8, Boss.HEIGHT-8, -Boss.OFFSET_WIDTH + Boss.WIDTH, -Boss.OFFSET_HEIGHT+Boss.HEIGHT);
-        //BOSS SPAWN OFFSETS ARE DIFFERNT FROM ALL SPRITES,
-        // SO WE NEED OFFSETS FOR THE SPAWN SPRITES
-        // look at zelda code
-        
-        /**
-		 * Since the regular sprite and sword-swinging sprite are different dimensions,
-		 * we need a position offset to make it look like one smooth animation when rendering.
-		* 		this.positionOffset = { x: 0, y: 0 };
-        */
+        this.hitboxOffsets = new Hitbox(Boss.WIDTH - Boss.SPRITE_WIDTH, Boss.HEIGHT-Tile.SIZE*2, -Boss.OFFSET_WIDTH + Boss.WIDTH, -Boss.OFFSET_HEIGHT+Boss.HEIGHT);        
 
         
         this.spawnSprites = Sprite.generateSpritesFromSpriteSheet(
@@ -83,7 +79,8 @@ export default class Boss extends Enemy{
     update(dt){
         super.update(dt);
 
-        if(this.map.collisionLayer == this.map.bossCollisionLayer && this.spawning){
+        if(//this.map.collisionLayer == this.map.bossCollisionLayer && 
+        this.spawning){
             this.stateMachine.change(EnemyStateName.Spawn);
             this.spawning = false;
         }

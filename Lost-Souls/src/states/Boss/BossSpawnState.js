@@ -1,5 +1,7 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
+import Tile from "../../../lib/Tile.js";
+import Vector from "../../../lib/Vector.js";
 import Boss from "../../entities/Boss.js";
 import EnemyStateName from "../../enums/EnemyStateName.js";
 import SoundName from "../../enums/SoundName.js";
@@ -14,6 +16,7 @@ export default class BossSpawnState extends State{
     }
 
     enter(){
+        this.boss.positionOffset = new Vector(Boss.SPAWN_OFFSET_WIDTH, 0);
         sounds.play(SoundName.Fire);
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.spawnSprites;
@@ -22,6 +25,8 @@ export default class BossSpawnState extends State{
     }
 
     exit(){
+        this.boss.positionOffset = new Vector(0,0);
+
         console.log('Boss spawning state: exit');
     }
 
