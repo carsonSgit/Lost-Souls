@@ -1,12 +1,6 @@
 {
 	"images": [
 		{
-			"name": "slime_boss",
-			"path":"./assets/images/Demon_Slime/spritesheets/demon_slime.png",
-			"width": 6336,
-			"height": 800
-		},
-		{
 			"name": "eye_attack",
 			"path": "./assets/images/Flying_eye/Attack.png",
 			"width": 900,
@@ -168,6 +162,18 @@
 			"path": "./assets/images/Tilesets/cave_tiles.png",
 			"width": 1024,
 			"height": 1024
+		},
+		{
+			"name": "boss_spawn",
+			"path": "./assets/images/Hell_Beast/with-stroke/hell-beast-burn.png",
+			"width": 444,
+			"height": 160
+		},
+		{
+			"name":"boss",
+			"path": "./assets/images/Demon_Slime/spritesheets/demon_slime.png",
+			"width": 6336,
+			"height": 800
 		}
 
 	],

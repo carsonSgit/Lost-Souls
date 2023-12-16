@@ -8,6 +8,7 @@ const EnemyStateName = {
     Falling: "Falling",
     AttackMode: "AttackMode",
     Projectile: "Projectile",
+    Spawn: "Spawn",
 };
 
 export default EnemyStateName;
