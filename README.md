@@ -117,6 +117,8 @@ https://chierit.itch.io/boss-demon-slime
 ### Map:
 Village: https://brullov.itch.io/oak-woods
 
+Village background: https://szadiart.itch.io/background-desert-mountains
+
 Cave: https://szadiart.itch.io/pixel-fantasy-caves
 
 Boss Map (background, Cave sprites used for everything else): https://szadiart.itch.io/pixel-platformer-world
