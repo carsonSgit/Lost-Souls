@@ -51,7 +51,7 @@ export default class Eye extends Enemy{
 
         this.direction = Direction.Left;
 
-        this.positionOffset =  new Vector(0, 0);
+        this.positionOffset =  new Vector(0, 2);
 
         this.hitboxOffsets = new Hitbox(Eye.WIDTH+4,Eye.HEIGHT+14,-Eye.OFFSET_WIDTH + Eye.WIDTH-4, -Eye.OFFSET_HEIGHT+Eye.HEIGHT)
 
