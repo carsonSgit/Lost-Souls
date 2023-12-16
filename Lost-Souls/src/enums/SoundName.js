@@ -21,6 +21,7 @@ const SoundName = {
     CaveTheme: 'Cave_Theme',
     CreditsTheme: 'Credits_Theme',
     VillageTheme: 'Village_Theme',
+    Fire: 'Fire',
 }
 
 export default SoundName;

@@ -303,6 +303,12 @@
 			"path": "./assets/sounds/sfx/UI_Menu_SFX/098_Unpause_04.wav",
 			"size": 2,
 			"volume": 0.15
+		},
+		{
+			"name": "Fire",
+			"path": "./assets/sounds/sfx/Atk_Magic_SFX/04_Fire_explosion_04_medium.wav",
+			"size": 2,
+			"volume": 0.5
 		}
 
 

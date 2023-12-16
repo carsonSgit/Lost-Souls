@@ -2,6 +2,8 @@ import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
 import Boss from "../../entities/Boss.js";
 import EnemyStateName from "../../enums/EnemyStateName.js";
+import SoundName from "../../enums/SoundName.js";
+import { sounds } from "../../globals.js";
 
 export default class BossSpawnState extends State{
     constructor(boss){
@@ -12,6 +14,7 @@ export default class BossSpawnState extends State{
     }
 
     enter(){
+        sounds.play(SoundName.Fire);
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.spawnSprites;
         this.boss.currentAnimation.refresh();
@@ -24,6 +27,8 @@ export default class BossSpawnState extends State{
 
     update(dt){
         if(this.boss.currentAnimation.isDone()){
+            sounds.play(SoundName.Fire);
+            sounds.stop(SoundName.Fire);
             this.boss.changeState(EnemyStateName.Idle);
         }
     }
