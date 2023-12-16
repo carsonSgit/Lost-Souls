@@ -100,6 +100,7 @@ export default class Skeleton extends Enemy{
         this.sprites = this.idleSprites;
         
         this.strength = 2;
+        this.scoreValue = this.scoreValue;
 
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new SkeletonIdleState(this));
@@ -131,6 +132,7 @@ export default class Skeleton extends Enemy{
             this.changeState(EnemyStateName.Hurt);
         }else if(!this.cleanUp){
             this.changeState(EnemyStateName.Death);
+            //this.map.player.score += this.scoreValue;
         }
     }
 

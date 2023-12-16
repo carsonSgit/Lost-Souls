@@ -78,6 +78,7 @@ export default class Eye extends Enemy{
 
         this.strength = 1;
         this.projectile = null;
+        this.scoreValue = this.scoreValue * 2;
 
 
         this.stateMachine = new StateMachine();
