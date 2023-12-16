@@ -58,7 +58,7 @@ export default class Map {
 			EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(500, 200), new Vector(100, 10), this),
 		]
 
-		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 ), this),
+		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(150, 300 ), this),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ), this)];
 
 		
@@ -149,7 +149,7 @@ export default class Map {
 			? (this.collisionLayer = this.caveCollisionLayer, // change to cave
 				this.player.position = new Vector(100,200),
 				this.door.position = Door.DOOR_SPAWN_CAVE,
-				this.door.shouldRender = true,
+				this.door.shouldRender = false,
 				this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 				backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC,
 				sounds.stop(SoundName.VillageTheme),
@@ -158,7 +158,7 @@ export default class Map {
 				?(this.collisionLayer = this.bossCollisionLayer, // change to boss
 					this.player.position = new Vector(100, 306),
 					this.door.position = Door.DOOR_SPAWN_BOSS,
-					this.door.shouldRender = true,
+					this.door.shouldRender = false,
 					this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 					backgroundImage.src = BOSS_ARENA_BACKGROUND_IMAGE_SRC,
 					sounds.stop(SoundName.CaveTheme),
