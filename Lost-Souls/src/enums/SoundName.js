@@ -2,6 +2,7 @@ const SoundName = {
     //Soundtrack
 
     //Effects
+    Menu: 'Menu',
     Step: 'Step',
     Jump: 'Jump',
     Land: 'Land',
