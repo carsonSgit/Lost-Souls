@@ -14,6 +14,7 @@ import {
 	VILLAGE_BACKGROUND_IMAGE_SRC,
 	BOSS_ARENA_BACKGROUND_IMAGE_SRC,
 	CAVE_BACKGROUND_IMAGE_SRC,
+	sounds,
 } from "../src/globals.js";
 import Player from "../src/entities/Player.js";
 import Platform from "../src/objects/Platform.js";
@@ -23,6 +24,8 @@ import Eye from "../src/entities/Eye.js";
 import EnemyFactory from "../src/services/EnemyFactory.js";
 import EnemyType from "../src/enums/EnemyType.js";
 import Enemy from "../src/entities/Enemy.js";
+import Sounds from "./Sounds.js";
+import SoundName from "../src/enums/SoundName.js";
 
 export default class Map {
 	/**
@@ -145,19 +148,25 @@ export default class Map {
 				this.door.position = Door.DOOR_SPAWN_CAVE,
 				this.door.shouldRender = true,
 				this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
-				backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC) 
+				backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC,
+				sounds.stop(SoundName.VillageTheme),
+				sounds.play(SoundName.CaveTheme)) 
 				: this.collisionLayer == this.caveCollisionLayer // otherwise if on cave
 				?(this.collisionLayer = this.bossCollisionLayer, // change to boss
 					this.player.position = new Vector(100, 306),
 					this.door.position = Door.DOOR_SPAWN_BOSS,
 					this.door.shouldRender = true,
 					this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
-					backgroundImage.src = BOSS_ARENA_BACKGROUND_IMAGE_SRC)
+					backgroundImage.src = BOSS_ARENA_BACKGROUND_IMAGE_SRC,
+					sounds.stop(SoundName.CaveTheme),
+					sounds.play(SoundName.BossFight))
 					:(this.collisionLayer = this.villageCollisionLayer, // otherwise change to village
 						this.player.position = new Vector(180, 384),
 						this.door.position = Door.DOOR_SPAWN_VILLAGE,
 						this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
-						backgroundImage.src = VILLAGE_BACKGROUND_IMAGE_SRC
+						backgroundImage.src = VILLAGE_BACKGROUND_IMAGE_SRC,
+						sounds.stop(SoundName.BossFight),
+						sounds.play(SoundName.VillageTheme)
 						);
 			
 		}

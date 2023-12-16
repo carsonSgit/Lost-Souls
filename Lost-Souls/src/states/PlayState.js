@@ -13,7 +13,7 @@ export default class PlayState extends State {
 
 	enter(parameters){
 		this.map = parameters.map;
-		sounds.play(SoundName.CaveTheme);
+		sounds.play(SoundName.VillageTheme);
 		
 	}
 

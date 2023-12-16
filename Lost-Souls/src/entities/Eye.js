@@ -121,7 +121,7 @@ export default class Eye extends Enemy{
     
         this.isDead = true;
         if(!this.cleanUp){
-        this.changeState(EnemyStateName.Death);
+            this.changeState(EnemyStateName.Death);
         }
     }
 
