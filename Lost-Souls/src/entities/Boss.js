@@ -144,9 +144,8 @@ export default class Boss extends Enemy{
             this.sprites[this.currentAnimation.getCurrentFrame()].render(renderX, renderY);
         }
         else {
-            this.sprites[this.currentAnimation.getCurrentFrame()].render(renderX, renderY);
             context.save();
-            context.translate(renderX + this.dimensions.x, renderY);
+            context.translate(renderX + Boss.SPRITE_WIDTH, renderY);
             context.scale(-1, 1);
             this.sprites[this.currentAnimation.getCurrentFrame()].render(0, 0);
             context.restore();
