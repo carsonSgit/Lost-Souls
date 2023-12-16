@@ -22,14 +22,19 @@ export default class Platform extends GameObject{
 
     static SUPPORT_SPRITE_SPAWN_OFFSET = 22;
 
-    constructor(dimensions, position){
+    constructor(dimensions, position, map){
         super(dimensions, position);
+
+        this.map = map;
+
         this.isSolid = true;
         this.isCollidable = true;
         this.isConsumable = false;
         this.wasCollided = false;
         this.wasConsumed = false;
         this.numOfSupports = this.getRandomNumberOfSupports();
+
+        this.shouldCollide = true;
 
         this.hitbox.position.x = this.position.x + (Platform.PLATFORM_SPRITE_WIDTH - Platform.PLATFORM_WIDTH);
         this.hitbox.position.y = this.position.y;
@@ -51,13 +56,20 @@ export default class Platform extends GameObject{
 
     update(dt){
         super.update(dt);
+
+        if(this.map.collisionLayer == this.map.villageCollisionLayer || this.map.collisionLayer == this.map.bossCollisionLayer){
+            this.shouldCollide = false;
+        }else{
+            this.shouldCollide = true;
+        }
     }
 
     render(offset = { x: 0, y: 0 }){
+    
         const x = this.position.x + offset.x;
-		const y = this.position.y + offset.y;
+        const y = this.position.y + offset.y;
 
-		// Render platform sprite
+        // Render platform sprite
         this.platformSprites[Platform.PLATFORM_TILE_LOCATIONS[0]].render(Math.floor(x), Math.floor(y));
 
         // Render support sprites
@@ -67,9 +79,10 @@ export default class Platform extends GameObject{
             this.supportSprites[Platform.SUPPORTS_TILE_LOCATIONS[0]].render(supportX, supportY);
         }
 
-		if (DEBUG) {
-			this.hitbox.render(context);
-		}
+        if (DEBUG) {
+            this.hitbox.render(context);
+        }
+        
     }
 
     onCollide(entity){

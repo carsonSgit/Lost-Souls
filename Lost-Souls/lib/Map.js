@@ -58,8 +58,8 @@ export default class Map {
 			EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(500, 200), new Vector(100, 10), this),
 		]
 
-		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 )),
-			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ))];
+		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 ), this),
+			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(400, 200 ), this)];
 
 		
 		this.door = new Door(new Vector(Door.DOOR_WIDTH, Door.DOOR_HEIGHT), Door.DOOR_SPAWN_VILLAGE, this);
@@ -67,6 +67,12 @@ export default class Map {
 
 	update(dt) {
 		this.player.update(dt);
+
+		this.platforms.forEach(platform => {
+			platform.update(dt);
+		});
+
+		
 		if(this.collisionLayer == this.caveCollisionLayer){
 			this.skeletons.forEach(skeleton => {
 				skeleton.update(dt);
@@ -78,9 +84,6 @@ export default class Map {
 					eye.projectile.update(dt);
 				}
 			})
-			this.platforms.forEach(platform => {
-				platform.update(dt);
-			});
 		
 
 			
