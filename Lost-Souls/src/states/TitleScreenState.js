@@ -48,12 +48,23 @@ export default class TitleScreenState extends State {
 		}
 
 		if(keys.Enter){
-			this.map.player.stateMachine.currentState.stopPraying();
-			stateMachine.change(
-				GameStateName.Play,
-				{
-					map: this.map,
-				});
+			if(this.highlighted === this.menuOptions.play){
+				keys.Enter = false;
+				this.map.player.stateMachine.currentState.stopPraying();
+				stateMachine.change(
+					GameStateName.Play,
+					{
+						map: this.map,
+					});
+			}
+			else if(this.highlighted === this.menuOptions.credits){
+				keys.Enter = false;
+				stateMachine.change(
+					GameStateName.Credits,
+					{
+						map: this.map,
+					});
+			}
 		}
 		/*Game loading is disabled for now
 		if(keys.l || keys.L){

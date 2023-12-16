@@ -185,6 +185,10 @@
 		{
 			"name": "Pixeloid",
 			"path": "./assets/fonts/Pixeloid.ttf"
+		},
+		{
+			"name": "Compass",
+			"path": "./assets/fonts/CompassPro.ttf"
 		}
 	],
 	"sounds": [
