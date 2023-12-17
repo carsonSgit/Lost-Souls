@@ -10,7 +10,7 @@ export default class BossHurtState extends State{
 
         this.boss = boss;
 
-        this.animation = new Animation(Boss.HURT_SPRITE_LOCATION, 0.3, 1);
+        this.animation = new Animation(Boss.HURT_SPRITE_LOCATION, 0.1, 1);
     }
 
     enter(){

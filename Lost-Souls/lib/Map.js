@@ -102,6 +102,7 @@ export default class Map {
 			this.skeletons.forEach(skeleton => {
 				if(this.player.attackHitbox.didCollide(skeleton.hitbox)) {
 					skeleton.receiveDamage(this.player.strength);
+					this.player.attackHitbox.set(0, 0, 0, 0);
 				}
 
 				if(skeleton.attackHitbox.didCollide(this.player.hitbox)) {
@@ -112,6 +113,7 @@ export default class Map {
 			this.eyes.forEach(eye => {
 				if(this.player.attackHitbox.didCollide(eye.hitbox)){
 					eye.receiveDamage(this.player.strength);
+					this.player.attackHitbox.set(0, 0, 0, 0);
 				}
 
 				if(eye.hitbox.didCollide(this.player.hitbox)){
@@ -127,6 +129,7 @@ export default class Map {
 					}
 					else if(this.player.attackHitbox.didCollide(eye.projectile.hitbox)){
 						eye.projectile = null;
+						this.player.attackHitbox.set(0, 0, 0, 0);
 					}
 				}
 			});
@@ -155,6 +158,7 @@ export default class Map {
 		if(this.collisionLayer == this.bossCollisionLayer){
 			if(this.player.attackHitbox.didCollide(this.boss.hitbox)){
 				this.boss.receiveDamage(this.player.strength);
+				this.player.attackHitbox.set(0, 0, 0, 0);
 			}
 
 			if(this.boss.attackHitbox.didCollide(this.player.hitbox)){
