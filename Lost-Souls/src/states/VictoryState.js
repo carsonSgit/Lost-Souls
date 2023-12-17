@@ -13,6 +13,12 @@ export default class VictoryState extends State {
 
 		sounds.play(SoundName.Sword_Swing);
 		sounds.stop(SoundName.Sword_Swing);
+
+		// Render door only after entering victory state
+			// this makes sure the player gets sent to victory state & doesn't skip by going to village
+		this.map.door.isSolid = true;
+		this.map.door.isCollidable = true;
+		this.map.door.shouldRender = true;
 	}
 
 	update(dt){

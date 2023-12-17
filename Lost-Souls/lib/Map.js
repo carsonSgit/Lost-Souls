@@ -78,11 +78,11 @@ export default class Map {
 		if(this.collisionLayer == this.bossCollisionLayer){
 			this.boss.update(dt);
 
-			if(this.boss.isDead){
+			/*if(this.boss.isDead){
 				this.door.isSolid = true;
 				this.door.isCollidable = true;
 				this.door.shouldRender = true;
-			}
+			}*/
 		}
 		
 		if(this.collisionLayer == this.caveCollisionLayer){
