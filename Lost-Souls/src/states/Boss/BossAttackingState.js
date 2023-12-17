@@ -17,15 +17,11 @@ export default class BossAttackingState extends State{
     enter(){
         this.boss.attackHitbox.set(0, 0, 0, 0);
 
-        console.log("Boss attacking state: enter");
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.allSprites;
-
     }
 
     exit(){
-        console.log("Boss attacking state: exit");
-        // Reset attack hitbox
         this.boss.attackHitbox.set(0, 0, 0, 0);
     }
 

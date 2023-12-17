@@ -14,11 +14,6 @@ export default class BossIdleSate extends State{
     enter(){
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.allSprites;
-        console.log('Boss idle state: enter');
-    }
-
-    exit(){
-        console.log('Boss idle state: exit');
     }
 
     update(dt){

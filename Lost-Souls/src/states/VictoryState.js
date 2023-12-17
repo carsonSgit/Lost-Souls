@@ -10,6 +10,9 @@ export default class VictoryState extends State {
 
 	enter(parameters){
 		this.map = parameters.map;
+
+		sounds.play(SoundName.Sword_Swing);
+		sounds.stop(SoundName.Sword_Swing);
 	}
 
 	update(dt){
@@ -44,7 +47,7 @@ export default class VictoryState extends State {
 		// This run's Score Display 
 		context.shadowBlur = 1;
 		context.font = '24px Pixeloid';
-		context.fillText('Score: ' + this.map.player.highScore, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50);
+		context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50);
 
 		// Return to game prompt
 		context.font = '18px Pixeloid';

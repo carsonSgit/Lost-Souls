@@ -42,6 +42,5 @@ export default class BossDeathState extends State{
                     map: this.boss.map
                 });
         }
-
     }
 }

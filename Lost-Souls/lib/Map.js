@@ -183,7 +183,7 @@ export default class Map {
 				sounds.play(SoundName.CaveTheme)) 
 				: this.collisionLayer == this.caveCollisionLayer // otherwise if on cave
 				?(this.collisionLayer = this.bossCollisionLayer, // change to boss
-					this.player.position = new Vector(100, 306),
+					this.player.position = new Vector(100, 305),
 					this.door.position = Door.DOOR_SPAWN_BOSS,
 					this.door.shouldRender = false,
 					this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),

@@ -14,13 +14,8 @@ export default class BossAttackModeState extends State{
     }
 
     enter(){
-        console.log('Boss attack mode state: enter');
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.allSprites;
-    }
-
-    exit(){
-        console.log('Boss attack mode state: exit');
     }
 
     update(dt){
@@ -28,7 +23,6 @@ export default class BossAttackModeState extends State{
         this.decideDirection();
         this.move();
         this.boss.attackHitbox.set(0, 0, 0, 0);
-
     }
 
     /**

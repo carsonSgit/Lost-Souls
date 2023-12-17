@@ -16,19 +16,15 @@ export default class BossSpawnState extends State{
     }
 
     enter(){
-        this.boss.positionOffset = new Vector(Boss.SPAWN_OFFSET_WIDTH, 0);
+        this.boss.positionOffset = new Vector(Boss.SPAWN_OFFSET_WIDTH, 1);
         sounds.play(SoundName.Fire);
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.spawnSprites;
         this.boss.currentAnimation.refresh();
-        console.log('Boss spawning state: enter');
     }
 
     exit(){
-        this.boss.positionOffset =  new Vector(-Boss.SPRITE_WIDTH,0);
-
-
-        console.log('Boss spawning state: exit');
+        this.boss.positionOffset =  new Vector(-Boss.SPRITE_WIDTH,1);
     }
 
     update(dt){
