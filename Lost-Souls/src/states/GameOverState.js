@@ -21,6 +21,14 @@ export default class GameOverState extends State {
 		}
 	}
 
+	
+	exit(){
+		if(this.map.collisionLayer = this.map.caveCollisionLayer){
+			sounds.stop(SoundName.CaveTheme);
+		}if(this.map.collisionLayer = this.map.bossCollisionLayer){
+			sounds.stop(SoundName.BossFight);
+		}
+	}
 	render(context){
 		context.save();
 		this.map.render();
