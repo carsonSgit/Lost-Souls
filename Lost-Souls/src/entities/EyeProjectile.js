@@ -32,9 +32,9 @@ export default class EyeProjectile extends Enemy{
         this.speedScalar = 0.60;
         this.frictionScalar = 0.05;
 
-        this.positionOffset =  new Vector(128, 0 );
+        this.positionOffset =  new Vector(0, 0 );
 
-        this.hitboxOffsets = new Hitbox((EyeProjectile.WIDTH / 4) - EyeProjectile.WIDTH*1.5, EyeProjectile.HEIGHT - (EyeProjectile.HEIGHT / 4),
+        this.hitboxOffsets = new Hitbox((EyeProjectile.WIDTH) - EyeProjectile.WIDTH * 2, EyeProjectile.HEIGHT - (EyeProjectile.HEIGHT / 4),
                                         -EyeProjectile.HEIGHT + (EyeProjectile.SPRITE_PROJECTILE_WIDTH / 2), -EyeProjectile.HEIGHT + EyeProjectile.SPRITE_PROJECTILE_HEIGHT / 2);
 
         // Sprites
