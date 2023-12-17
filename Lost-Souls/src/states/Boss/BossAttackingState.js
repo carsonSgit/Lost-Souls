@@ -1,5 +1,6 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
+import Tile from "../../../lib/Tile.js";
 import Boss from "../../entities/Boss.js";
 import Direction from "../../enums/Direction.js";
 import EnemyStateName from "../../enums/EnemyStateName.js";
@@ -35,7 +36,6 @@ export default class BossAttackingState extends State{
         }
         // Is boss halfway through animation? If so, set attack hitbox
         if (this.boss.currentAnimation.isHalfwayDone()) {
-            console.log('here')
             this.setSwordHitbox();
         }
         else{
@@ -60,22 +60,20 @@ export default class BossAttackingState extends State{
         if(this.boss.direction === Direction.Left){
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
-            console.log(this.boss.dimensions)
-            hitboxWidth = this.boss.dimensions.x;
-            hitboxHeight = this.boss.dimensions.x;
-            hitboxX = this.boss.position.x + hitboxWidth + this.boss.dimensions.x / 5;
-            hitboxY = this.boss.position.y + this.boss.dimensions.y / 3;
+            hitboxWidth = this.boss.dimensions.x /4;
+            hitboxHeight = this.boss.dimensions.x /3;
+            hitboxX = this.boss.position.x - Boss.SPRITE_WIDTH + Tile.SIZE * 1.5;
+            hitboxY = this.boss.position.y + Boss.HEIGHT - Tile.SIZE *2;
 
-            console.log(hitboxX, hitboxY, hitboxWidth, hitboxHeight)
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }else if(this.boss.direction === Direction.Right) {// Right side hitbox
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
-            hitboxWidth = this.boss.dimensions.x / 12;
+            hitboxWidth = this.boss.dimensions.x / 4;
             hitboxHeight = this.boss.dimensions.x / 3;
-            hitboxX = this.boss.position.x + this.boss.dimensions.x / 1.45;
-            hitboxY = this.boss.position.y + this.boss.dimensions.y / 3;
+            hitboxX = this.boss.position.x - Boss.WIDTH;
+            hitboxY = this.boss.position.y + Boss.HEIGHT - Tile.SIZE *2;
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }

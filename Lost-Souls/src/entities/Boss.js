@@ -6,9 +6,11 @@ import Vector from "../../lib/Vector.js";
 import Direction from "../enums/Direction.js";
 import EnemyStateName from "../enums/EnemyStateName.js";
 import ImageName from "../enums/ImageName.js";
-import { DEBUG, context, images } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
+import { DEBUG, context, images, sounds } from "../globals.js";
 import BossAttackModeState from "../states/Boss/BossAttackModeState.js";
 import BossAttackingState from "../states/Boss/BossAttackingState.js";
+import BossHurtState from "../states/Boss/BossHurtState.js";
 import BossIdleSate from "../states/Boss/BossIdleState.js";
 import BossSpawnState from "../states/Boss/BossSpawnState.js";
 import Enemy from "./Enemy.js";
@@ -49,7 +51,7 @@ export default class Boss extends Enemy{
 
         this.gravityForce = new Vector(0, 1000);
 
-        this.speedScalar = 0.15;
+        this.speedScalar = 0.3;
         this.frictionScalar = 0.1;
 
         this.direction = Direction.Left;
@@ -71,8 +73,6 @@ export default class Boss extends Enemy{
             Boss.SPRITE_HEIGHT,
         );
 
-        console.log(this.allSprites)
-
         this.sprites = this.allSprites;
 
         this.strength = 4;
@@ -82,7 +82,7 @@ export default class Boss extends Enemy{
         this.stateMachine.add(EnemyStateName.Idle, new BossIdleSate(this));
         this.stateMachine.add(EnemyStateName.AttackMode, new BossAttackModeState(this));
         this.stateMachine.add(EnemyStateName.Attacking, new BossAttackingState(this));
-
+        this.stateMachine.add(EnemyStateName.Hurt, new BossHurtState(this));
         this.stateMachine.change(EnemyStateName.Idle);
     }
 
@@ -126,6 +126,20 @@ export default class Boss extends Enemy{
         // Collision detection
         if(this.map.collisionLayer.getTile(Math.ceil((this.position.x + Boss.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
             this.velocity.x = 0;
+        }
+    }
+
+    receiveDamage(damage){
+        super.receiveDamage(damage);
+
+        // Is it alive? ...
+        if(!this.isDead){
+            sounds.play(SoundName.Sword_Hit)
+            this.changeState(EnemyStateName.Hurt);
+        }
+        // It is dead, change state
+        else if(!this.cleanUp){
+            this.changeState(EnemyStateName.Death);
         }
     }
 

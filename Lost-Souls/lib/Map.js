@@ -143,6 +143,18 @@ export default class Map {
 			}
 		}
 
+		//FOR TESTING REMOVE COMMENT BELOW
+		if(//this.collisionLayer == this.bossCollisionLayer
+		true){
+			if(this.player.attackHitbox.didCollide(this.boss.hitbox)){
+				this.boss.receiveDamage(this.player.strength);
+			}
+
+			if(this.boss.attackHitbox.didCollide(this.player.hitbox)){
+				this.player.receiveDamage(this.boss.strength);
+			}
+		}
+
 		if(this.player.hitbox.didCollide(this.door.hitbox) && this.door.shouldRender) {
 			// ternary? mess
 			//check collision layer, if village, change to cave, if cave, change to boss, if boss, change to village
