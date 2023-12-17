@@ -281,6 +281,13 @@
 			"loop": true
 		},
 		{
+			"name": "Victory_Theme",
+			"path": "./assets/sounds/soundtrack/rest.wav",
+			"size": 1,
+			"volume": 0.025,
+			"loop": true
+		},
+		{
 			"name": "Hover",
 			"path": "./assets/sounds/sfx/UI_Menu_SFX/001_Hover_01.wav",
 			"size": 2,

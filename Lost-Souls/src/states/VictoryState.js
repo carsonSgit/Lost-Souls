@@ -1,6 +1,7 @@
 import State from "../../lib/State.js";
 import GameStateName from "../enums/GameStateName.js";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, stateMachine } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, sounds, stateMachine } from "../globals.js";
 
 export default class VictoryState extends State {
 	constructor() {
@@ -16,7 +17,8 @@ export default class VictoryState extends State {
 			keys.Enter = false;
 			stateMachine.change(GameStateName.Play, 
 				{
-					map: this.map
+					map: this.map,
+					fromVictory: true
 			});
 		}
 	}

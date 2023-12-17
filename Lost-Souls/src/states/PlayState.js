@@ -14,9 +14,10 @@ export default class PlayState extends State {
 	enter(parameters){
 		this.map = parameters.map;
 		this.fromPause = parameters.fromPause;
+		this.fromVictory = parameters.fromVictory;
 
 		// Play Village Theme sound
-		if(!this.fromPause)
+		if(!this.fromVictory && !this.fromPause)
 			sounds.play(SoundName.VillageTheme);
 	}
 
