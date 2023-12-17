@@ -75,7 +75,15 @@ export default class Map {
 			platform.update(dt);
 		});
 		
-		this.boss.update(dt);
+		if(this.collisionLayer == this.bossCollisionLayer){
+			this.boss.update(dt);
+
+			if(this.boss.isDead){
+				this.door.isSolid = true;
+				this.door.isCollidable = true;
+				this.door.shouldRender = true;
+			}
+		}
 		
 		if(this.collisionLayer == this.caveCollisionLayer){
 			this.skeletons.forEach(skeleton => {
@@ -141,11 +149,10 @@ export default class Map {
 					this.door.isCollidable = true;
 					this.door.shouldRender = true;
 			}
+
 		}
 
-		//FOR TESTING REMOVE COMMENT BELOW
-		if(//this.collisionLayer == this.bossCollisionLayer
-		true){
+		if(this.collisionLayer == this.bossCollisionLayer){
 			if(this.player.attackHitbox.didCollide(this.boss.hitbox)){
 				this.boss.receiveDamage(this.player.strength);
 			}
@@ -185,7 +192,8 @@ export default class Map {
 						this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 						backgroundImage.src = VILLAGE_BACKGROUND_IMAGE_SRC,
 						sounds.stop(SoundName.BossFight),
-						sounds.play(SoundName.VillageTheme)
+						sounds.play(SoundName.VillageTheme),
+						this.respawnEnemies()
 						);
 			
 		}
@@ -220,8 +228,7 @@ export default class Map {
 		}
 
 		// FOR TESTING  REMOVE COMMENT BELOW AFTER
-		if(//this.collisionLayer == this.bossCollisionLayer
-		true){
+		if(this.collisionLayer == this.bossCollisionLayer){
 			this.boss.render();
 		}
 		
@@ -259,5 +266,17 @@ export default class Map {
 		}
 
 		context.restore();
+	}
+
+	respawnEnemies(){
+		this.skeletons = [EnemyFactory.createInstance(EnemyType.Skeleton, new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(100, 330), new Vector(100, 10), this),
+			EnemyFactory.createInstance(EnemyType.Skeleton, new Vector(Skeleton.SPRITE_WIDTH, Skeleton.SPRITE_HEIGHT), new Vector(500, 330), new Vector(100, 10), this)
+		]
+		
+		this.eyes = [EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(400, 100), new Vector(100, 10), this),
+			EnemyFactory.createInstance(EnemyType.Eye, new Vector(Eye.FLIGHT_SPRITE_WIDTH, Eye.FLIGHT_SPRITE_HEIGHT), new Vector(600, 200), new Vector(100, 10), this),
+		]
+
+		this.boss = EnemyFactory.createInstance(EnemyType.Boss, new Vector(Boss.SPRITE_WIDTH, Boss.SPRITE_HEIGHT), new Vector(784, 208), new Vector(100, 10), this);
 	}
 }

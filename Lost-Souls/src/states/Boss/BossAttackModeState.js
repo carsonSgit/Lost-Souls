@@ -27,6 +27,8 @@ export default class BossAttackModeState extends State{
         // Decide direction & move accordingly
         this.decideDirection();
         this.move();
+        this.boss.attackHitbox.set(0, 0, 0, 0);
+
     }
 
     /**
@@ -37,7 +39,7 @@ export default class BossAttackModeState extends State{
      */
     decideDirection() {
         // If player is within attack distance, change to attacking state
-        if (this.boss.getDistanceBetween(this.boss.map.player) < (Boss.CHASE_DISTANCE - 35)) {
+        if (this.boss.getDistanceBetween(this.boss.map.player) < (Boss.CHASE_DISTANCE - 100)) {
             this.boss.changeState(EnemyStateName.Attacking);
         }
         // If the player is on the left of the boss, set boss direction to left

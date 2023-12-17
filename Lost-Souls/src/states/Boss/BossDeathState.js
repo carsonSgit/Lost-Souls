@@ -1,6 +1,8 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js"
-import Boss from "../../entities/Boss";
+import Boss from "../../entities/Boss.js";
+import SoundName from "../../enums/SoundName.js";
+import { sounds } from "../../globals.js";
 
 export default class BossDeathState extends State{
     
@@ -9,5 +11,30 @@ export default class BossDeathState extends State{
         this.boss = boss;
 
         this.animation = new Animation(Boss.DEATH_SPRITE_LOCATION, 0.2, 1);
+    }
+
+    enter(){
+        sounds.play(SoundName.EnemyDeath);
+
+        this.boss.currentAnimation = this.animation;
+        this.boss.sprites = this.boss.allSprites;
+
+        this.boss.velocity.x = 0;
+    }
+
+    exit(){
+        this.boss.attackHitbox.set(0, 0, 0, 0);
+    }
+
+    update(dt){
+        if(this.boss.currentAnimation.isDone()){
+            this.boss.attackHitbox.set(0, 0, 0, 0);
+            this.boss.hitbox.set(0, 0, 0, 0);
+
+            this.boss.cleanUp = true;
+        
+            this.boss.map.player.score += this.boss.scoreValue;
+        }
+
     }
 }

@@ -10,6 +10,7 @@ import SoundName from "../enums/SoundName.js";
 import { DEBUG, context, images, sounds } from "../globals.js";
 import BossAttackModeState from "../states/Boss/BossAttackModeState.js";
 import BossAttackingState from "../states/Boss/BossAttackingState.js";
+import BossDeathState from "../states/Boss/BossDeathState.js";
 import BossHurtState from "../states/Boss/BossHurtState.js";
 import BossIdleSate from "../states/Boss/BossIdleState.js";
 import BossSpawnState from "../states/Boss/BossSpawnState.js";
@@ -43,9 +44,6 @@ export default class Boss extends Enemy{
     constructor(dimensions, position, velocityLimit, map){
         super(dimensions, position, velocityLimit);
 
-        console.log(dimensions)
-        console.log(this.dimensions)
-
         this.map = map;
         this.spawning = true;
 
@@ -76,6 +74,7 @@ export default class Boss extends Enemy{
         this.sprites = this.allSprites;
 
         this.strength = 4;
+        this.scoreValue = 50;
 
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Spawn, new BossSpawnState(this));
@@ -83,6 +82,7 @@ export default class Boss extends Enemy{
         this.stateMachine.add(EnemyStateName.AttackMode, new BossAttackModeState(this));
         this.stateMachine.add(EnemyStateName.Attacking, new BossAttackingState(this));
         this.stateMachine.add(EnemyStateName.Hurt, new BossHurtState(this));
+        this.stateMachine.add(EnemyStateName.Death, new BossDeathState(this));
         this.stateMachine.change(EnemyStateName.Idle);
     }
 
