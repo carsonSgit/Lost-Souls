@@ -46,8 +46,8 @@ export default class TitleScreenState extends State {
 			// Change highlighted menu option to newly selected menu option
 			this.highlighted = this.highlighted === this.menuOptions.play ? this.menuOptions.credits : this.menuOptions.play;
 			// sounds.play followed by sounds.stop so that audio plays on every switch
-			sounds.play(SoundName.Hover)
-			sounds.stop(SoundName.Hover)
+			sounds.play(SoundName.Sword_Swing)
+			sounds.stop(SoundName.Sword_Swing)
 		}
 
 		// If enter key is pressed, change to selected menu option
