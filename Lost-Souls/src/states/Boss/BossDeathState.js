@@ -31,12 +31,15 @@ export default class BossDeathState extends State{
 
     update(dt){
         if(this.boss.currentAnimation.isDone()){
+            // Clear boss hitboxes
             this.boss.attackHitbox.set(0, 0, 0, 0);
             this.boss.hitbox.set(0, 0, 0, 0);
 
             this.boss.cleanUp = true;
-        
+            
+            // Give player his score for his boss kill
             this.boss.map.player.score += this.boss.scoreValue;
+            // Change to victory state
             stateMachine.change(GameStateName.Victory,
                 {
                     map: this.boss.map

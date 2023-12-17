@@ -22,8 +22,8 @@ export default class BossIdleSate extends State{
     }
 
     chase(){
+        // If player is within chase distance, change to AttackModde state
         if(this.boss.getDistanceBetween(this.boss.map.player) <= Boss.CHASE_DISTANCE
-        //&& this.boss.map.collisionLayer == this.boss.map.bossCollisionLayer
         ){
             this.boss.changeState(EnemyStateName.AttackMode)
         }

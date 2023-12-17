@@ -26,6 +26,7 @@ export default class CreditsState extends State {
 	}
 
 	exit(){
+		// If exiting, stop playing credits theme
 		sounds.stop(SoundName.CreditsTheme);
 	}
 

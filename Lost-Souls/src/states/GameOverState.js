@@ -23,12 +23,17 @@ export default class GameOverState extends State {
 
 	
 	exit(){
+		// If we are currently in cave, stop cave theme
 		if(this.map.collisionLayer = this.map.caveCollisionLayer){
 			sounds.stop(SoundName.CaveTheme);
-		}if(this.map.collisionLayer = this.map.bossCollisionLayer){
+		}
+		// If we are currently in boss arena, stop boss theme
+		if(this.map.collisionLayer = this.map.bossCollisionLayer){
 			sounds.stop(SoundName.BossFight);
 		}
 	}
+
+	// Game Over state render calls
 	render(context){
 		context.save();
 		this.map.render();
@@ -36,7 +41,7 @@ export default class GameOverState extends State {
 		context.restore();
 	}
 
-	// Game Over Rendering
+	// Game Over Rendering formatting
 	renderGameOverScreen(context){
 		// Game Over Header
 		context.font = '60px Pixeloid';

@@ -28,8 +28,10 @@ export default class PlayState extends State {
 		// If key p is pressed, change to Pause state
 		if(keys.p || keys.P){
 			keys.p = false;
+			// Play pause sound effect
 			sounds.play(SoundName.Pause);
 			sounds.stop(SoundName.Pause);
+			// Change to pause state
 			stateMachine.change(
 				GameStateName.Pause, {
 					map: this.map
@@ -38,6 +40,7 @@ export default class PlayState extends State {
 		}
 	}
 
+	// Play state Renders
 	render(context){
 		context.save();
 		this.map.render();

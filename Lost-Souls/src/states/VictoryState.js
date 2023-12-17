@@ -11,6 +11,7 @@ export default class VictoryState extends State {
 	enter(parameters){
 		this.map = parameters.map;
 
+		// Sound effect for Victory effect show up
 		sounds.play(SoundName.Sword_Swing);
 		sounds.stop(SoundName.Sword_Swing);
 
@@ -22,6 +23,7 @@ export default class VictoryState extends State {
 	}
 
 	update(dt){
+		// If we hit the Enter key, return to the game
 		if(keys.Enter){
 			keys.Enter = false;
 			stateMachine.change(GameStateName.Play, 
@@ -32,6 +34,7 @@ export default class VictoryState extends State {
 		}
 	}
 
+	// Victory Screen Renders
 	render(context){
 		context.save();
 		this.map.render();
@@ -39,6 +42,7 @@ export default class VictoryState extends State {
 		context.restore();
 	}
 
+	// Victory Screen Rendering formatting
 	renderVictoryScreen(context){
 		// Victory Header
 		context.font = '60px Pixeloid';

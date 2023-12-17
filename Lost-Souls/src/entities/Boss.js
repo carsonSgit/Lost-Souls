@@ -73,6 +73,7 @@ export default class Boss extends Enemy{
 
         this.sprites = this.allSprites;
 
+        // Boss specific entity values (strength & score)
         this.strength = 4;
         this.scoreValue = 50;
 
@@ -89,14 +90,14 @@ export default class Boss extends Enemy{
     update(dt){
         super.update(dt);
 
-        // FOR TESTING  REMOVE COMMENT BELOW AFTER
-        if(//this.map.collisionLayer == this.map.bossCollisionLayer && 
-        this.spawning){
+        // If boss is spawning, change to spawn state
+        if(this.spawning){
             this.stateMachine.change(EnemyStateName.Spawn);
             this.spawning = false;
         }
     }
 
+    // Renders...
     render(){
         context.save();
         super.render(this.positionOffset);
@@ -109,7 +110,6 @@ export default class Boss extends Enemy{
     }
 
     moveLeft() {
-        console.log('moving left')
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
 

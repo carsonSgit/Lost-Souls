@@ -91,9 +91,11 @@ export default class TitleScreenState extends State {
 	}
 
 	exit(){
+		// Stop playing the sound
 		sounds.stop(SoundName.VillageTheme);
 	}
 
+	// Title Screen Renders
 	render(context){
 		context.save();
 		this.map.render();

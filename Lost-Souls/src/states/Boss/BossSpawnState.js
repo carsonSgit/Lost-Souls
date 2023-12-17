@@ -17,7 +17,11 @@ export default class BossSpawnState extends State{
 
     enter(){
         this.boss.positionOffset = new Vector(Boss.SPAWN_OFFSET_WIDTH, 1);
+
+        // Play fire sound effect (fire spawning)
         sounds.play(SoundName.Fire);
+
+        // Boss spawning animation & sprites
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.spawnSprites;
         this.boss.currentAnimation.refresh();
@@ -28,9 +32,12 @@ export default class BossSpawnState extends State{
     }
 
     update(dt){
+        // When animation is done ...
         if(this.boss.currentAnimation.isDone()){
+            // Play fire sound effect (fire dissipating)
             sounds.play(SoundName.Fire);
             sounds.stop(SoundName.Fire);
+            // Change to boss idle state
             this.boss.changeState(EnemyStateName.Idle);
         }
     }

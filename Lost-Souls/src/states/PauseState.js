@@ -16,9 +16,11 @@ export default class PauseState extends State{
     update(dt){
         // If Escape key, Re-enter play-state
         if(keys.Escape){
+            // Play unpause sound effect
             sounds.play(SoundName.Unpause);
             sounds.stop(SoundName.Unpause);
             keys.Escape = false;
+            // Change back to play state
             stateMachine.change(
                 GameStateName.Play,{
                     map: this.map,
@@ -36,6 +38,7 @@ export default class PauseState extends State{
         }
     }
 
+    // Pause Screen Renders
     render(context){
         context.save();
         this.map.render();
@@ -43,7 +46,7 @@ export default class PauseState extends State{
         context.restore();
     }
 
-    // Pause Screen Rendering
+    // Pause Screen Rendering format
     renderMenuScreen(context){
         // Pause Screen Header
         context.font = '60px Dungeon';
@@ -54,11 +57,16 @@ export default class PauseState extends State{
 
         // Pause Screen Exit prompt
         context.font = '24px Dungeon';
+        context.fillStyle = 'black';
         context.fillText('Press Escape to resume', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
         
+        // Pause Screen Save prompt
+        context.font = '20px Dungeon';
+        context.fillText('Press \'S\' to save score', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 70);
 
         // Player Score render
         context.font = '32px Dungeon';
+        context.fillStyle = 'white';
         context.textAlign = 'right';
         context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH - 40, CANVAS_HEIGHT - 20);
 
