@@ -45,22 +45,22 @@ export default class VictoryState extends State {
 	// Victory Screen Rendering formatting
 	renderVictoryScreen(context){
 		// Victory Header
-		context.font = '60px Pixeloid';
+		context.font = '60px Dungeon';
 		context.fillStyle = 'black';
-		context.shadowColor = 'rgb(255, 20, 20)';
-		context.shadowOffset = {x: 2, y: 2};
-		context.shadowBlur = 3;
+		context.shadowColor = 'rgb(243, 213, 215)';
+		context.shadowOffset = {x: 1, y: 1};
+		context.shadowBlur = 2;
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
 		context.fillText('Victory', CANVAS_WIDTH/2, CANVAS_HEIGHT/ 2 - 20);
 
 		// This run's Score Display 
 		context.shadowBlur = 1;
-		context.font = '24px Pixeloid';
+		context.font = '38px Dungeon';
 		context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50);
 
 		// Return to game prompt
-		context.font = '18px Pixeloid';
-		context.fillText('Press Enter to return to the game', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 90);
+		context.font = '34px Dungeon';
+		context.fillText('Press Enter to return', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 90);
 	}
 }

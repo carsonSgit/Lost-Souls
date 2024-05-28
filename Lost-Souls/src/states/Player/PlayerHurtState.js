@@ -39,7 +39,7 @@ export default class PlayerHurtState extends State{
                 this.player.changeState(PlayerStateName.Dying);
             }
             // It wasn't, are we moving? ...
-            else if((keys.a || keys.d) || (keys.A || keys.D)){
+            else if((keys.a || keys.d) || (keys.A || keys.D) || (keys.ArrowLeft || keys.ArrowRight)){
                 this.player.changeState(PlayerStateName.Walking);
             }
             // It wasn't and we aren't moving (Was the attack that shocking?...)

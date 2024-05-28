@@ -40,11 +40,11 @@ export default class PlayerIdleState extends State{
             this.player.changeState(PlayerStateName.Falling);
         }
         // Are movement keys being pressed? If so, walk
-        else if (keys.a || keys.d || keys.A || keys.D) {
+        else if (keys.a || keys.d || keys.A || keys.D || keys.ArrowLeft || keys.ArrowRight) {
 			this.player.changeState(PlayerStateName.Walking);
 		}
         // Are we pressing the jump key? If so, jump
-        else if (keys.w || keys.W) {
+        else if (keys.w || keys.W || keys.ArrowUp) {
 			this.player.changeState(PlayerStateName.Jumping);
 		}
         // Are we pressing the roll key? If so, roll

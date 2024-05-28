@@ -14,12 +14,13 @@ export default class PauseState extends State{
     }
 
     update(dt){
-        // If Escape key, Re-enter play-state
-        if(keys.Escape){
+        // If 'P' key, Re-enter play-state
+        if(keys.p || keys.P){
             // Play unpause sound effect
             sounds.play(SoundName.Unpause);
             sounds.stop(SoundName.Unpause);
-            keys.Escape = false;
+            keys.p = false;
+            keys.P = false;
             // Change back to play state
             stateMachine.change(
                 GameStateName.Play,{
@@ -58,7 +59,7 @@ export default class PauseState extends State{
         // Pause Screen Exit prompt
         context.font = '24px Dungeon';
         context.fillStyle = 'black';
-        context.fillText('Press Escape to resume', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
+        context.fillText('Press \'P\' to resume', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
         
         // Pause Screen Save prompt
         context.font = '20px Dungeon';

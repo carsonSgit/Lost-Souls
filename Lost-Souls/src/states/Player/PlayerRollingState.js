@@ -42,7 +42,7 @@ export default class PlayerRollingState extends State{
         if(this.player.currentAnimation.isDone()){
 			this.player.currentAnimation.refresh();   
             // Are we trying to move? If so, change to walking state
-            if((keys.a || keys.d) || (keys.A || keys.D)){
+            if((keys.a || keys.d) || (keys.A || keys.D) || (keys.ArrowLeft || keys.ArrowRight)){
                 this.player.changeState(PlayerStateName.Walking);
             }
             // No movement input detected, reset to idle state (no speed boost)

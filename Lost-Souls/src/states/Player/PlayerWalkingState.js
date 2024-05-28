@@ -45,26 +45,26 @@ export default class PlayerWalkingState extends State{
             this.player.changeState(PlayerStateName.Falling);
         }
         // If we hit jump button, change to jumping state
-        else if (keys.w || keys.W) {
+        else if (keys.w || keys.W || keys.ArrowUp) {
 			this.player.changeState(PlayerStateName.Jumping);
 		}
         // Checking if Left Movement & Slide button pressed so that we can roll while moving
-        else if((keys.a && keys.r) || keys.A && keys.R){
+        else if((keys.a && keys.r) || (keys.A && keys.R) || (keys.ArrowLeft && keys.r) || (keys.ArrowLeft && keys.R)){
             this.player.changeState(PlayerStateName.Rolling);
         }
         // Done after above check so that above is always hit first
             // Are we moving left? Play movement audio & move leftwards
-        else if(keys.a || keys.A){
+        else if(keys.a || keys.A || keys.ArrowLeft){
             sounds.play(SoundName.Step);
             this.player.moveLeft();
         }
         // Checking if Right Movement & Slide button pressed so that we can roll while moving
-        else if((keys.d && keys.r) || keys.D && keys.R){
+        else if((keys.d && keys.r) || (keys.D && keys.R) || (keys.ArrowRight && keys.r) || (keys.ArrowRight && keys.R)){
             this.player.changeState(PlayerStateName.Rolling);
         }
         // Done after above check so that above is always hit first
             // Are we moving right? Play movement audio & move rightwards
-        else if(keys.d || keys.D){
+        else if(keys.d || keys.D || keys.ArrowRight){
             sounds.play(SoundName.Step);
             this.player.moveRight();
         }

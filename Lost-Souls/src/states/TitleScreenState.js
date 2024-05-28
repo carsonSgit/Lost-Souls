@@ -39,10 +39,12 @@ export default class TitleScreenState extends State {
 	update(dt){
 		this.map.update(dt)
 
-		// If any Menu cycling key input ...
-		if ((keys.w || keys.s) || (keys.W || keys.S)) {
+		// If any Menu cycling key input ...		
+		if ((keys.w || keys.s || keys.ArrowUp || keys.ArrowDown) || (keys.W || keys.S)) {
 			keys.w = false;
-			keys.s = false;
+			keys.s = false;			
+			keys.ArrowUp = false;
+			keys.ArrowDown = false;
 			// Change highlighted menu option to newly selected menu option
 			this.highlighted = this.highlighted === this.menuOptions.play ? this.menuOptions.credits : this.menuOptions.play;
 			// sounds.play followed by sounds.stop so that audio plays on every switch

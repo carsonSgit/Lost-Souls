@@ -48,11 +48,11 @@ export default class PlayerJumpingState extends State{
             this.player.changeState(PlayerStateName.Falling);
         }
         // Move left while jumping
-        if (keys.a || keys.A) {
+        if (keys.a || keys.A || keys.ArrowLeft) {
 			this.player.moveLeft();
 		}
         // Move right while jumping
-        else if (keys.d || keys.D){
+        else if (keys.d || keys.D || keys.ArrowRight){
 			this.player.moveRight();
         }
     }
