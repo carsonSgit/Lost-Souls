@@ -1,8 +1,8 @@
-# 🗡️ Lost Soul
+# 🗡️ Lost Souls
 
-Welcome to the adventurous world of Lost Soul! In this JavaScript game, you embark on a heroic journey to cleanse a dark cave of menacing monsters, safeguarding nearby villagers. Armed only with a trusty sword, navigate perilous terrain, vanquish foes, and confront the ultimate challenge: the 🔥 Fire Demon, in an epic showdown for the realm's tranquility. Lost Soul beckons players to step into the shoes of the hero villagers desperately need.
+Welcome to the adventurous world of Lost Souls! In this JavaScript game, you embark on a heroic journey to cleanse a dark cave of menacing monsters, safeguarding nearby villagers. Armed only with a trusty sword, navigate perilous terrain, vanquish foes, and confront the ultimate challenge: the 🔥 Fire Demon, in an epic showdown for the realm's tranquility. Lost Souls beckons players to step into the shoes of the hero villagers desperately need.
 > [!NOTE]
-> Lost Soul was developed as a JavaScript game for a final project. It combines immersive gameplay with captivating artwork and audio, providing players with an engaging experience.
+> Lost Souls was developed as a JavaScript game for a final project. It combines immersive gameplay with captivating artwork and audio, providing players with an engaging experience.
 
 ## 🎮 Gameplay
 
