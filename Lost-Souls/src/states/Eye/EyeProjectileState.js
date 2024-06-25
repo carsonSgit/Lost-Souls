@@ -37,7 +37,7 @@ export default class EyeProjectileState extends State{
     update(dt){
         if(this.projectile.currentAnimation.isDone()){
             this.projectile.cleanUp = true;
-            console.log(this.projectile);
+            
         }
     }
 }

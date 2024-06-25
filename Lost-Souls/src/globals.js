@@ -43,7 +43,7 @@ export function saveGameState(){
 
 export function loadGameState(){
 	const serializedGameState = localStorage.getItem("gameState");
-    console.log(serializedGameState);
+    
 	if(serializedGameState){
 		return JSON.parse(serializedGameState);
 		//would need to assign values to stateMachine, context, canvas.width, canvas.height ...

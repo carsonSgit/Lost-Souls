@@ -76,6 +76,6 @@ export default class BossAttackingState extends State{
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
 
-        console.log(this.boss.attackHitbox)
+        
     }
 }
