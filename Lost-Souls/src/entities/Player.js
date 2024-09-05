@@ -70,6 +70,7 @@ export default class Player extends GameEntity{
 
         this.speedScalar = 0.7;
         this.frictionScalar = 0.7;
+        this.speedFactor = 5;
 
         this.positionOffset = new Vector(0, 0);
         this.attackHitbox = new Hitbox(0, 0, 0, 0, 'blue');
@@ -184,7 +185,7 @@ export default class Player extends GameEntity{
 
     moveLeft() {
 		this.direction = Direction.Left;
-		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x);
+		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x) - this.speedFactor;
 
         // Did we collide with a tile on our left? ...
         if(this.position.x <= -Tile.SIZE  || this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
@@ -194,8 +195,8 @@ export default class Player extends GameEntity{
     
 	moveRight() {
 		this.direction = Direction.Right;
-		this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x);
-
+        this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x) + this.speedFactor;
+         
         // Did we collide with a tile on our right? ...
         if(this.position.x + Player.WIDTH >= CANVAS_WIDTH -Tile.SIZE*3 ||this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
            this.velocity.x = 0;
