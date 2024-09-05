@@ -16,9 +16,9 @@ export default class PlayerIdleState extends State{
 
     enter(){
         // Set idle animation & sprites
+        this.player.velocity.x = 0;
         this.player.currentAnimation = this.animation;
         this.player.sprites = this.player.idleSprites;
-        
         this.player.attackHitbox.set(0, 0, 0, 0);
     }
 
