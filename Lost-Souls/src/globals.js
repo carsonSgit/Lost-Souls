@@ -21,9 +21,9 @@ export const sounds = new Sounds();
 
 
 // Set the background image
-export const CAVE_BACKGROUND_IMAGE_SRC = "../assets/images/Backgrounds/caveBackground.png";
-export const VILLAGE_BACKGROUND_IMAGE_SRC = "../assets/images/Backgrounds/villageBackground.png";
-export const BOSS_ARENA_BACKGROUND_IMAGE_SRC = "../assets/images/Backgrounds/finalBossBackground.png";
+export const CAVE_BACKGROUND_IMAGE_SRC = "./assets/images/Backgrounds/caveBackground.png";
+export const VILLAGE_BACKGROUND_IMAGE_SRC = "./assets/images/Backgrounds/villageBackground.png";
+export const BOSS_ARENA_BACKGROUND_IMAGE_SRC = "./assets/images/Backgrounds/finalBossBackground.png";
 
 // Load the background image
 export const backgroundImage = new Image();

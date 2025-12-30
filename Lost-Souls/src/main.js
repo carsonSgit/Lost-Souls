@@ -53,9 +53,9 @@ const {
 } = await fetch('./src/config.json').then((response) => response.json());
 
 // Fetch the level definitions from their JSON files.
-const villageDefinition = await fetch('../config/village.json').then((response) => response.json());
-const caveDefinition = await fetch('../config/cavenew.json').then((response) => response.json());
-const bossMapDefinition = await fetch('../config/bossMap.json').then((response) => response.json());
+const villageDefinition = await fetch('./config/village.json').then((response) => response.json());
+const caveDefinition = await fetch('./config/cavenew.json').then((response) => response.json());
+const bossMapDefinition = await fetch('./config/bossMap.json').then((response) => response.json());
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
 fonts.load(fontDefinitions);
