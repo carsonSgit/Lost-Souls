@@ -1,17 +1,6 @@
 import Vector from "./Vector.js";
 
 export default class Camera {
-	/**
-	 * The "camera" in video games boils down to a small section of the space the player can look at
-	 * at any given time. The camera's position is used to translate the canvas based on where the
-	 * subject currently is in the scene.
-	 *
-	 * @param {Object} subject The camera will follow the subject. Subject must have a position vector.
-	 * @param {Vector} scene The entire space the camera can potentially look at.
-	 * @param {Vector} viewport How much of the scene the player can look at at any one time.
-	 * @param {number} zoom The zoom level (1 = normal, 2 = 2x zoom, etc.)
-	 * @param {number} smoothSpeed The speed at which camera follows (lower = smoother/slower, 0.02-0.1 recommended)
-	 */
 	constructor(subject, scene, viewport, zoom = 2, smoothSpeed = 0.05) {
 		this.subject = subject;
 		this.scene = scene;
@@ -19,38 +8,73 @@ export default class Camera {
 		this.zoom = zoom;
 		this.smoothSpeed = smoothSpeed;
 		this.position = new Vector(0, 0);
+
+		this.smoothSpeedX = 0.04;
+		this.smoothSpeedY = 0.06;
+		this.deadzoneWidth = 0.15;
+		this.deadzoneHeight = 0.2;
+		this.lookaheadX = 40;
+		this.lookaheadY = 20;
+		this.lookaheadSmooth = 0.3;
+		this.currentLookahead = new Vector(0, 0);
 	}
 
 	update(dt = 1) {
+		this.updateLookahead();
 		const targetPosition = this.getTargetPosition();
-
-		// Smooth camera movement using lerp
-		// Lower smoothSpeed = smoother/slower following
-		const lerpSpeed = this.smoothSpeed;
-
-		this.position.x += (targetPosition.x - this.position.x) * lerpSpeed;
-		this.position.y += (targetPosition.y - this.position.y) * lerpSpeed;
+		this.position.x += (targetPosition.x - this.position.x) * this.smoothSpeedX;
+		this.position.y += (targetPosition.y - this.position.y) * this.smoothSpeedY;
 	}
 
-	/**
-	 * Calculate the target camera position to center the subject in the viewport.
-	 * Clamps to scene boundaries.
-	 */
+	updateLookahead() {
+		if (!this.subject.velocity) return;
+
+		let targetLookaheadX = 0;
+		let targetLookaheadY = 0;
+
+		if (Math.abs(this.subject.velocity.x) > 10) {
+			targetLookaheadX = Math.sign(this.subject.velocity.x) * this.lookaheadX;
+		}
+		if (Math.abs(this.subject.velocity.y) > 50) {
+			targetLookaheadY = Math.sign(this.subject.velocity.y) * this.lookaheadY;
+		}
+
+		this.currentLookahead.x += (targetLookaheadX - this.currentLookahead.x) * this.lookaheadSmooth;
+		this.currentLookahead.y += (targetLookaheadY - this.currentLookahead.y) * this.lookaheadSmooth;
+	}
+
 	getTargetPosition() {
 		const targetPosition = new Vector(0, 0);
-
-		// Calculate effective viewport size accounting for zoom
 		const effectiveViewportX = this.viewport.x / this.zoom;
 		const effectiveViewportY = this.viewport.y / this.zoom;
 
-		// Center the subject in the viewport for X axis
-		const targetX = this.subject.position.x + this.subject.dimensions.x / 2 - effectiveViewportX / 2;
-		const maxPositionX = this.scene.x - effectiveViewportX;
-		targetPosition.x = Math.max(0, Math.min(targetX, maxPositionX));
+		const playerCenterX = this.subject.position.x + this.subject.dimensions.x / 2;
+		const playerCenterY = this.subject.position.y + this.subject.dimensions.y / 2;
+		const deadzoneW = effectiveViewportX * this.deadzoneWidth;
+		const deadzoneH = effectiveViewportY * this.deadzoneHeight;
+		const cameraCenterX = this.position.x + effectiveViewportX / 2;
+		const cameraCenterY = this.position.y + effectiveViewportY / 2;
 
-		// Center the subject in the viewport for Y axis
-		const targetY = this.subject.position.y + this.subject.dimensions.y / 2 - effectiveViewportY / 2;
+		let targetX = this.position.x;
+		let targetY = this.position.y;
+
+		const playerOffsetX = playerCenterX - cameraCenterX;
+		if (Math.abs(playerOffsetX) > deadzoneW) {
+			targetX = this.position.x + playerOffsetX - Math.sign(playerOffsetX) * deadzoneW;
+		}
+
+		const playerOffsetY = playerCenterY - cameraCenterY;
+		if (Math.abs(playerOffsetY) > deadzoneH) {
+			targetY = this.position.y + playerOffsetY - Math.sign(playerOffsetY) * deadzoneH;
+		}
+
+		targetX += this.currentLookahead.x;
+		targetY += this.currentLookahead.y;
+
+		const maxPositionX = this.scene.x - effectiveViewportX;
 		const maxPositionY = this.scene.y - effectiveViewportY;
+
+		targetPosition.x = Math.max(0, Math.min(targetX, maxPositionX));
 		targetPosition.y = Math.max(0, Math.min(targetY, maxPositionY));
 
 		return targetPosition;
