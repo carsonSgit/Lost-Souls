@@ -57,6 +57,39 @@ export default class EntityEffects {
 	// ==================== SLASH TRAILS ====================
 
 	/**
+	 * Helper function to generate a random shard shape (simplified for performance)
+	 */
+	generateShardShape() {
+		const shardType = Math.random();
+		
+		if (shardType < 0.4) {
+			// Sharp triangle shard (3 points - fastest)
+			return [
+				{ x: 0, y: -1 },
+				{ x: 0.6, y: 0.8 },
+				{ x: -0.4, y: 0.5 }
+			];
+		} else if (shardType < 0.7) {
+			// Irregular diamond (4 points)
+			return [
+				{ x: 0, y: -1 },
+				{ x: 0.7, y: 0 },
+				{ x: 0.2, y: 1 },
+				{ x: -0.5, y: 0.2 }
+			];
+		} else {
+			// Pentagon shard (5 points - simpler than before)
+			return [
+				{ x: 0, y: -1 },
+				{ x: 0.8, y: -0.3 },
+				{ x: 0.5, y: 0.8 },
+				{ x: -0.5, y: 0.6 },
+				{ x: -0.7, y: -0.2 }
+			];
+		}
+	}
+
+	/**
 	 * Create a sword slash trail effect
 	 * @param {number} x - Center X position
 	 * @param {number} y - Center Y position
@@ -169,13 +202,16 @@ export default class EntityEffects {
 				y,
 				vx: Math.cos(angle) * velocity,
 				vy: Math.sin(angle) * velocity,
-				size: Math.random() * 3 + 1,
+				size: Math.random() * 3 + 2,
 				color,
 				alpha: 1,
 				life: Math.random() * 0.3 + 0.2,
 				timer: 0,
 				hasTrail: Math.random() > 0.5,
 				trail: [],
+				rotation: Math.random() * Math.PI * 2,
+				rotationSpeed: (Math.random() - 0.5) * 0.3,
+				shardShape: this.generateShardShape(),
 			});
 		}
 	}
@@ -219,6 +255,9 @@ export default class EntityEffects {
 				timer: 0,
 				hasTrail: true,
 				trail: [],
+				rotation: Math.random() * Math.PI * 2,
+				rotationSpeed: (Math.random() - 0.5) * 0.3,
+				shardShape: this.generateShardShape(),
 			});
 		}
 	}
@@ -369,6 +408,9 @@ export default class EntityEffects {
 				timer: 0,
 				hasTrail: true,
 				trail: [],
+				rotation: Math.random() * Math.PI * 2,
+				rotationSpeed: (Math.random() - 0.5) * 0.3,
+				shardShape: this.generateShardShape(),
 			});
 		}
 
@@ -532,6 +574,9 @@ export default class EntityEffects {
 				timer: 0,
 				hasTrail: true,
 				trail: [],
+				rotation: Math.random() * Math.PI * 2,
+				rotationSpeed: (Math.random() - 0.5) * 0.3,
+				shardShape: this.generateShardShape(),
 			});
 		}
 	}
@@ -586,6 +631,9 @@ export default class EntityEffects {
 				timer: 0,
 				hasTrail: false,
 				trail: [],
+				rotation: Math.random() * Math.PI * 2,
+				rotationSpeed: (Math.random() - 0.5) * 0.3,
+				shardShape: this.generateShardShape(),
 			});
 		}
 
@@ -680,6 +728,10 @@ export default class EntityEffects {
 				spark.x += Math.sin(spark.timer * 5) * 0.5;
 			} else {
 				spark.vy += 0.2; // Gravity
+				// Rotate shard fragments
+				if (spark.rotation !== undefined) {
+					spark.rotation += spark.rotationSpeed;
+				}
 			}
 
 			spark.alpha = 1 - spark.timer / spark.life;
@@ -827,9 +879,9 @@ export default class EntityEffects {
 			context.save();
 			context.translate(trail.x, trail.y);
 
-			// Draw arc trail
-			context.strokeStyle = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha})`;
-			context.lineWidth = 3;
+			// Outer energy trail
+			context.strokeStyle = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha * 0.7})`;
+			context.lineWidth = 6;
 			context.lineCap = 'round';
 			context.shadowBlur = 15;
 			context.shadowColor = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha})`;
@@ -838,9 +890,10 @@ export default class EntityEffects {
 			context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
 			context.stroke();
 
-			// Inner bright line
+			// Inner bright core line
 			context.strokeStyle = `rgba(255, 255, 255, ${trail.alpha * 0.8})`;
-			context.lineWidth = 1;
+			context.lineWidth = 2;
+			context.shadowBlur = 8;
 			context.beginPath();
 			context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
 			context.stroke();
@@ -863,14 +916,51 @@ export default class EntityEffects {
 				context.stroke();
 			}
 
-			// Draw spark
 			context.globalAlpha = spark.alpha;
-			context.fillStyle = `rgb(${spark.color.r}, ${spark.color.g}, ${spark.color.b})`;
 			context.shadowBlur = spark.isSoul ? 10 : 5;
 			context.shadowColor = `rgb(${spark.color.r}, ${spark.color.g}, ${spark.color.b})`;
-			context.beginPath();
-			context.arc(spark.x, spark.y, spark.size, 0, Math.PI * 2);
-			context.fill();
+
+			if (spark.isSoul) {
+				// Souls: Simplified ethereal wisp shape
+				const gradient = context.createRadialGradient(
+					spark.x, spark.y, 0,
+					spark.x, spark.y, spark.size * 2
+				);
+				gradient.addColorStop(0, `rgba(${spark.color.r}, ${spark.color.g}, ${spark.color.b}, ${spark.alpha})`);
+				gradient.addColorStop(0.5, `rgba(${spark.color.r}, ${spark.color.g}, ${spark.color.b}, ${spark.alpha * 0.5})`);
+				gradient.addColorStop(1, `rgba(${spark.color.r}, ${spark.color.g}, ${spark.color.b}, 0)`);
+				context.fillStyle = gradient;
+				context.beginPath();
+				context.ellipse(spark.x, spark.y, spark.size * 2, spark.size * 1.5, spark.timer, 0, Math.PI * 2);
+				context.fill();
+			} else if (spark.shardShape) {
+				// Combat sparks: Irregular shard/fragment shapes
+				context.save();
+				context.translate(spark.x, spark.y);
+				context.rotate(spark.rotation);
+				context.scale(spark.size, spark.size);
+				
+				// Draw shard shape
+				context.fillStyle = `rgb(${spark.color.r}, ${spark.color.g}, ${spark.color.b})`;
+				context.beginPath();
+				spark.shardShape.forEach((point, i) => {
+					if (i === 0) {
+						context.moveTo(point.x, point.y);
+					} else {
+						context.lineTo(point.x, point.y);
+					}
+				});
+				context.closePath();
+				context.fill();
+				
+				// Bright edge highlight (simplified)
+				context.strokeStyle = `rgba(255, 255, 255, ${spark.alpha * 0.5})`;
+				context.lineWidth = 0.2;
+				context.stroke();
+				
+				context.restore();
+			}
+			
 			context.shadowBlur = 0;
 		});
 		context.globalAlpha = 1;
@@ -881,16 +971,48 @@ export default class EntityEffects {
 			context.globalAlpha = blood.alpha;
 			context.fillStyle = `rgb(${blood.color.r}, ${blood.color.g}, ${blood.color.b})`;
 
+			context.save();
+			context.translate(blood.x, blood.y);
+			
 			if (blood.isDrop) {
-				// Elongated drop shape
+				// Simplified elongated drop shape
+				const angle = Math.atan2(blood.vy, blood.vx);
+				context.rotate(angle);
 				context.beginPath();
-				context.ellipse(blood.x, blood.y, blood.size * 0.6, blood.size, 0, 0, Math.PI * 2);
+				context.ellipse(0, 0, blood.size * 0.6, blood.size * 1.2, 0, 0, Math.PI * 2);
 				context.fill();
 			} else {
+				// Simplified irregular splatter shape
+				if (!blood.shape) {
+					// Generate random splatter shape once (reduced points)
+					blood.shape = [];
+					const points = 5; // Fixed at 5 points for performance
+					for (let i = 0; i < points; i++) {
+						const angle = (i / points) * Math.PI * 2;
+						const radiusVariation = 0.7 + Math.random() * 0.6;
+						blood.shape.push({
+							angle,
+							radius: blood.size * radiusVariation
+						});
+					}
+				}
+				
+				// Draw irregular splatter
 				context.beginPath();
-				context.arc(blood.x, blood.y, blood.size, 0, Math.PI * 2);
+				blood.shape.forEach((point, i) => {
+					const x = Math.cos(point.angle) * point.radius;
+					const y = Math.sin(point.angle) * point.radius;
+					if (i === 0) {
+						context.moveTo(x, y);
+					} else {
+						context.lineTo(x, y);
+					}
+				});
+				context.closePath();
 				context.fill();
 			}
+			
+			context.restore();
 		});
 		context.globalAlpha = 1;
 	}
@@ -900,11 +1022,34 @@ export default class EntityEffects {
 			context.globalAlpha = wave.alpha;
 			context.strokeStyle = `rgb(${wave.color.r}, ${wave.color.g}, ${wave.color.b})`;
 			context.lineWidth = 2;
-			context.shadowBlur = 10;
+			context.shadowBlur = 8;
 			context.shadowColor = `rgb(${wave.color.r}, ${wave.color.g}, ${wave.color.b})`;
+			
+			context.save();
+			context.translate(wave.x, wave.y);
+			
+			// Generate simpler crack pattern if not exists
+			if (!wave.cracks) {
+				wave.cracks = [];
+				const crackCount = 6; // Fixed count for performance
+				for (let i = 0; i < crackCount; i++) {
+					const angle = (i / crackCount) * Math.PI * 2;
+					wave.cracks.push({ angle });
+				}
+			}
+			
+			// Draw main cracks radiating outward
 			context.beginPath();
-			context.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+			wave.cracks.forEach(crack => {
+				const length = wave.radius;
+				const endX = Math.cos(crack.angle) * length;
+				const endY = Math.sin(crack.angle) * length;
+				context.moveTo(0, 0);
+				context.lineTo(endX, endY);
+			});
 			context.stroke();
+			
+			context.restore();
 			context.shadowBlur = 0;
 		});
 		context.globalAlpha = 1;
@@ -912,19 +1057,54 @@ export default class EntityEffects {
 
 	renderDeathExplosions() {
 		this.deathExplosions.forEach(exp => {
-			// Core glow
-			const gradient = context.createRadialGradient(
-				exp.x, exp.y, 0,
-				exp.x, exp.y, exp.radius
-			);
-			gradient.addColorStop(0, `rgba(255, 255, 255, ${exp.alpha})`);
-			gradient.addColorStop(0.3, `rgba(${exp.color.r}, ${exp.color.g}, ${exp.color.b}, ${exp.alpha * 0.8})`);
-			gradient.addColorStop(1, `rgba(${exp.color.r}, ${exp.color.g}, ${exp.color.b}, 0)`);
-
-			context.fillStyle = gradient;
+			context.save();
+			context.translate(exp.x, exp.y);
+			
+			// Simplified dark energy burst
+			const tendrils = 6; // Reduced from 8
+			const progress = exp.timer / exp.duration;
+			
+			context.strokeStyle = `rgba(${exp.color.r}, ${exp.color.g}, ${exp.color.b}, ${exp.alpha * 0.8})`;
+			context.lineWidth = 4;
+			context.shadowBlur = 12;
+			context.shadowColor = `rgba(${exp.color.r}, ${exp.color.g}, ${exp.color.b}, ${exp.alpha})`;
+			
+			// Draw simplified tendrils
 			context.beginPath();
-			context.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
+			for (let i = 0; i < tendrils; i++) {
+				const angle = (i / tendrils) * Math.PI * 2;
+				const length = exp.radius;
+				const endX = Math.cos(angle) * length;
+				const endY = Math.sin(angle) * length;
+				context.moveTo(0, 0);
+				context.lineTo(endX, endY);
+			}
+			context.stroke();
+			
+			// Simplified burst core
+			context.shadowBlur = 15;
+			context.shadowColor = `rgba(255, 255, 255, ${exp.alpha})`;
+			
+			// Simple star burst shape for core (5 points instead of 6)
+			const corePoints = 5;
+			context.fillStyle = `rgba(255, 255, 255, ${exp.alpha})`;
+			context.beginPath();
+			for (let i = 0; i <= corePoints * 2; i++) {
+				const angle = (i / (corePoints * 2)) * Math.PI * 2;
+				const radius = (i % 2 === 0) ? exp.radius * 0.25 : exp.radius * 0.1;
+				const x = Math.cos(angle) * radius;
+				const y = Math.sin(angle) * radius;
+				if (i === 0) {
+					context.moveTo(x, y);
+				} else {
+					context.lineTo(x, y);
+				}
+			}
+			context.closePath();
 			context.fill();
+			
+			context.restore();
+			context.shadowBlur = 0;
 		});
 	}
 
@@ -959,25 +1139,58 @@ export default class EntityEffects {
 		});
 		context.shadowBlur = 0;
 
-		// Converging particles
+		// Converging dark energy particles - simplified
 		be.particles.forEach(p => {
 			context.globalAlpha = p.alpha;
-			context.fillStyle = 'rgba(100, 50, 150, 0.8)';
+			context.shadowBlur = 10;
+			context.shadowColor = 'rgba(100, 50, 150, 0.8)';
+			
+			context.save();
+			context.translate(p.x, p.y);
+			const angle = Math.atan2(p.targetY - p.y, p.targetX - p.x);
+			context.rotate(angle);
+			
+			// Simplified dark energy blob
+			context.fillStyle = 'rgba(100, 50, 150, 0.9)';
 			context.beginPath();
-			context.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+			context.ellipse(0, 0, p.size * 3, p.size * 1.5, 0, 0, Math.PI * 2);
 			context.fill();
+			
+			context.restore();
+			context.shadowBlur = 0;
 		});
 
-		// Reveal rings
+		// Simplified reveal rings
 		be.rings.forEach(ring => {
 			context.globalAlpha = ring.alpha;
 			context.strokeStyle = 'rgba(255, 100, 50, 1)';
 			context.lineWidth = 4;
-			context.shadowBlur = 20;
+			context.shadowBlur = 15;
 			context.shadowColor = 'rgba(255, 100, 50, 1)';
+			
+			context.save();
+			context.translate(be.x, be.y);
+			
+			// Simple burst pattern (8 spikes instead of 12)
 			context.beginPath();
-			context.arc(be.x, be.y, ring.radius, 0, Math.PI * 2);
+			const spikes = 8;
+			for (let i = 0; i <= spikes; i++) {
+				const angle = (i / spikes) * Math.PI * 2;
+				const radiusMultiplier = (i % 2 === 0) ? 1 : 0.7;
+				const radius = ring.radius * radiusMultiplier;
+				const x = Math.cos(angle) * radius;
+				const y = Math.sin(angle) * radius;
+				
+				if (i === 0) {
+					context.moveTo(x, y);
+				} else {
+					context.lineTo(x, y);
+				}
+			}
+			context.closePath();
 			context.stroke();
+			
+			context.restore();
 			context.shadowBlur = 0;
 		});
 
@@ -1020,13 +1233,23 @@ export default class EntityEffects {
 			);
 			context.shadowBlur = 0;
 
-			// Particles
+			// Simplified mystical particles
 			door.particles.forEach(p => {
 				context.globalAlpha = p.alpha;
-				context.fillStyle = 'rgba(150, 220, 255, 1)';
+				context.shadowBlur = 6;
+				context.shadowColor = 'rgba(150, 220, 255, 0.8)';
+				
+				// Simple diamond shape
+				context.fillStyle = 'rgba(150, 220, 255, 0.8)';
 				context.beginPath();
-				context.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+				context.moveTo(p.x, p.y - p.size * 2);
+				context.lineTo(p.x + p.size * 1.5, p.y);
+				context.lineTo(p.x, p.y + p.size * 2);
+				context.lineTo(p.x - p.size * 1.5, p.y);
+				context.closePath();
 				context.fill();
+				
+				context.shadowBlur = 0;
 			});
 			context.globalAlpha = 1;
 		});
@@ -1037,16 +1260,25 @@ export default class EntityEffects {
 			const progress = spawn.timer / spawn.duration;
 			const alpha = 1 - progress;
 
-			// Rising column of light
-			const gradient = context.createLinearGradient(
-				spawn.x, spawn.y + 30,
-				spawn.x, spawn.y - 50
-			);
-			gradient.addColorStop(0, `rgba(${spawn.color.r}, ${spawn.color.g}, ${spawn.color.b}, ${alpha * 0.6})`);
-			gradient.addColorStop(1, `rgba(${spawn.color.r}, ${spawn.color.g}, ${spawn.color.b}, 0)`);
-
-			context.fillStyle = gradient;
-			context.fillRect(spawn.x - 15, spawn.y - 50, 30, 80);
+			context.save();
+			context.translate(spawn.x, spawn.y);
+			context.globalAlpha = alpha;
+			context.shadowBlur = 12;
+			context.shadowColor = `rgba(${spawn.color.r}, ${spawn.color.g}, ${spawn.color.b}, ${alpha})`;
+			
+			// Simplified rising energy pillars
+			context.fillStyle = `rgba(${spawn.color.r}, ${spawn.color.g}, ${spawn.color.b}, ${alpha * 0.6})`;
+			
+			// Draw two simple rectangles instead of jagged pillars
+			context.fillRect(-15, -50, 10, 80);
+			context.fillRect(5, -50, 10, 80);
+			
+			// Add bright center streak
+			context.fillStyle = `rgba(${Math.min(255, spawn.color.r + 100)}, ${Math.min(255, spawn.color.g + 100)}, ${Math.min(255, spawn.color.b + 100)}, ${alpha * 0.8})`;
+			context.fillRect(-2, -50, 4, 80);
+			
+			context.restore();
+			context.shadowBlur = 0;
 		});
 	}
 
