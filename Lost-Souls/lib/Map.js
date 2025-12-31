@@ -124,25 +124,16 @@ export default class Map {
 			platform.update(dt);
 		});
 		
-		if(this.collisionLayer == this.bossCollisionLayer){
-			this.boss.update(dt);
+	if(this.collisionLayer == this.bossCollisionLayer){
+		this.boss.update(dt);
 
-			// Enable door when boss is defeated
-			if(this.boss.isDead){
-				if (!this.doorEffectCreated) {
-					this.doorEffectCreated = true;
-					this.entityEffects.createDoorPortal(
-						this.door.position.x,
-						this.door.position.y,
-						Door.DOOR_SPRITE_WIDTH,
-						Door.DOOR_SPRITE_HEIGHT
-					);
-				}
-				this.door.isSolid = true;
-				this.door.isCollidable = true;
-				this.door.shouldRender = true;
-			}
+		// Hide door during boss fight and death animation
+		if(this.boss.isDead && !this.boss.cleanUp){
+			this.door.shouldRender = false;
+			this.door.isSolid = false;
+			this.door.isCollidable = false;
 		}
+	}
 		
 		if(this.collisionLayer == this.caveCollisionLayer){
 			this.skeletons.forEach(skeleton => {
@@ -269,17 +260,14 @@ export default class Map {
 				}
 			});
 
-			// Check all enemies are dead for door to spawn
 			if(this.skeletons.every(skeleton => skeleton.isDead) && this.eyes.every(eye => eye.isDead)){
 					if (!this.doorEffectCreated) {
-						// First time door appears - add portal effect with correct positioning
-						// Use hitbox dimensions and position to match the actual door collision area
 						this.doorEffectCreated = true;
 						this.entityEffects.createDoorPortal(
-							this.door.hitbox.position.x,
-							this.door.hitbox.position.y,
-							Door.DOOR_WIDTH,
-							Door.DOOR_HEIGHT
+							this.door.position.x,
+							this.door.position.y,
+							Door.DOOR_SPRITE_WIDTH,
+							Door.DOOR_SPRITE_HEIGHT
 						);
 					}
 					this.door.isSolid = true;
@@ -424,15 +412,19 @@ export default class Map {
 			})
 		}
 
-		// FOR TESTING  REMOVE COMMENT BELOW AFTER
-		if(this.collisionLayer == this.bossCollisionLayer){
+		if(this.collisionLayer == this.bossCollisionLayer && !this.boss.isDead){
 			this.boss.render();
 		}
 		
-		if(this.door.shouldRender)
+		if(this.door.shouldRender) {
 			this.door.render();
+		}
+		
+		// Render dead boss death animation on top of door
+		if(this.collisionLayer == this.bossCollisionLayer && this.boss.isDead && !this.boss.cleanUp){
+			this.boss.render();
+		}
 
-		// Render entity effects (combat visuals, etc)
 		this.entityEffects.render();
 
 		//this.midgroundLayer.render();

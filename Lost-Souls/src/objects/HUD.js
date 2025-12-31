@@ -28,6 +28,9 @@ export default class HUD {
 		this.bossHealthDisplay = 0;
 		this.bossBarVisible = false;
 		this.bossBarAlpha = 0;
+		this.lastBossHealth = 0;
+		this.bossHealthFlashTimer = 0;
+		this.bossHealthLerpSpeed = 5;
 
 		// Low health warning
 		this.lowHealthPulse = 0;
@@ -53,7 +56,13 @@ export default class HUD {
 	 */
 	setBoss(enemy) {
 		this.bossEnemy = enemy;
-		this.bossHealthDisplay = enemy ? enemy.currentHealth : 0;
+		if (enemy) {
+			this.bossHealthDisplay = enemy.currentHealth;
+			this.lastBossHealth = enemy.currentHealth;
+		} else {
+			this.bossHealthDisplay = 0;
+			this.lastBossHealth = 0;
+		}
 		this.bossBarVisible = !!enemy;
 	}
 
@@ -108,7 +117,15 @@ export default class HUD {
 		// Boss health bar
 		if (this.bossBarVisible && this.bossEnemy) {
 			const bossDiff = this.bossEnemy.currentHealth - this.bossHealthDisplay;
-			this.bossHealthDisplay += bossDiff * 3 * dt;
+			this.bossHealthDisplay += bossDiff * this.bossHealthLerpSpeed * dt;
+			
+			// Flash when taking damage
+			if (this.bossEnemy.currentHealth < this.lastBossHealth) {
+				this.bossHealthFlashTimer = 0.3;
+			}
+			this.lastBossHealth = this.bossEnemy.currentHealth;
+			this.bossHealthFlashTimer = Math.max(0, this.bossHealthFlashTimer - dt);
+			
 			this.bossBarAlpha = Math.min(1, this.bossBarAlpha + dt * 2);
 		} else {
 			this.bossBarAlpha = Math.max(0, this.bossBarAlpha - dt * 2);
@@ -444,7 +461,7 @@ export default class HUD {
 		context.fill();
 
 		// Health percentage
-		const healthPercent = this.bossHealthDisplay / this.bossEnemy.maxHealth;
+		const healthPercent = this.bossHealthDisplay / this.bossEnemy.totalHealth;
 		const currentWidth = barWidth * Math.max(0, healthPercent);
 
 		if (currentWidth > 0) {
@@ -475,6 +492,14 @@ export default class HUD {
 			context.fillStyle = shine;
 			this.roundRect(barX + 2, barY + 2, currentWidth - 4, barHeight * 0.35, 2);
 			context.fill();
+
+			// Damage flash overlay (like player healthbar)
+			if (this.bossHealthFlashTimer > 0) {
+				context.globalAlpha = this.bossBarAlpha * this.bossHealthFlashTimer * 2;
+				context.fillStyle = 'rgba(255, 255, 255, 0.6)';
+				this.roundRect(barX, barY, currentWidth, barHeight, 3);
+				context.fill();
+			}
 		}
 
 		context.globalAlpha = 1;

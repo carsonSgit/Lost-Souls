@@ -988,27 +988,36 @@ export default class EntityEffects {
 		this.doorEffects.forEach(door => {
 			const pulse = 0.5 + Math.sin(door.pulsePhase) * 0.3;
 
-			// Portal glow
+			// Portal glow (subtle atmospheric effect, tight to door)
 			const gradient = context.createRadialGradient(
 				door.x + door.width/2, door.y + door.height/2, 0,
-				door.x + door.width/2, door.y + door.height/2, Math.max(door.width, door.height)
+				door.x + door.width/2, door.y + door.height/2, Math.max(door.width, door.height) * 0.6
 			);
-			gradient.addColorStop(0, `rgba(100, 200, 255, ${pulse * 0.4})`);
-			gradient.addColorStop(0.5, `rgba(50, 150, 255, ${pulse * 0.2})`);
+			gradient.addColorStop(0, `rgba(100, 200, 255, ${pulse * 0.25})`);
+			gradient.addColorStop(0.5, `rgba(50, 150, 255, ${pulse * 0.12})`);
 			gradient.addColorStop(1, 'rgba(0, 100, 200, 0)');
 
 			context.fillStyle = gradient;
 			context.fillRect(
-				door.x - 20, door.y - 20,
-				door.width + 40, door.height + 40
+				door.x, door.y,
+				door.width, door.height
 			);
 
-			// Border glow
+			// Border glow - matches door sprite exactly (64x80)
+			// Use lineWidth of 2, and draw border to match sprite bounds precisely
+			const lineWidth = 2;
 			context.strokeStyle = `rgba(100, 200, 255, ${pulse})`;
-			context.lineWidth = 2;
-			context.shadowBlur = 15;
-			context.shadowColor = 'rgba(100, 200, 255, 0.8)';
-			context.strokeRect(door.x, door.y, door.width, door.height);
+			context.lineWidth = lineWidth;
+			context.shadowBlur = 10;
+			context.shadowColor = 'rgba(100, 200, 255, 0.6)';
+			// Draw border at exact sprite position and size (64x80)
+			// strokeRect draws from center of line, so we offset by half lineWidth
+			context.strokeRect(
+				door.x + lineWidth / 2, 
+				door.y + lineWidth / 2, 
+				door.width - Image.TileSize, 
+				door.height - Image.TileSize
+			);
 			context.shadowBlur = 0;
 
 			// Particles

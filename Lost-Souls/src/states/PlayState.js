@@ -6,6 +6,7 @@ import SoundName from "../enums/SoundName.js";
 import { keys, sounds, stateMachine, timer } from "../globals.js";
 import HUD from "../objects/HUD.js";
 import AmbientEffects from "../objects/AmbientEffects.js";
+import Door from "../objects/Door.js";
 
 export default class PlayState extends State {
 	constructor() {
@@ -47,9 +48,30 @@ export default class PlayState extends State {
 			this.ambientEffects.setMode('boss');
 		}
 
-		// Play Village Theme sound
 		if(!this.fromVictory && !this.fromPause)
 			sounds.play(SoundName.VillageTheme);
+
+		// Show door after victory screen
+		if (this.fromVictory && this.map.collisionLayer === this.map.bossCollisionLayer) {
+			this.map.door.position.x = Door.DOOR_SPAWN_BOSS.x;
+			this.map.door.position.y = Door.DOOR_SPAWN_BOSS.y;
+			this.map.door.hitbox.position.x = this.map.door.position.x;
+			this.map.door.hitbox.position.y = this.map.door.position.y + (Door.DOOR_SPRITE_HEIGHT - Door.DOOR_HEIGHT);
+			
+			this.map.door.isSolid = true;
+			this.map.door.isCollidable = true;
+			this.map.door.shouldRender = true;
+			
+			if (!this.map.doorEffectCreated) {
+				this.map.doorEffectCreated = true;
+				this.map.entityEffects.createDoorPortal(
+					this.map.door.position.x,
+					this.map.door.position.y,
+					Door.DOOR_SPRITE_WIDTH,
+					Door.DOOR_SPRITE_HEIGHT
+				);
+			}
+		}
 	}
 
 	update(dt){

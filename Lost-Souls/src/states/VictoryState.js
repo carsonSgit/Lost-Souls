@@ -105,12 +105,11 @@ export default class VictoryState extends State {
 		sounds.play(SoundName.Sword_Swing);
 		sounds.stop(SoundName.Sword_Swing);
 
-		// Setup door
-		this.map.door.isSolid = true;
-		this.map.door.isCollidable = true;
-		this.map.door.shouldRender = true;
+		// Hide door during victory screen
+		this.map.door.shouldRender = false;
+		this.map.door.isSolid = false;
+		this.map.door.isCollidable = false;
 
-		// Initialize effects
 		this.particles.clear();
 		this.initializeEffects();
 
