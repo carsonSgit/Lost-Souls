@@ -23,10 +23,28 @@ export default class PlayState extends State {
 		if (!this.hud) {
 			this.hud = new HUD(this.map.player);
 		}
+		// Connect HUD to map for combo/kill tracking
+		this.hud.map = this.map;
+
+		// Set boss for HUD when in boss arena
+		if (this.map.collisionLayer === this.map.bossCollisionLayer) {
+			this.hud.setBoss(this.map.boss);
+		} else {
+			this.hud.setBoss(null);
+		}
 
 		// Initialize ambient effects
 		if (!this.ambientEffects) {
 			this.ambientEffects = new AmbientEffects();
+		}
+
+		// Set ambient mode based on current level
+		if (this.map.collisionLayer === this.map.villageCollisionLayer) {
+			this.ambientEffects.setMode('village');
+		} else if (this.map.collisionLayer === this.map.caveCollisionLayer) {
+			this.ambientEffects.setMode('cave');
+		} else if (this.map.collisionLayer === this.map.bossCollisionLayer) {
+			this.ambientEffects.setMode('boss');
 		}
 
 		// Play Village Theme sound
@@ -41,11 +59,27 @@ export default class PlayState extends State {
 		// Update HUD
 		if (this.hud) {
 			this.hud.update(dt);
+
+			// Update boss health bar visibility based on current level and boss state
+			if (this.map.collisionLayer === this.map.bossCollisionLayer && this.map.boss && !this.map.boss.isDead) {
+				this.hud.setBoss(this.map.boss);
+			} else {
+				this.hud.setBoss(null);
+			}
 		}
 
 		// Update ambient effects
 		if (this.ambientEffects) {
 			this.ambientEffects.update(dt);
+
+			// Update ambient mode based on current level
+			if (this.map.collisionLayer === this.map.villageCollisionLayer) {
+				this.ambientEffects.setMode('village');
+			} else if (this.map.collisionLayer === this.map.caveCollisionLayer) {
+				this.ambientEffects.setMode('cave');
+			} else if (this.map.collisionLayer === this.map.bossCollisionLayer) {
+				this.ambientEffects.setMode('boss');
+			}
 		}
 
 		// If key p is pressed, change to Pause state

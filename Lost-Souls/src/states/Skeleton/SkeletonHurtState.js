@@ -35,9 +35,9 @@ export default class SkeletonHurtState extends State{
         // Is the hurt animation done?
         if(this.skeleton.currentAnimation.isDone()){
 			this.skeleton.currentAnimation.refresh();  
-            // Is the skeleton dead? If so, change state to dying
+            // Is the skeleton dead? If so, change state to death
             if(this.skeleton.isDead){
-                this.skeleton.changeState(EnemyStateName.Dying);
+                this.skeleton.changeState(EnemyStateName.Death);
             }
             // If it isn't dead, change state to idle
             else{

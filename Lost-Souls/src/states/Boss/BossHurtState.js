@@ -28,9 +28,9 @@ export default class BossHurtState extends State{
         if(this.boss.currentAnimation.isDone()){
             this.boss.currentAnimation.refresh();
 
-            // Did the damage kill the boss? If so, go to to Dying state
+            // Did the damage kill the boss? If so, go to Death state
             if(this.boss.isDead){
-                this.boss.changeState(EnemyStateName.Dying);
+                this.boss.changeState(EnemyStateName.Death);
             }
             // It didn't kill the boss, go back to Idle state
             else{

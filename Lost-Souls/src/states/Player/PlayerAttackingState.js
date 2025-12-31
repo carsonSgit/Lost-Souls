@@ -40,7 +40,7 @@ export default class PlayerAttackingState extends State{
 
     /**
      * Sets the sword hitbox based on the player's direction
-     * 
+     *
      * Inspired by Vikram Singh's Zelda code
      * @see https://github.com/JAC-CS-Game-Programming-F23/4-Zelda/blob/main/src/Zelda-5/src/states/entity/player/PlayerSwordSwingingState.js
      */
@@ -50,7 +50,7 @@ export default class PlayerAttackingState extends State{
         *
         * So miserable to get right...
         */
-        
+
         // Left side hitbox
         if(this.player.direction === Direction.Left){
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
@@ -61,6 +61,9 @@ export default class PlayerAttackingState extends State{
 			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
 
             this.player.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+
+            // Slash trail effect
+            this.createSlashEffect(hitboxX, hitboxY + hitboxHeight / 2, 'left');
         }
         // Right side hitbox
         if(this.player.direction === Direction.Right) {
@@ -72,6 +75,18 @@ export default class PlayerAttackingState extends State{
 			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
 
             this.player.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+
+            // Slash trail effect
+            this.createSlashEffect(hitboxX + hitboxWidth, hitboxY + hitboxHeight / 2, 'right');
+        }
+    }
+
+    /**
+     * Creates a visual slash effect at the sword position
+     */
+    createSlashEffect(x, y, direction) {
+        if (this.player.map && this.player.map.entityEffects) {
+            this.player.map.entityEffects.createPlayerSlash(x, y, direction);
         }
     }
 }

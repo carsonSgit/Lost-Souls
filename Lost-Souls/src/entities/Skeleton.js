@@ -103,6 +103,10 @@ export default class Skeleton extends Enemy{
         this.strength = 2;
         this.scoreValue = this.scoreValue;
 
+        // Skeleton health (3 hits to kill with player strength of 2)
+        this.totalHealth = 6;
+        this.currentHealth = 6;
+
         // State machines
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Idle, new SkeletonIdleState(this));

@@ -77,6 +77,10 @@ export default class Boss extends Enemy{
         this.strength = 4;
         this.scoreValue = 50;
 
+        // Boss health (10 hits to kill with player strength of 2)
+        this.totalHealth = 20;
+        this.currentHealth = 20;
+
         this.stateMachine = new StateMachine();
         this.stateMachine.add(EnemyStateName.Spawn, new BossSpawnState(this));
         this.stateMachine.add(EnemyStateName.Idle, new BossIdleSate(this));

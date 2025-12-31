@@ -28,6 +28,7 @@ import Enemy from "../src/entities/Enemy.js";
 import Sounds from "./Sounds.js";
 import SoundName from "../src/enums/SoundName.js";
 import Boss from "../src/entities/Boss.js";
+import EntityEffects from "../src/objects/EntityEffects.js";
 
 export default class Map {
 	/**
@@ -78,11 +79,46 @@ export default class Map {
 			2, // 2x zoom
 			0.05 // smooth speed (lower = smoother/slower, try 0.02-0.1)
 		);
+
+		// Entity effects system for combat visuals
+		this.entityEffects = new EntityEffects();
+
+		// Combat tracking
+		this.comboCount = 0;
+		this.comboTimer = 0;
+		this.killCount = 0;
+		this.lastHitTime = 0;
+
+		// Track enemies hit by current attack to prevent multi-hit
+		this.enemiesHitThisAttack = new Set();
+		this.lastAttackHitboxActive = false;
+
+		// Track if door effect has been created
+		this.doorEffectCreated = false;
 	}
 
 	update(dt) {
 		this.player.update(dt);
 		this.camera.update(dt);
+
+		// Update entity effects
+		this.entityEffects.update(dt);
+
+		// Update combo timer
+		if (this.comboTimer > 0) {
+			this.comboTimer -= dt;
+			if (this.comboTimer <= 0) {
+				this.comboCount = 0;
+			}
+		}
+
+		// Track attack hitbox state - clear hit enemies when attack ends
+		const attackHitboxActive = this.player.attackHitbox.dimensions.x > 0;
+		if (!attackHitboxActive && this.lastAttackHitboxActive) {
+			// Attack just ended, clear the hit tracking
+			this.enemiesHitThisAttack.clear();
+		}
+		this.lastAttackHitboxActive = attackHitboxActive;
 
 		this.platforms.forEach(platform => {
 			platform.update(dt);
@@ -91,11 +127,21 @@ export default class Map {
 		if(this.collisionLayer == this.bossCollisionLayer){
 			this.boss.update(dt);
 
-			/*if(this.boss.isDead){
+			// Enable door when boss is defeated
+			if(this.boss.isDead){
+				if (!this.doorEffectCreated) {
+					this.doorEffectCreated = true;
+					this.entityEffects.createDoorPortal(
+						this.door.position.x,
+						this.door.position.y,
+						Door.DOOR_SPRITE_WIDTH,
+						Door.DOOR_SPRITE_HEIGHT
+					);
+				}
 				this.door.isSolid = true;
 				this.door.isCollidable = true;
 				this.door.shouldRender = true;
-			}*/
+			}
 		}
 		
 		if(this.collisionLayer == this.caveCollisionLayer){
@@ -113,23 +159,77 @@ export default class Map {
 
 			
 			this.skeletons.forEach(skeleton => {
-				if(this.player.attackHitbox.didCollide(skeleton.hitbox)) {
+				if(this.player.attackHitbox.didCollide(skeleton.hitbox) && !this.enemiesHitThisAttack.has(skeleton)) {
+					// Mark as hit to prevent multi-hit
+					this.enemiesHitThisAttack.add(skeleton);
+
+					const wasAlive = !skeleton.isDead;
 					skeleton.receiveDamage(this.player.strength);
-					this.player.attackHitbox.set(0, 0, 0, 0);
+
+					// Combat effects
+					const hitX = skeleton.hitbox.position.x + skeleton.hitbox.dimensions.x / 2;
+					const hitY = skeleton.hitbox.position.y + skeleton.hitbox.dimensions.y / 2;
+
+					this.entityEffects.createHitImpact(hitX, hitY, this.player.direction);
+					this.entityEffects.createBloodSplatter(hitX, hitY, this.player.direction);
+					this.entityEffects.createHitFlash(skeleton, 0.1);
+
+					// Combo tracking
+					this.comboCount++;
+					this.comboTimer = 2;
+
+					// Death effects
+					if (skeleton.isDead && wasAlive) {
+						this.entityEffects.createDeathExplosion(hitX, hitY, 'skeleton');
+						this.killCount++;
+					}
 				}
 
 				if(skeleton.attackHitbox.didCollide(this.player.hitbox)) {
+					if (!this.player.isInvulnerable) {
+						const hitX = this.player.hitbox.position.x + this.player.hitbox.dimensions.x / 2;
+						const hitY = this.player.hitbox.position.y + this.player.hitbox.dimensions.y / 2;
+						this.entityEffects.createHitImpact(hitX, hitY, skeleton.direction === 'left' ? 'right' : 'left');
+						this.entityEffects.createBloodSplatter(hitX, hitY, skeleton.direction === 'left' ? 'right' : 'left', 0.5);
+					}
 					this.player.receiveDamage(skeleton.strength);
 				}
 			});
 
 			this.eyes.forEach(eye => {
-				if(this.player.attackHitbox.didCollide(eye.hitbox)){
+				if(this.player.attackHitbox.didCollide(eye.hitbox) && !this.enemiesHitThisAttack.has(eye)){
+					// Mark as hit to prevent multi-hit
+					this.enemiesHitThisAttack.add(eye);
+
+					const wasAlive = !eye.isDead;
 					eye.receiveDamage(this.player.strength);
-					this.player.attackHitbox.set(0, 0, 0, 0);
+
+					// Combat effects
+					const hitX = eye.hitbox.position.x + eye.hitbox.dimensions.x / 2;
+					const hitY = eye.hitbox.position.y + eye.hitbox.dimensions.y / 2;
+
+					this.entityEffects.createHitImpact(hitX, hitY, this.player.direction);
+					this.entityEffects.createBloodSplatter(hitX, hitY, this.player.direction, 0.7);
+					this.entityEffects.createHitFlash(eye, 0.1);
+
+					// Combo tracking
+					this.comboCount++;
+					this.comboTimer = 2;
+
+					// Death effects
+					if (eye.isDead && wasAlive) {
+						this.entityEffects.createDeathExplosion(hitX, hitY, 'eye');
+						this.killCount++;
+					}
 				}
 
 				if(eye.hitbox.didCollide(this.player.hitbox)){
+					if (!this.player.isInvulnerable) {
+						const hitX = this.player.hitbox.position.x + this.player.hitbox.dimensions.x / 2;
+						const hitY = this.player.hitbox.position.y + this.player.hitbox.dimensions.y / 2;
+						this.entityEffects.createHitImpact(hitX, hitY, 'left');
+						this.entityEffects.createBloodSplatter(hitX, hitY, 'left', 0.5);
+					}
 					this.player.receiveDamage(eye.strength);
 				}
 				if(eye.projectile != null){
@@ -137,10 +237,20 @@ export default class Map {
 						eye.projectile = null;
 					}
 					else if(this.player.hitbox.didCollide(eye.projectile.hitbox)){
+						if (!this.player.isInvulnerable) {
+							const hitX = this.player.hitbox.position.x + this.player.hitbox.dimensions.x / 2;
+							const hitY = this.player.hitbox.position.y + this.player.hitbox.dimensions.y / 2;
+							this.entityEffects.createHitImpact(hitX, hitY, 'left');
+							this.entityEffects.createSpark(hitX, hitY, { count: 8, color: { r: 150, g: 50, b: 200 } });
+						}
 						this.player.receiveDamage(eye.projectile.strength);
 						eye.projectile = null;
 					}
 					else if(this.player.attackHitbox.didCollide(eye.projectile.hitbox)){
+						// Deflected projectile effect
+						const projX = eye.projectile.hitbox.position.x;
+						const projY = eye.projectile.hitbox.position.y;
+						this.entityEffects.createSpark(projX, projY, { count: 10, color: { r: 200, g: 150, b: 255 } });
 						eye.projectile = null;
 						this.player.attackHitbox.set(0, 0, 0, 0);
 					}
@@ -161,6 +271,17 @@ export default class Map {
 
 			// Check all enemies are dead for door to spawn
 			if(this.skeletons.every(skeleton => skeleton.isDead) && this.eyes.every(eye => eye.isDead)){
+					if (!this.doorEffectCreated) {
+						// First time door appears - add portal effect with correct positioning
+						// Use hitbox dimensions and position to match the actual door collision area
+						this.doorEffectCreated = true;
+						this.entityEffects.createDoorPortal(
+							this.door.hitbox.position.x,
+							this.door.hitbox.position.y,
+							Door.DOOR_WIDTH,
+							Door.DOOR_HEIGHT
+						);
+					}
 					this.door.isSolid = true;
 					this.door.isCollidable = true;
 					this.door.shouldRender = true;
@@ -169,17 +290,48 @@ export default class Map {
 		}
 
 		if(this.collisionLayer == this.bossCollisionLayer){
-			if(this.player.attackHitbox.didCollide(this.boss.hitbox)){
+			if(this.player.attackHitbox.didCollide(this.boss.hitbox) && !this.enemiesHitThisAttack.has(this.boss)){
+				// Mark as hit to prevent multi-hit
+				this.enemiesHitThisAttack.add(this.boss);
+
+				const wasAlive = !this.boss.isDead;
 				this.boss.receiveDamage(this.player.strength);
-				this.player.attackHitbox.set(0, 0, 0, 0);
+
+				// Combat effects - boss has bigger impacts
+				const hitX = this.boss.hitbox.position.x + this.boss.hitbox.dimensions.x / 2;
+				const hitY = this.boss.hitbox.position.y + this.boss.hitbox.dimensions.y / 2;
+
+				this.entityEffects.createHitImpact(hitX, hitY, this.player.direction, true); // Critical-style impact
+				this.entityEffects.createBloodSplatter(hitX, hitY, this.player.direction, 1.5);
+				this.entityEffects.createHitFlash(this.boss, 0.15);
+
+				// Combo tracking
+				this.comboCount++;
+				this.comboTimer = 2;
+
+				// Boss death effects - spectacular explosion
+				if (this.boss.isDead && wasAlive) {
+					this.entityEffects.createDeathExplosion(hitX, hitY, 'boss');
+					this.killCount++;
+				}
 			}
 
 			if(this.boss.attackHitbox.didCollide(this.player.hitbox)){
+				if (!this.player.isInvulnerable) {
+					const hitX = this.player.hitbox.position.x + this.player.hitbox.dimensions.x / 2;
+					const hitY = this.player.hitbox.position.y + this.player.hitbox.dimensions.y / 2;
+					this.entityEffects.createHitImpact(hitX, hitY, this.boss.direction === 'left' ? 'right' : 'left', true);
+					this.entityEffects.createBloodSplatter(hitX, hitY, this.boss.direction === 'left' ? 'right' : 'left', 1);
+				}
 				this.player.receiveDamage(this.boss.strength);
 			}
 		}
 
 		if(this.player.hitbox.didCollide(this.door.hitbox) && this.door.shouldRender) {
+			// Clean up effects before room transition
+			this.entityEffects.doorEffects = [];
+			this.doorEffectCreated = false;
+
 			// ternary? mess
 			//check collision layer, if village, change to cave, if cave, change to boss, if boss, change to village
 			// update player position and background image
@@ -194,7 +346,7 @@ export default class Map {
 				this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 				backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC,
 				sounds.stop(SoundName.VillageTheme),
-				sounds.play(SoundName.CaveTheme)) 
+				sounds.play(SoundName.CaveTheme))
 				: this.collisionLayer == this.caveCollisionLayer // otherwise if on cave
 				?(this.collisionLayer = this.bossCollisionLayer, // change to boss
 					this.player.position = new Vector(100, 305),
@@ -215,7 +367,7 @@ export default class Map {
 						sounds.play(SoundName.VillageTheme),
 						this.respawnEnemies()
 						);
-			
+
 		}
 		this.door.update(dt);
 
@@ -279,6 +431,9 @@ export default class Map {
 		
 		if(this.door.shouldRender)
 			this.door.render();
+
+		// Render entity effects (combat visuals, etc)
+		this.entityEffects.render();
 
 		//this.midgroundLayer.render();
 

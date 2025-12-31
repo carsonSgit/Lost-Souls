@@ -47,9 +47,9 @@ export default class BossAttackingState extends State{
 
     /**
      * Sets the sword hitbox based on the boss's direction
-     * 
+     *
      * Inspired by Vikram Singh's Zelda code
-     * @see https://github.com/JAC-CS-Game-Programming-F23/4-Zelda/blob/main/src/Zelda-5/src/states/entity/player/PlayerSwordSwingingState.js 
+     * @see https://github.com/JAC-CS-Game-Programming-F23/4-Zelda/blob/main/src/Zelda-5/src/states/entity/player/PlayerSwordSwingingState.js
      */
     setSwordHitbox(){
         /*
@@ -57,7 +57,7 @@ export default class BossAttackingState extends State{
         *
         * So miserable to get right...
         */
-        
+
         // Left side hitbox
         if(this.boss.direction === Direction.Left){
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
@@ -69,6 +69,9 @@ export default class BossAttackingState extends State{
 
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+
+            // Boss slash effect - bigger and more dramatic
+            this.createSlashEffect(hitboxX + hitboxWidth / 2, hitboxY + hitboxHeight / 2, 'left');
         }else if(this.boss.direction === Direction.Right) {// Right side hitbox
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
 
@@ -78,6 +81,25 @@ export default class BossAttackingState extends State{
             hitboxY = this.boss.position.y + Boss.HEIGHT - Tile.SIZE *2;
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+
+            // Boss slash effect - bigger and more dramatic
+            this.createSlashEffect(hitboxX + hitboxWidth / 2, hitboxY + hitboxHeight / 2, 'right');
+        }
+    }
+
+    /**
+     * Creates a visual slash effect at the attack position
+     */
+    createSlashEffect(x, y, direction) {
+        if (this.boss.map && this.boss.map.entityEffects) {
+            this.boss.map.entityEffects.createEnemySlash(x, y, direction, 'boss');
+
+            // Extra fire sparks for boss attacks
+            this.boss.map.entityEffects.createSpark(x, y, {
+                count: 8,
+                color: { r: 255, g: 100, b: 50 },
+                speed: 4
+            });
         }
     }
 }

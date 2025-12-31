@@ -25,6 +25,28 @@ export default class BossSpawnState extends State{
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.spawnSprites;
         this.boss.currentAnimation.refresh();
+
+        // Boss entrance visual effects
+        if (this.boss.map && this.boss.map.entityEffects) {
+            const centerX = this.boss.position.x + this.boss.dimensions.x / 2;
+            const centerY = this.boss.position.y + this.boss.dimensions.y / 2;
+
+            // Create dramatic spawn effect
+            this.boss.map.entityEffects.createSpawnEffect(centerX, centerY, 'boss');
+
+            // Create rising fire sparks
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    if (this.boss.map && this.boss.map.entityEffects) {
+                        this.boss.map.entityEffects.createSpark(
+                            centerX + (Math.random() - 0.5) * 60,
+                            centerY + 30,
+                            { count: 3, color: { r: 255, g: 100, b: 30 }, speed: 2 }
+                        );
+                    }
+                }, i * 50);
+            }
+        }
     }
 
     exit(){

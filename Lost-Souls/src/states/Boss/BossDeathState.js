@@ -10,8 +10,6 @@ export default class BossDeathState extends State{
     constructor(boss){
         super();
         this.boss = boss;
-        this.boss.totalHealth = 500;
-        this.boss.currentHealth = 500;
 
         this.animation = new Animation(Boss.DEATH_SPRITE_LOCATION, 0.2, 1);
     }

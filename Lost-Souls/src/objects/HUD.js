@@ -7,6 +7,7 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT, context } from "../globals.js";
 export default class HUD {
 	constructor(player) {
 		this.player = player;
+		this.map = null; // Will be set when map is available
 
 		// HUD positioning
 		this.padding = 16;
@@ -34,6 +35,17 @@ export default class HUD {
 
 		// Notification queue
 		this.notifications = [];
+
+		// Combo counter
+		this.displayedCombo = 0;
+		this.comboScale = 1;
+		this.comboFlash = 0;
+		this.lastCombo = 0;
+		this.comboColorPhase = 0;
+
+		// Kill tracker
+		this.displayedKills = 0;
+		this.killFlash = 0;
 	}
 
 	/**
@@ -111,6 +123,34 @@ export default class HUD {
 				this.notifications.splice(i, 1);
 			}
 		}
+
+		// Update combo counter
+		if (this.map) {
+			const currentCombo = this.map.comboCount || 0;
+			const currentKills = this.map.killCount || 0;
+
+			// Combo changed - trigger effects
+			if (currentCombo > this.lastCombo && currentCombo > 1) {
+				this.comboFlash = 1;
+				this.comboScale = 1.5;
+			}
+			this.lastCombo = currentCombo;
+
+			// Animate combo display
+			if (this.displayedCombo !== currentCombo) {
+				this.displayedCombo = currentCombo;
+			}
+			this.comboScale = Math.max(1, this.comboScale - dt * 3);
+			this.comboFlash = Math.max(0, this.comboFlash - dt * 3);
+			this.comboColorPhase += dt * 5;
+
+			// Kill tracker
+			if (currentKills > this.displayedKills) {
+				this.killFlash = 1;
+			}
+			this.displayedKills = currentKills;
+			this.killFlash = Math.max(0, this.killFlash - dt * 2);
+		}
 	}
 
 	render() {
@@ -124,6 +164,14 @@ export default class HUD {
 
 		// Render high score
 		this.renderHighScore();
+
+		// Render combo counter
+		if (this.displayedCombo > 1) {
+			this.renderComboCounter();
+		}
+
+		// Render kill tracker
+		this.renderKillTracker();
 
 		// Render boss health bar if visible
 		if (this.bossBarAlpha > 0) {
@@ -483,6 +531,102 @@ export default class HUD {
 
 		context.fillStyle = gradient;
 		context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	}
+
+	/**
+	 * Render combo counter with dynamic styling
+	 */
+	renderComboCounter() {
+		const comboX = this.padding + 10;
+		const comboY = 90;
+
+		// Color cycling for high combos
+		let comboColor;
+		if (this.displayedCombo >= 10) {
+			// Rainbow effect for massive combos
+			const hue = (this.comboColorPhase * 50) % 360;
+			comboColor = `hsl(${hue}, 100%, 60%)`;
+		} else if (this.displayedCombo >= 5) {
+			// Gold for good combos
+			comboColor = '#ffd700';
+		} else {
+			// White for basic combos
+			comboColor = '#ffffff';
+		}
+
+		context.save();
+		context.translate(comboX + 60, comboY);
+		context.scale(this.comboScale, this.comboScale);
+		context.translate(-comboX - 60, -comboY);
+
+		// Glow effect
+		context.shadowBlur = 15 + this.comboFlash * 15;
+		context.shadowColor = comboColor;
+
+		// Combo number
+		context.font = '32px Dungeon';
+		context.textAlign = 'center';
+		context.textBaseline = 'middle';
+		context.fillStyle = comboColor;
+		context.fillText(`${this.displayedCombo}x`, comboX + 30, comboY);
+
+		// "COMBO" label
+		context.font = '14px Dungeon';
+		context.shadowBlur = 5;
+		context.fillStyle = 'rgba(255, 255, 255, 0.8)';
+		context.fillText('COMBO', comboX + 30, comboY + 20);
+
+		// Flash overlay
+		if (this.comboFlash > 0) {
+			context.globalAlpha = this.comboFlash * 0.5;
+			context.fillStyle = '#ffffff';
+			context.fillText(`${this.displayedCombo}x`, comboX + 30, comboY);
+			context.globalAlpha = 1;
+		}
+
+		context.restore();
+		context.shadowBlur = 0;
+	}
+
+	/**
+	 * Render kill tracker in bottom-left corner
+	 */
+	renderKillTracker() {
+		if (this.displayedKills === 0) return;
+
+		const killX = this.padding;
+		const killY = CANVAS_HEIGHT - this.padding - 30;
+
+		// Panel background
+		const panelWidth = 80;
+		const panelHeight = 28;
+
+		context.fillStyle = 'rgba(15, 10, 8, 0.8)';
+		this.roundRect(killX, killY, panelWidth, panelHeight, 4);
+		context.fill();
+
+		// Border
+		context.strokeStyle = 'rgba(100, 60, 60, 0.6)';
+		context.lineWidth = 1;
+		this.roundRect(killX, killY, panelWidth, panelHeight, 4);
+		context.stroke();
+
+		// Skull icon
+		context.font = '16px Dungeon';
+		context.fillStyle = this.killFlash > 0 ? '#ff6666' : '#aa6666';
+		context.shadowBlur = this.killFlash > 0 ? 10 : 3;
+		context.shadowColor = 'rgba(255, 100, 100, 0.6)';
+		context.textAlign = 'left';
+		context.textBaseline = 'middle';
+		context.fillText('*', killX + 10, killY + panelHeight / 2);
+
+		// Kill count
+		context.font = '18px Dungeon';
+		context.fillStyle = this.killFlash > 0 ? '#ffffff' : '#cc9999';
+		context.textAlign = 'right';
+		context.fillText(`${this.displayedKills}`, killX + panelWidth - 10, killY + panelHeight / 2);
+
+		context.shadowBlur = 0;
 	}
 
 	// Helper: Draw ornate frame
