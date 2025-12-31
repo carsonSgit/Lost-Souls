@@ -26,6 +26,11 @@ export default class Sprite {
 	 * @param {object} scale Can be used to draw the Sprite bigger or smaller.
 	 */
 	render(canvasX, canvasY, scale = { x: 1, y: 1 }) {
+		// Only render if image is loaded
+		if (!this.graphic.loaded) {
+			return;
+		}
+
 		this.graphic.context.drawImage(
 			this.graphic.image,
 			this.x,

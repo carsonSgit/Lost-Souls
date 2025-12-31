@@ -38,7 +38,18 @@ export default class SoundPool {
 		if (this.pool[this.currentSound].currentTime === 0
 			|| this.pool[this.currentSound].ended
 			|| this.pool[this.currentSound].paused) {
-			this.pool[this.currentSound].play();
+			const playPromise = this.pool[this.currentSound].play();
+
+			// Handle autoplay restrictions - browsers require user interaction first
+			if (playPromise !== undefined) {
+				playPromise.catch(error => {
+					if (error.name === 'NotAllowedError') {
+						console.warn('Audio playback blocked by browser autoplay policy. Will retry on user interaction.');
+					} else {
+						console.error('Audio playback error:', error);
+					}
+				});
+			}
 		}
 
 		this.currentSound = (this.currentSound + 1) % this.size;

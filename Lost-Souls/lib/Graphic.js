@@ -9,13 +9,31 @@ export default class Graphic {
 	 */
 	constructor(path, width, height, context) {
 		this.image = new Image(width, height);
-		this.image.src = path;
 		this.width = width;
 		this.height = height;
 		this.context = context;
+		this.loaded = false;
+
+		// Create a Promise that resolves when the image loads
+		this.loadPromise = new Promise((resolve, reject) => {
+			this.image.onload = () => {
+				this.loaded = true;
+				resolve(this);
+			};
+			this.image.onerror = () => {
+				console.error(`Failed to load image: ${path}`);
+				reject(new Error(`Failed to load image: ${path}`));
+			};
+		});
+
+		// Set src after handlers to ensure they catch the load event
+		this.image.src = path;
 	}
 
 	render(x, y, width = this.width, height = this.height) {
-		this.context.drawImage(this.image, x, y, width, height);
+		// Only render if image is loaded
+		if (this.loaded) {
+			this.context.drawImage(this.image, x, y, width, height);
+		}
 	}
 }

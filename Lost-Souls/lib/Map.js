@@ -245,8 +245,9 @@ export default class Map {
 		context.drawImage(backgroundImage, 0, 0, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
 
 		// Apply camera transformations (zoom and translation)
+		// Round camera position to prevent sub-pixel rendering gaps between tiles
 		context.scale(this.camera.zoom, this.camera.zoom);
-		context.translate(-this.camera.position.x, -this.camera.position.y);
+		context.translate(Math.round(-this.camera.position.x), Math.round(-this.camera.position.y));
 
 		//this.bottomLayer.render();
 		if(this.collisionLayer == this.caveCollisionLayer){

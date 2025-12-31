@@ -6,15 +6,24 @@ export default class Images {
 		this.images = {};
 	}
 
+	/**
+	 * Load all images and return a Promise that resolves when all are loaded.
+	 * @param {Array} imageDefinitions
+	 * @returns {Promise} Resolves when all images are loaded
+	 */
 	load(imageDefinitions) {
-		imageDefinitions.forEach((imageDefinition) => {
-			this.images[imageDefinition.name] = new Graphic(
+		const loadPromises = imageDefinitions.map((imageDefinition) => {
+			const graphic = new Graphic(
 				imageDefinition.path,
 				imageDefinition.width,
 				imageDefinition.height,
 				this.context,
 			);
+			this.images[imageDefinition.name] = graphic;
+			return graphic.loadPromise;
 		});
+
+		return Promise.all(loadPromises);
 	}
 
 	get(name) {
@@ -23,7 +32,7 @@ export default class Images {
 
 	render(name, x, y, width = null, height = null) {
 		const image = this.get(name);
-		
+
 		image.render(x, y, width ?? image.width, height ?? image.height);
 	}
 }
