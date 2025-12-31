@@ -8,9 +8,15 @@ import Timer from "../lib/Timer.js";
 export const canvas = document.createElement('canvas');
 export const context = canvas.getContext('2d') || new CanvasRenderingContext2D();
 
-// Replace these values according to how big you want your canvas.
-export const CANVAS_WIDTH = 960;
-export const CANVAS_HEIGHT = 480;
+// Disable image smoothing globally for crisp pixel art
+context.imageSmoothingEnabled = false;
+context.webkitImageSmoothingEnabled = false;
+context.mozImageSmoothingEnabled = false;
+context.msImageSmoothingEnabled = false;
+
+// Set canvas to full browser size
+export let CANVAS_WIDTH = window.innerWidth;
+export let CANVAS_HEIGHT = window.innerHeight;
 
 export const keys = {};
 export const images = new Images(context);

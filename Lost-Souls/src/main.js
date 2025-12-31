@@ -91,4 +91,8 @@ game.start();
 // Focus the canvas so that the player doesn't have to click on it.
 canvas.focus();
 
-
+// Handle window resizing
+window.addEventListener('resize', () => {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+});

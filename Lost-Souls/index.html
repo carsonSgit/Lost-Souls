@@ -14,18 +14,19 @@
 		}
 
 		body {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
 			margin: 0;
+			padding: 0;
+			overflow: hidden;
 			background-color: #121212;
 		}
 
 		canvas {
+			display: block;
+			width: 100vw;
+			height: 100vh;
 			background-color: rgb(208, 244, 247);
 			outline: none;
-			
+
 			image-rendering: crisp-edges;
 			image-rendering: pixelated;
 		}

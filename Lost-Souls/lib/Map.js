@@ -210,7 +210,27 @@ export default class Map {
 	}
 
 	render() {
-		context.drawImage(backgroundImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		// Calculate scale to fit original 960x480 game to new canvas size
+		const ORIGINAL_WIDTH = 960;
+		const ORIGINAL_HEIGHT = 480;
+		const scaleX = CANVAS_WIDTH / ORIGINAL_WIDTH;
+		const scaleY = CANVAS_HEIGHT / ORIGINAL_HEIGHT;
+
+		// Save context state
+		context.save();
+
+		// Disable image smoothing for crisp pixel art (prevents gaps between tiles)
+		context.imageSmoothingEnabled = false;
+		context.webkitImageSmoothingEnabled = false;
+		context.mozImageSmoothingEnabled = false;
+		context.msImageSmoothingEnabled = false;
+
+		// Apply scaling transformation
+		context.scale(scaleX, scaleY);
+
+		// Draw background at original size (will be scaled by transformation)
+		context.drawImage(backgroundImage, 0, 0, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
+
 		//this.bottomLayer.render();
 		if(this.collisionLayer == this.caveCollisionLayer){
 			this.platforms.forEach(platform => {
@@ -247,6 +267,9 @@ export default class Map {
 		if (false){
 			Map.renderGrid();
 		}
+
+		// Restore context state
+		context.restore();
 	}
 
 	/**
