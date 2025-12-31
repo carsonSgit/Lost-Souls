@@ -187,8 +187,26 @@ export default class Player extends GameEntity{
 		this.direction = Direction.Left;
 		this.velocity.x = Math.max(this.velocity.x - this.speedScalar * this.frictionScalar, -this.velocityLimit.x) - this.speedFactor;
 
-        // Did we collide with a tile on our left? ...
-        if(this.position.x <= -Tile.SIZE  || this.map.collisionLayer.getTile(Math.ceil(this.position.x /Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+        // Use actual hitbox position and dimensions for accurate collision
+        let hitboxLeft = this.hitbox.position.x;
+        let hitboxTop = this.hitbox.position.y;
+        let hitboxHeight = this.hitbox.dimensions.y;
+
+        // Did we collide with a tile on our left? Check top, middle, and bottom tiles
+        let leftTopTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxLeft / Tile.SIZE),
+            Math.floor(hitboxTop / Tile.SIZE)
+        );
+        let leftMiddleTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxLeft / Tile.SIZE),
+            Math.floor((hitboxTop + hitboxHeight / 2) / Tile.SIZE)
+        );
+        let leftBottomTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxLeft / Tile.SIZE),
+            Math.floor((hitboxTop + hitboxHeight - 1) / Tile.SIZE)
+        );
+
+        if(this.position.x <= 0 || leftTopTile !== null || leftMiddleTile !== null || leftBottomTile !== null) {
             this.velocity.x = 0;
         }
 	}
@@ -196,9 +214,27 @@ export default class Player extends GameEntity{
 	moveRight() {
 		this.direction = Direction.Right;
         this.velocity.x = Math.min(this.velocity.x + this.speedScalar * this.frictionScalar, this.velocityLimit.x) + this.speedFactor;
-         
-        // Did we collide with a tile on our right? ...
-        if(this.position.x + Player.WIDTH >= CANVAS_WIDTH -Tile.SIZE*3 ||this.map.collisionLayer.getTile(Math.ceil((this.position.x + Player.WIDTH) / Tile.SIZE) + 2, Math.ceil(this.position.y /Tile.SIZE)) !== null) {
+
+        // Use actual hitbox position and dimensions for accurate collision
+        let hitboxRight = this.hitbox.position.x + this.hitbox.dimensions.x;
+        let hitboxTop = this.hitbox.position.y;
+        let hitboxHeight = this.hitbox.dimensions.y;
+
+        // Did we collide with a tile on our right? Check top, middle, and bottom tiles
+        let rightTopTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxRight / Tile.SIZE),
+            Math.floor(hitboxTop / Tile.SIZE)
+        );
+        let rightMiddleTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxRight / Tile.SIZE),
+            Math.floor((hitboxTop + hitboxHeight / 2) / Tile.SIZE)
+        );
+        let rightBottomTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxRight / Tile.SIZE),
+            Math.floor((hitboxTop + hitboxHeight - 1) / Tile.SIZE)
+        );
+
+        if(this.position.x + Player.WIDTH >= CANVAS_WIDTH || rightTopTile !== null || rightMiddleTile !== null || rightBottomTile !== null) {
            this.velocity.x = 0;
         }
     }
@@ -206,8 +242,22 @@ export default class Player extends GameEntity{
     moveUp(dt){
         this.direction = Direction.Up;
 
-        // Did we collide with a tile above? ...
-        if(this.map.collisionLayer.getTile(Math.floor(this.position.x /Tile.SIZE) + 2, Math.floor(this.position.y /Tile.SIZE) + 1) != null) {
+        // Use actual hitbox position and dimensions for accurate collision
+        let hitboxLeft = this.hitbox.position.x;
+        let hitboxTop = this.hitbox.position.y;
+        let hitboxWidth = this.hitbox.dimensions.x;
+
+        // Did we collide with a tile above? Check left and right tiles
+        let topLeftTile = this.map.collisionLayer.getTile(
+            Math.floor(hitboxLeft / Tile.SIZE),
+            Math.floor(hitboxTop / Tile.SIZE)
+        );
+        let topRightTile = this.map.collisionLayer.getTile(
+            Math.floor((hitboxLeft + hitboxWidth - 1) / Tile.SIZE),
+            Math.floor(hitboxTop / Tile.SIZE)
+        );
+
+        if(topLeftTile !== null || topRightTile !== null) {
             this.velocity.y = 0;
         }
         // If no collision, move upwards
@@ -220,25 +270,39 @@ export default class Player extends GameEntity{
         const collisionObjects = this.checkObjectCollisions();
         this.direction = Direction.Down;
 
+        // Use actual hitbox position and dimensions for accurate collision
+        let hitboxLeft = this.hitbox.position.x;
+        let hitboxBottom = this.hitbox.position.y + this.hitbox.dimensions.y;
+        let hitboxWidth = this.hitbox.dimensions.x;
+
         // Calculate tile positions for collision checking
         let bottomLeftTile = this.map.collisionLayer.getTile(
-            Math.floor(this.position.x / Tile.SIZE) + 2,
-            Math.floor((this.position.y + Player.HEIGHT) / Tile.SIZE) + 1
+            Math.floor(hitboxLeft / Tile.SIZE),
+            Math.floor(hitboxBottom / Tile.SIZE)
         );
 
         // Calculate tile positions for collision checking
         let bottomRightTile = this.map.collisionLayer.getTile(
-            Math.floor((this.position.x + Player.WIDTH) / Tile.SIZE),
-            Math.floor((this.position.y + Player.HEIGHT) / Tile.SIZE) + 1
+            Math.floor((hitboxLeft + hitboxWidth - 1) / Tile.SIZE),
+            Math.floor(hitboxBottom / Tile.SIZE)
         );
 
-        // Check for collision with the map
-        let collisionWithMap = bottomLeftTile !== null && bottomRightTile !== null;
+        // Check for collision with the map (OR - player should stop if either foot is on solid ground)
+        let collisionWithMap = bottomLeftTile !== null || bottomRightTile !== null;
 
         // Are we colliding with the map or a platform? ...
         if((collisionWithMap || collisionObjects.length > 0)){
             this.velocity.y = 0;
-        } 
+
+            // Adjust position to sit exactly on top of the floor to prevent embedding
+            if(collisionWithMap) {
+                const floorTileY = Math.floor(hitboxBottom / Tile.SIZE);
+                const floorPixelY = floorTileY * Tile.SIZE;
+                // Position player so hitbox bottom aligns with floor
+                const hitboxBottomOffset = this.hitbox.position.y + this.hitbox.dimensions.y - this.position.y;
+                this.position.y = floorPixelY - hitboxBottomOffset;
+            }
+        }
         // If not, move downwards
         else {
             this.velocity.add(this.gravityForce, dt);

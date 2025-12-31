@@ -28,6 +28,9 @@ export default class PlayerJumpingState extends State{
         this.player.velocity.y = this.jumpForce.y;
         // Shrink our hitbox
         this.player.hitboxOffsets = this.player.jumpingHitboxOffsets;
+
+        // Play the jump sound effect (only once when entering state)
+        sounds.play(SoundName.Jump);
     }
 
     exit(){
@@ -37,9 +40,6 @@ export default class PlayerJumpingState extends State{
     }
 
     update(dt){
-        // Play the jump sound effect
-        sounds.play(SoundName.Jump)
-
         // Move up
         this.player.moveUp(dt);
 

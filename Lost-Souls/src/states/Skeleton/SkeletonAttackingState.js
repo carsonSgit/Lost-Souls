@@ -19,6 +19,10 @@ export default class SkeletonAttackingState extends State{
         // Set skeleton animation & sprites
         this.skeleton.currentAnimation = this.animation;
         this.skeleton.sprites = this.skeleton.attackingSprites;
+
+        // Always refresh animation to start from frame 0
+        // This prevents instant attacks when returning to this state after being hurt
+        this.animation.refresh();
     }
 
     exit(){

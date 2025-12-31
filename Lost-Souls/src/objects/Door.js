@@ -19,7 +19,7 @@ export default class Door extends GameObject{
 
     constructor(dimensions, position, map){
         super(dimensions, position);
-        
+
         this.wasCollided = false;
         this.wasConsumed = false;
 
@@ -27,6 +27,8 @@ export default class Door extends GameObject{
 
         this.shouldRender = this.map.collisionLayer === this.map.villageCollisionLayer;
 
+        // Set hitbox position to match door sprite position
+        this.hitbox.position.x = this.position.x;
         this.hitbox.position.y = this.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT);
 
         // Sprites

@@ -16,6 +16,10 @@ export default class EyeAttackingState extends State{
         this.eye.velocity.y = 0;
         this.eye.currentAnimation = this.animation;
         this.eye.sprites = this.eye.attackSprites;
+
+        // Always refresh animation to start from frame 0
+        // This prevents instant attacks when returning to this state after being hurt
+        this.animation.refresh();
     }
 
     update(dt){

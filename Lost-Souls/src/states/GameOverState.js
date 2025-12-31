@@ -24,11 +24,11 @@ export default class GameOverState extends State {
 	
 	exit(){
 		// If we are currently in cave, stop cave theme
-		if(this.map.collisionLayer = this.map.caveCollisionLayer){
+		if(this.map.collisionLayer === this.map.caveCollisionLayer){
 			sounds.stop(SoundName.CaveTheme);
 		}
 		// If we are currently in boss arena, stop boss theme
-		if(this.map.collisionLayer = this.map.bossCollisionLayer){
+		if(this.map.collisionLayer === this.map.bossCollisionLayer){
 			sounds.stop(SoundName.BossFight);
 		}
 	}

@@ -34,8 +34,11 @@ export default class PlayerIdleState extends State{
         if(keys[" "]){
             this.player.changeState(PlayerStateName.Attacking);
         }
-        // Are we floating? ... Then fall!!!
-        else if(objCollisions <= 0 && this.player.map.collisionLayer.getTile(Math.floor(this.player.position.x /Tile.SIZE) + 2, Math.floor((this.player.position.y + Player.HEIGHT) /Tile.SIZE)+ 1) == null)
+        // Are we floating? ... Then fall!!! (use hitbox-based collision)
+        else if(objCollisions.length <= 0 && this.player.map.collisionLayer.getTile(
+            Math.floor(this.player.hitbox.position.x / Tile.SIZE),
+            Math.floor((this.player.hitbox.position.y + this.player.hitbox.dimensions.y) / Tile.SIZE)
+        ) == null)
         {
             this.player.changeState(PlayerStateName.Falling);
         }

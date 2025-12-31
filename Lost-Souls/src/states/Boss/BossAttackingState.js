@@ -19,6 +19,10 @@ export default class BossAttackingState extends State{
 
         this.boss.currentAnimation = this.animation;
         this.boss.sprites = this.boss.allSprites;
+
+        // Always refresh animation to start from frame 0
+        // This prevents instant attacks when returning to this state after being hurt
+        this.animation.refresh();
     }
 
     exit(){
@@ -75,7 +79,5 @@ export default class BossAttackingState extends State{
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
-
-        console.log(this.boss.attackHitbox)
     }
 }

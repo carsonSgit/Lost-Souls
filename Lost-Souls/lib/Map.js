@@ -177,6 +177,7 @@ export default class Map {
 				this.player.position = new Vector(100,200),
 				this.door.position = Door.DOOR_SPAWN_CAVE,
 				this.door.shouldRender = false,
+				this.door.hitbox.position.x = this.door.position.x,
 				this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 				backgroundImage.src = CAVE_BACKGROUND_IMAGE_SRC,
 				sounds.stop(SoundName.VillageTheme),
@@ -186,6 +187,7 @@ export default class Map {
 					this.player.position = new Vector(100, 305),
 					this.door.position = Door.DOOR_SPAWN_BOSS,
 					this.door.shouldRender = false,
+					this.door.hitbox.position.x = this.door.position.x,
 					this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 					backgroundImage.src = BOSS_ARENA_BACKGROUND_IMAGE_SRC,
 					sounds.stop(SoundName.CaveTheme),
@@ -193,6 +195,7 @@ export default class Map {
 					:(this.collisionLayer = this.villageCollisionLayer, // otherwise change to village
 						this.player.position = new Vector(180, 384),
 						this.door.position = Door.DOOR_SPAWN_VILLAGE,
+						this.door.hitbox.position.x = this.door.position.x,
 						this.door.hitbox.position.y = this.door.position.y + (Door.DOOR_SPRITE_HEIGHT-Door.DOOR_HEIGHT),
 						backgroundImage.src = VILLAGE_BACKGROUND_IMAGE_SRC,
 						sounds.stop(SoundName.BossFight),
