@@ -1,198 +1,331 @@
 import State from "../../lib/State.js";
 import GameStateName from "../enums/GameStateName.js";
 import SoundName from "../enums/SoundName.js";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, saveGameState, sounds, stateMachine } from "../globals.js";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, keys, sounds, stateMachine, context } from "../globals.js";
+import ParticleSystem from "../objects/ParticleSystem.js";
 
-export default class PauseState extends State{
+export default class PauseState extends State {
+	constructor() {
+		super();
 
-    constructor(){
-        super();
+		// Menu system
+		this.menuOptions = [
+			{ id: 'resume', label: 'Resume', icon: '>' },
+			{ id: 'save', label: 'Save Score', icon: '*' },
+			{ id: 'quit', label: 'Quit to Title', icon: 'x' },
+		];
+		this.selectedIndex = 0;
 
-        // Atmospheric particles
-        this.particles = [];
-        this.animationTimer = 0;
-    }
+		// Particle system
+		this.particles = new ParticleSystem();
 
-    initializeParticles() {
-        // Create floating ember/dust particles for atmosphere
-        this.particles = [];
-        for (let i = 0; i < 40; i++) {
-            this.particles.push({
-                x: Math.random() * CANVAS_WIDTH,
-                y: Math.random() * CANVAS_HEIGHT,
-                size: Math.random() * 2 + 0.5,
-                speedY: -(Math.random() * 0.3 + 0.1),
-                speedX: (Math.random() - 0.5) * 0.3,
-                opacity: Math.random() * 0.5 + 0.2,
-                flicker: Math.random() * Math.PI * 2,
-            });
-        }
-    }
+		// Animation
+		this.animationTimer = 0;
+		this.overlayAlpha = 0;
+		this.menuSlideIn = 0;
 
-    enter(parameters){
-        this.map = parameters.map;
-        this.initializeParticles();
-    }
+		// Frozen frame effect
+		this.freezeFrame = null;
+	}
 
-    update(dt){
-        // Update animation timer
-        this.animationTimer += dt;
+	enter(parameters) {
+		this.map = parameters.map;
+		this.selectedIndex = 0;
+		this.animationTimer = 0;
+		this.overlayAlpha = 0;
+		this.menuSlideIn = 0;
 
-        // Update particles
-        this.particles.forEach(particle => {
-            particle.y += particle.speedY;
-            particle.x += particle.speedX;
-            particle.flicker += dt * 2;
+		// Clear and start particles
+		this.particles.clear();
+	}
 
-            // Reset particle when it goes off screen
-            if (particle.y < -10) {
-                particle.y = CANVAS_HEIGHT + 10;
-                particle.x = Math.random() * CANVAS_WIDTH;
-            }
-            if (particle.x < -10) {
-                particle.x = CANVAS_WIDTH + 10;
-            }
-            if (particle.x > CANVAS_WIDTH + 10) {
-                particle.x = -10;
-            }
-        });
+	update(dt) {
+		this.animationTimer += dt;
 
-        // If 'P' key, Re-enter play-state
-        if(keys.p || keys.P){
-            // Play unpause sound effect
-            sounds.play(SoundName.Unpause);
-            sounds.stop(SoundName.Unpause);
-            keys.p = false;
-            keys.P = false;
-            // Change back to play state
-            stateMachine.change(
-                GameStateName.Play,{
-                    map: this.map,
-                    fromPause: true
-                }
-            );
-        }
-        // Saving is enabled when the 's' key is pressed
-        if(keys.s || keys.S){
-            keys.s = false;
-            keys.S = false;
+		// Animate overlay fade in
+		if (this.overlayAlpha < 0.7) {
+			this.overlayAlpha += dt * 3;
+		}
 
-            // Save player score to localStorage
-            localStorage.setItem('playerScore', this.map.player.score);
-        }
-    }
+		// Animate menu slide in
+		if (this.menuSlideIn < 1) {
+			this.menuSlideIn += dt * 4;
+		}
 
-    // Pause Screen Renders
-    render(context){
-        context.save();
-        this.map.render();
-        this.renderAtmosphericEffects(context);
-        this.renderMenuScreen(context);
-        context.restore();
-    }
+		// Update particles
+		this.particles.update(dt);
 
-    // Render atmospheric particles and vignette
-    renderAtmosphericEffects(context) {
-        // Render floating particles (embers/dust)
-        this.particles.forEach(particle => {
-            const flickerOpacity = particle.opacity * (0.7 + Math.sin(particle.flicker) * 0.3);
+		// Emit ambient particles
+		if (Math.random() < dt * 3) {
+			this.particles.emit('dust', Math.random() * CANVAS_WIDTH, Math.random() * CANVAS_HEIGHT, 1, {
+				color: { r: 100, g: 150, b: 200 },
+			});
+		}
 
-            context.save();
-            context.globalAlpha = flickerOpacity;
+		// Menu navigation
+		if (keys.w || keys.ArrowUp || keys.W) {
+			keys.w = keys.ArrowUp = keys.W = false;
+			this.selectedIndex = (this.selectedIndex - 1 + this.menuOptions.length) % this.menuOptions.length;
+			sounds.play(SoundName.Sword_Swing);
+			sounds.stop(SoundName.Sword_Swing);
+		}
 
-            // Particle glow
-            const gradient = context.createRadialGradient(
-                particle.x, particle.y, 0,
-                particle.x, particle.y, particle.size * 3
-            );
-            gradient.addColorStop(0, 'rgba(255, 200, 100, 0.8)');
-            gradient.addColorStop(0.5, 'rgba(255, 150, 50, 0.3)');
-            gradient.addColorStop(1, 'rgba(255, 100, 0, 0)');
+		if (keys.s || keys.ArrowDown || keys.S) {
+			keys.s = keys.ArrowDown = keys.S = false;
+			this.selectedIndex = (this.selectedIndex + 1) % this.menuOptions.length;
+			sounds.play(SoundName.Sword_Swing);
+			sounds.stop(SoundName.Sword_Swing);
+		}
 
-            context.fillStyle = gradient;
-            context.beginPath();
-            context.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2);
-            context.fill();
+		// Quick resume with P
+		if (keys.p || keys.P) {
+			sounds.play(SoundName.Unpause);
+			sounds.stop(SoundName.Unpause);
+			keys.p = keys.P = false;
+			stateMachine.change(GameStateName.Play, { map: this.map, fromPause: true });
+		}
 
-            // Particle core
-            context.fillStyle = 'rgba(255, 220, 150, 0.9)';
-            context.beginPath();
-            context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            context.fill();
+		// Selection with Enter
+		if (keys.Enter) {
+			keys.Enter = false;
+			this.handleSelection();
+		}
+	}
 
-            context.restore();
-        });
+	handleSelection() {
+		const selected = this.menuOptions[this.selectedIndex];
 
-        // Dark vignette overlay for atmosphere
-        const vignetteGradient = context.createRadialGradient(
-            CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_HEIGHT * 0.3,
-            CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_HEIGHT * 0.8
-        );
-        vignetteGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        vignetteGradient.addColorStop(0.7, 'rgba(0, 0, 0, 0.3)');
-        vignetteGradient.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
+		switch (selected.id) {
+			case 'resume':
+				sounds.play(SoundName.Unpause);
+				sounds.stop(SoundName.Unpause);
+				stateMachine.change(GameStateName.Play, { map: this.map, fromPause: true });
+				break;
 
-        context.fillStyle = vignetteGradient;
-        context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    }
+			case 'save':
+				localStorage.setItem('playerScore', this.map.player.score);
+				sounds.play(SoundName.Confirm);
+				sounds.stop(SoundName.Confirm);
+				// Visual feedback - could add notification
+				break;
 
-    // Pause Screen Rendering format
-    renderMenuScreen(context){
-        const pulse = Math.sin(this.animationTimer * 1.5) * 0.1 + 1;
+			case 'quit':
+				sounds.play(SoundName.Confirm);
+				sounds.stop(SoundName.Confirm);
+				stateMachine.change(GameStateName.TitleScreen);
+				break;
+		}
+	}
 
-        context.textBaseline = 'middle';
-        context.textAlign = 'center';
+	render(context) {
+		context.save();
 
-        // Pause Screen Header with enhanced effects
-        context.font = '60px Dungeon';
-        // Deep shadow
-        context.globalAlpha = 0.5;
-        context.fillStyle = 'rgba(0, 0, 0, 0.8)';
-        context.fillText('Paused', CANVAS_WIDTH / 2 + 4, CANVAS_HEIGHT / 2 - 20 + 4);
+		// Render frozen game state
+		this.map.render();
 
-        // Outer glow
-        context.globalAlpha = 0.6 * pulse;
-        context.shadowBlur = 25;
-        context.shadowColor = 'rgba(100, 150, 200, 0.8)';
-        context.fillStyle = 'rgba(100, 150, 200, 0.4)';
-        context.fillText('Paused', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20);
+		// Dark overlay with blur effect simulation
+		this.renderOverlay(context);
 
-        // Main text
-        context.globalAlpha = 1;
-        context.shadowBlur = 12;
-        context.shadowColor = 'rgba(180, 200, 255, 0.8)';
-        context.fillStyle = '#e6f0ff';
-        context.fillText('Paused', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20);
+		// Render particles
+		this.particles.render();
 
-        context.shadowBlur = 0;
+		// Render pause panel
+		this.renderPausePanel(context);
 
-        // Pause Screen Exit prompt
-        context.font = '24px Dungeon';
-        context.shadowBlur = 5;
-        context.shadowColor = 'rgba(0, 0, 0, 0.6)';
-        context.fillStyle = '#e8e8e8';
-        context.fillText('Press \'P\' to resume', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
+		// Render stats
+		this.renderStats(context);
 
-        // Pause Screen Save prompt
-        context.font = '20px Dungeon';
-        context.fillStyle = '#d4af77';
-        context.fillText('Press \'S\' to save score', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 70);
+		context.restore();
+	}
 
-        context.shadowBlur = 0;
+	renderOverlay(context) {
+		// Main dark overlay
+		context.fillStyle = `rgba(0, 0, 10, ${this.overlayAlpha * 0.6})`;
+		context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        // Player Score render
-        context.font = '32px Dungeon';
-        context.shadowBlur = 6;
-        context.shadowColor = 'rgba(255, 215, 100, 0.6)';
-        context.fillStyle = '#ffd966';
-        context.textAlign = 'right';
-        context.fillText('Score: ' + this.map.player.score, CANVAS_WIDTH - 40, CANVAS_HEIGHT - 20);
+		// Blue-tinted vignette for "frozen" effect
+		const gradient = context.createRadialGradient(
+			CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_HEIGHT * 0.2,
+			CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_HEIGHT * 0.9
+		);
+		gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+		gradient.addColorStop(0.5, `rgba(10, 20, 40, ${this.overlayAlpha * 0.4})`);
+		gradient.addColorStop(1, `rgba(0, 10, 30, ${this.overlayAlpha * 0.8})`);
 
-        // Player High Score render
-        context.textAlign = 'left';
-        context.fillText('High Score: ' + this.map.player.highScore, 20, CANVAS_HEIGHT - 20);
+		context.fillStyle = gradient;
+		context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        context.shadowBlur = 0;
-    }
+		// Scanline effect (subtle)
+		context.globalAlpha = 0.03;
+		for (let y = 0; y < CANVAS_HEIGHT; y += 4) {
+			context.fillStyle = '#000';
+			context.fillRect(0, y, CANVAS_WIDTH, 2);
+		}
+		context.globalAlpha = 1;
+	}
 
+	renderPausePanel(context) {
+		const panelWidth = 320;
+		const panelHeight = 280;
+		const panelX = (CANVAS_WIDTH - panelWidth) / 2;
+		const panelY = (CANVAS_HEIGHT - panelHeight) / 2 - 20;
+
+		// Slide-in effect
+		const slideOffset = (1 - Math.min(1, this.menuSlideIn)) * -50;
+		const alpha = Math.min(1, this.menuSlideIn);
+
+		context.globalAlpha = alpha;
+		context.save();
+		context.translate(0, slideOffset);
+
+		// Panel background with gradient
+		const panelGrad = context.createLinearGradient(panelX, panelY, panelX, panelY + panelHeight);
+		panelGrad.addColorStop(0, 'rgba(20, 25, 35, 0.95)');
+		panelGrad.addColorStop(0.5, 'rgba(15, 18, 28, 0.95)');
+		panelGrad.addColorStop(1, 'rgba(10, 12, 20, 0.95)');
+
+		context.fillStyle = panelGrad;
+		this.roundRect(context, panelX, panelY, panelWidth, panelHeight, 12);
+		context.fill();
+
+		// Panel border with glow
+		context.strokeStyle = 'rgba(80, 120, 180, 0.6)';
+		context.lineWidth = 2;
+		context.shadowBlur = 15;
+		context.shadowColor = 'rgba(100, 150, 220, 0.5)';
+		this.roundRect(context, panelX, panelY, panelWidth, panelHeight, 12);
+		context.stroke();
+
+		// Inner border
+		context.strokeStyle = 'rgba(60, 80, 120, 0.4)';
+		context.lineWidth = 1;
+		context.shadowBlur = 0;
+		this.roundRect(context, panelX + 4, panelY + 4, panelWidth - 8, panelHeight - 8, 10);
+		context.stroke();
+
+		// Title
+		context.textAlign = 'center';
+		context.textBaseline = 'middle';
+
+		// Title glow
+		const pulse = Math.sin(this.animationTimer * 2) * 0.2 + 0.8;
+		context.font = '42px Dungeon';
+		context.shadowBlur = 20;
+		context.shadowColor = `rgba(100, 150, 255, ${pulse})`;
+		context.fillStyle = '#b8d4ff';
+		context.fillText('PAUSED', CANVAS_WIDTH / 2, panelY + 45);
+
+		// Decorative line under title
+		context.shadowBlur = 0;
+		const lineWidth = 180;
+		const lineY = panelY + 75;
+		const lineGrad = context.createLinearGradient(
+			CANVAS_WIDTH / 2 - lineWidth / 2, lineY,
+			CANVAS_WIDTH / 2 + lineWidth / 2, lineY
+		);
+		lineGrad.addColorStop(0, 'rgba(80, 120, 180, 0)');
+		lineGrad.addColorStop(0.5, 'rgba(80, 120, 180, 0.8)');
+		lineGrad.addColorStop(1, 'rgba(80, 120, 180, 0)');
+		context.strokeStyle = lineGrad;
+		context.lineWidth = 1;
+		context.beginPath();
+		context.moveTo(CANVAS_WIDTH / 2 - lineWidth / 2, lineY);
+		context.lineTo(CANVAS_WIDTH / 2 + lineWidth / 2, lineY);
+		context.stroke();
+
+		// Menu options
+		const menuStartY = panelY + 110;
+		const menuSpacing = 50;
+
+		this.menuOptions.forEach((option, index) => {
+			const y = menuStartY + index * menuSpacing;
+			const isSelected = index === this.selectedIndex;
+
+			if (isSelected) {
+				// Selection highlight bar
+				const highlightGrad = context.createLinearGradient(
+					panelX + 20, y - 15,
+					panelX + panelWidth - 20, y - 15
+				);
+				highlightGrad.addColorStop(0, 'rgba(80, 150, 255, 0)');
+				highlightGrad.addColorStop(0.5, 'rgba(80, 150, 255, 0.2)');
+				highlightGrad.addColorStop(1, 'rgba(80, 150, 255, 0)');
+				context.fillStyle = highlightGrad;
+				context.fillRect(panelX + 20, y - 18, panelWidth - 40, 36);
+
+				// Selection indicator
+				const indicatorPulse = Math.sin(this.animationTimer * 5) * 3;
+				context.font = '24px Dungeon';
+				context.shadowBlur = 10;
+				context.shadowColor = 'rgba(150, 200, 255, 0.8)';
+				context.fillStyle = '#88ccff';
+				context.fillText('>', CANVAS_WIDTH / 2 - 90 - indicatorPulse, y);
+				context.fillText('<', CANVAS_WIDTH / 2 + 90 + indicatorPulse, y);
+
+				// Selected text
+				context.font = '28px Dungeon';
+				context.shadowBlur = 12;
+				context.shadowColor = 'rgba(150, 200, 255, 0.9)';
+				context.fillStyle = '#ffffff';
+				context.fillText(option.label, CANVAS_WIDTH / 2, y);
+			} else {
+				// Unselected text
+				context.font = '24px Dungeon';
+				context.shadowBlur = 3;
+				context.shadowColor = 'rgba(0, 0, 0, 0.5)';
+				context.fillStyle = '#667788';
+				context.fillText(option.label, CANVAS_WIDTH / 2, y);
+			}
+		});
+
+		context.shadowBlur = 0;
+		context.restore();
+		context.globalAlpha = 1;
+	}
+
+	renderStats(context) {
+		// Stats at bottom corners
+		const alpha = Math.min(1, this.menuSlideIn);
+		context.globalAlpha = alpha;
+
+		context.font = '24px Dungeon';
+		context.textBaseline = 'bottom';
+
+		// Current score (right side)
+		context.textAlign = 'right';
+		context.shadowBlur = 6;
+		context.shadowColor = 'rgba(255, 200, 100, 0.5)';
+		context.fillStyle = '#ffd966';
+		context.fillText(`Souls: ${this.map.player.score}`, CANVAS_WIDTH - 30, CANVAS_HEIGHT - 25);
+
+		// High score (left side)
+		context.textAlign = 'left';
+		context.shadowColor = 'rgba(200, 150, 100, 0.5)';
+		context.fillStyle = '#c4a060';
+		context.fillText(`Best: ${this.map.player.highScore}`, 30, CANVAS_HEIGHT - 25);
+
+		// Hint
+		context.font = '12px Dungeon';
+		context.textAlign = 'center';
+		context.shadowBlur = 0;
+		context.fillStyle = 'rgba(100, 120, 150, 0.6)';
+		context.fillText('Press P to Quick Resume', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 10);
+
+		context.globalAlpha = 1;
+	}
+
+	// Helper: Rounded rectangle
+	roundRect(context, x, y, width, height, radius) {
+		context.beginPath();
+		context.moveTo(x + radius, y);
+		context.lineTo(x + width - radius, y);
+		context.quadraticCurveTo(x + width, y, x + width, y + radius);
+		context.lineTo(x + width, y + height - radius);
+		context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+		context.lineTo(x + radius, y + height);
+		context.quadraticCurveTo(x, y + height, x, y + height - radius);
+		context.lineTo(x, y + radius);
+		context.quadraticCurveTo(x, y, x + radius, y);
+		context.closePath();
+	}
 }
