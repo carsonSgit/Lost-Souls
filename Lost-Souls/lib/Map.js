@@ -4,6 +4,7 @@ import Vector from "./Vector.js";
 import ImageName from "../src/enums/ImageName.js";
 import Tile from "./Tile.js";
 import Layer from "./Layer.js";
+import Camera from "./Camera.js";
 import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
@@ -64,12 +65,24 @@ export default class Map {
 		this.platforms = [new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(100, 300 ), this),
 			new Platform(new Vector(Platform.PLATFORM_WIDTH + Platform.SUPPORTS_HEIGHT, Platform.PLATFORM_HEIGHT + Platform.SUPPORTS_HEIGHT), new Vector(300, 200 ), this)];
 
-		
+
 		this.door = new Door(new Vector(Door.DOOR_WIDTH, Door.DOOR_HEIGHT), Door.DOOR_SPAWN_VILLAGE, this);
+
+		// Initialize camera to follow the player
+		const ORIGINAL_WIDTH = 960;
+		const ORIGINAL_HEIGHT = 480;
+		this.camera = new Camera(
+			this.player,
+			new Vector(ORIGINAL_WIDTH, ORIGINAL_HEIGHT),
+			new Vector(ORIGINAL_WIDTH, ORIGINAL_HEIGHT),
+			2, // 2x zoom
+			0.05 // smooth speed (lower = smoother/slower, try 0.02-0.1)
+		);
 	}
 
 	update(dt) {
 		this.player.update(dt);
+		this.camera.update(dt);
 
 		this.platforms.forEach(platform => {
 			platform.update(dt);
@@ -230,6 +243,10 @@ export default class Map {
 
 		// Draw background at original size (will be scaled by transformation)
 		context.drawImage(backgroundImage, 0, 0, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
+
+		// Apply camera transformations (zoom and translation)
+		context.scale(this.camera.zoom, this.camera.zoom);
+		context.translate(-this.camera.position.x, -this.camera.position.y);
 
 		//this.bottomLayer.render();
 		if(this.collisionLayer == this.caveCollisionLayer){
