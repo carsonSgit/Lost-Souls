@@ -18,6 +18,7 @@
  */
 
 import GameStateName from "./enums/GameStateName.js";
+import SoundName from "./enums/SoundName.js";
 import Game from "../lib/Game.js";
 import {
 	canvas,
@@ -76,14 +77,29 @@ stateMachine.add(GameStateName.Pause, new PauseState());
 stateMachine.change(GameStateName.TitleScreen);
 // stateMachine.change(GameStateName.Play)
 
+let audioUnlocked = false;
+
+function unlockAudio() {
+	if (!audioUnlocked) {
+		audioUnlocked = true;
+		if (stateMachine.currentState && stateMachine.currentState.name === GameStateName.TitleScreen) {
+			sounds.play(SoundName.VillageTheme);
+		}
+	}
+}
+
 // Add event listeners for player input.
 canvas.addEventListener('keydown', event => {
 	keys[event.key] = true;
+	unlockAudio();
 });
 
 canvas.addEventListener('keyup', event => {
 	keys[event.key] = false;
 });
+
+canvas.addEventListener('click', unlockAudio);
+canvas.addEventListener('touchstart', unlockAudio);
 
 const game = new Game(stateMachine, context, canvas.width, canvas.height);
 

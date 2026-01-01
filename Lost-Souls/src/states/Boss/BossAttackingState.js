@@ -94,9 +94,9 @@ export default class BossAttackingState extends State{
         if (this.boss.map && this.boss.map.entityEffects) {
             this.boss.map.entityEffects.createEnemySlash(x, y, direction, 'boss');
 
-            // Extra fire sparks for boss attacks
+            // Reduced spark count for better performance (was 8, now 3)
             this.boss.map.entityEffects.createSpark(x, y, {
-                count: 8,
+                count: 3,
                 color: { r: 255, g: 100, b: 50 },
                 speed: 4
             });

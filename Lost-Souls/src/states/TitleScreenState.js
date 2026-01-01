@@ -283,7 +283,7 @@ export default class TitleScreenState extends State {
 		context.textBaseline = 'middle';
 
 		// Deep shadow layers
-		context.font = '72px Dungeon';
+		context.font = '96px Dungeon';
 		context.globalAlpha = 0.6;
 		context.fillStyle = 'rgba(0, 0, 0, 0.9)';
 		context.fillText('Lost Souls', CANVAS_WIDTH / 2 + 6, titleY + 6);
@@ -320,11 +320,11 @@ export default class TitleScreenState extends State {
 		// Subtitle
 		const subtitleOpacity = 0.5 + Math.sin(this.animationTimer * 2) * 0.2;
 		context.globalAlpha = subtitleOpacity;
-		context.font = '18px Dungeon';
+		context.font = '24px Dungeon';
 		context.fillStyle = '#c4a070';
 		context.shadowBlur = 10;
 		context.shadowColor = 'rgba(200, 160, 100, 0.5)';
-		context.fillText('A Dark Fantasy Adventure', CANVAS_WIDTH / 2, titleY + 50);
+		context.fillText('A Dark Fantasy Adventure', CANVAS_WIDTH / 2, titleY + 60);
 		context.shadowBlur = 0;
 		context.globalAlpha = 1;
 	}
@@ -373,29 +373,29 @@ export default class TitleScreenState extends State {
 
 				// Animated selection indicators
 				const pulse = Math.sin(this.animationTimer * 4) * 5;
-				context.font = '28px Dungeon';
+				context.font = '36px Dungeon';
 				context.shadowBlur = 12;
 				context.shadowColor = 'rgba(255, 180, 100, 0.9)';
 				context.fillStyle = '#ffd700';
-				context.fillText('>', CANVAS_WIDTH / 2 - 120 - pulse, y);
-				context.fillText('<', CANVAS_WIDTH / 2 + 120 + pulse, y);
+				context.fillText('>', CANVAS_WIDTH / 2 - 140 - pulse, y);
+				context.fillText('<', CANVAS_WIDTH / 2 + 140 + pulse, y);
 
 				// Main text with glow
-				context.font = '32px Dungeon';
+				context.font = '40px Dungeon';
 				context.shadowBlur = 15;
 				context.shadowColor = 'rgba(255, 200, 100, 1)';
 				context.fillStyle = '#fff5dc';
 				context.fillText(option.label, CANVAS_WIDTH / 2, y);
 
 				// Description below
-				context.font = '14px Dungeon';
+				context.font = '18px Dungeon';
 				context.shadowBlur = 5;
 				context.shadowColor = 'rgba(0, 0, 0, 0.8)';
 				context.fillStyle = 'rgba(200, 180, 150, 0.8)';
-				context.fillText(option.description, CANVAS_WIDTH / 2, y + 22);
+				context.fillText(option.description, CANVAS_WIDTH / 2, y + 26);
 			} else {
 				// Non-selected option
-				context.font = '28px Dungeon';
+				context.font = '36px Dungeon';
 				context.shadowBlur = 4;
 				context.shadowColor = 'rgba(0, 0, 0, 0.6)';
 				context.fillStyle = '#888888';
@@ -436,7 +436,7 @@ export default class TitleScreenState extends State {
 		context.fill();
 
 		// Version/hint at bottom
-		context.font = '12px Dungeon';
+		context.font = '16px Dungeon';
 		context.textAlign = 'center';
 		context.fillStyle = 'rgba(100, 100, 100, 0.6)';
 		context.fillText('Use W/S or Arrow Keys to Navigate | Enter to Select', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 25);

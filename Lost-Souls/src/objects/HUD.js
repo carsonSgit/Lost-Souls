@@ -219,8 +219,8 @@ export default class HUD {
 		const barY = this.padding + 8;
 
 		// Ornate frame dimensions
-		const frameWidth = barWidth + 30;
-		const frameHeight = barHeight + 24;
+		const frameWidth = barWidth + 20;
+		const frameHeight = barHeight + 16;
 		const frameX = this.padding;
 		const frameY = this.padding;
 
@@ -303,7 +303,7 @@ export default class HUD {
 		// Health text with ornate styling
 		context.shadowBlur = 4;
 		context.shadowColor = 'rgba(0, 0, 0, 0.9)';
-		context.font = '16px Dungeon';
+		context.font = '18px Dungeon';
 		context.fillStyle = '#ffffff';
 		context.textAlign = 'center';
 		context.textBaseline = 'middle';
@@ -312,10 +312,6 @@ export default class HUD {
 			barX + barWidth / 2,
 			barY + barHeight / 2 + 1
 		);
-
-		// Skull icon (decorative)
-		context.shadowBlur = 0;
-		this.drawSkullIcon(frameX + frameWidth - 18, frameY + frameHeight / 2);
 	}
 
 	/**
@@ -326,13 +322,13 @@ export default class HUD {
 		const labelText = 'SOULS';
 
 		// Measure for positioning
-		context.font = '28px Dungeon';
+		context.font = '36px Dungeon';
 		const scoreWidth = context.measureText(scoreText).width;
-		context.font = '12px Dungeon';
+		context.font = '14px Dungeon';
 		const labelWidth = context.measureText(labelText).width;
 
-		const panelWidth = Math.max(scoreWidth, labelWidth) + 50;
-		const panelHeight = 50;
+		const panelWidth = Math.max(scoreWidth, labelWidth) + 60;
+		const panelHeight = 60;
 		const panelX = CANVAS_WIDTH - panelWidth - this.padding;
 		const panelY = this.padding;
 
@@ -341,28 +337,28 @@ export default class HUD {
 		this.drawOrnateFrame(panelX, panelY, panelWidth, panelHeight);
 
 		// Soul icon glow
-		const iconX = panelX + 20;
+		const iconX = panelX + 24;
 		const iconY = panelY + panelHeight / 2;
 
-		const iconGlow = context.createRadialGradient(iconX, iconY, 0, iconX, iconY, 15);
+		const iconGlow = context.createRadialGradient(iconX, iconY, 0, iconX, iconY, 18);
 		iconGlow.addColorStop(0, 'rgba(255, 200, 100, 0.6)');
 		iconGlow.addColorStop(0.5, 'rgba(255, 180, 50, 0.2)');
 		iconGlow.addColorStop(1, 'rgba(255, 150, 0, 0)');
 		context.fillStyle = iconGlow;
 		context.beginPath();
-		context.arc(iconX, iconY, 15, 0, Math.PI * 2);
+		context.arc(iconX, iconY, 18, 0, Math.PI * 2);
 		context.fill();
 
 		// Soul orb
 		context.fillStyle = '#ffd966';
-		context.shadowBlur = 8;
+		context.shadowBlur = 10;
 		context.shadowColor = 'rgba(255, 200, 100, 0.8)';
 		context.beginPath();
-		context.arc(iconX, iconY, 6, 0, Math.PI * 2);
+		context.arc(iconX, iconY, 8, 0, Math.PI * 2);
 		context.fill();
 
 		// Score number
-		context.font = '28px Dungeon';
+		context.font = '36px Dungeon';
 		context.textAlign = 'right';
 		context.textBaseline = 'middle';
 		context.shadowBlur = 6;
@@ -371,10 +367,10 @@ export default class HUD {
 		context.fillText(scoreText, panelX + panelWidth - 15, panelY + panelHeight / 2 - 5);
 
 		// Label
-		context.font = '10px Dungeon';
+		context.font = '14px Dungeon';
 		context.fillStyle = '#aa8844';
 		context.shadowBlur = 2;
-		context.fillText(labelText, panelX + panelWidth - 15, panelY + panelHeight / 2 + 12);
+		context.fillText(labelText, panelX + panelWidth - 15, panelY + panelHeight / 2 + 14);
 
 		context.shadowBlur = 0;
 	}
@@ -385,12 +381,12 @@ export default class HUD {
 	renderHighScore() {
 		const scoreText = `Best: ${this.player.highScore}`;
 
-		context.font = '14px Dungeon';
+		context.font = '18px Dungeon';
 		const textWidth = context.measureText(scoreText).width;
-		const panelWidth = textWidth + 24;
-		const panelHeight = 22;
+		const panelWidth = textWidth + 28;
+		const panelHeight = 28;
 		const panelX = CANVAS_WIDTH - panelWidth - this.padding;
-		const panelY = this.padding + 56;
+		const panelY = this.padding + 66;
 
 		// Small panel
 		context.fillStyle = 'rgba(15, 10, 8, 0.75)';
@@ -404,13 +400,13 @@ export default class HUD {
 		context.stroke();
 
 		// Text
-		context.font = '14px Dungeon';
+		context.font = '18px Dungeon';
 		context.textAlign = 'right';
 		context.textBaseline = 'middle';
 		context.shadowBlur = 3;
 		context.shadowColor = 'rgba(0, 0, 0, 0.8)';
 		context.fillStyle = '#c4a060';
-		context.fillText(scoreText, panelX + panelWidth - 12, panelY + panelHeight / 2);
+		context.fillText(scoreText, panelX + panelWidth - 14, panelY + panelHeight / 2);
 
 		context.shadowBlur = 0;
 	}
@@ -430,13 +426,13 @@ export default class HUD {
 
 		// Boss name
 		const bossName = this.bossEnemy.name || 'ANCIENT EVIL';
-		context.font = '20px Dungeon';
+		context.font = '28px Dungeon';
 		context.textAlign = 'center';
 		context.textBaseline = 'bottom';
 		context.shadowBlur = 8;
 		context.shadowColor = 'rgba(150, 0, 0, 0.8)';
 		context.fillStyle = '#ff6644';
-		context.fillText(bossName, CANVAS_WIDTH / 2, barY - 8);
+		context.fillText(bossName, CANVAS_WIDTH / 2, barY - 10);
 
 		// Frame background
 		context.fillStyle = 'rgba(20, 10, 10, 0.9)';
@@ -682,7 +678,7 @@ export default class HUD {
 		context.font = '14px Dungeon';
 		context.textAlign = 'center';
 		context.textBaseline = 'middle';
-		context.fillText('*', x, y);
+		context.fillText('*!!!', x, y);
 	}
 
 	// Helper: Draw corner decoration

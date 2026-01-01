@@ -176,7 +176,7 @@ export default class EntityEffects {
 
 		this.createSlashTrail(x, y, direction, {
 			color,
-			size: enemyType === 'boss' ? 60 : 35,
+			size: enemyType === 'boss' ? 50 : 35, // Reduced from 60 to 50 for better performance
 			duration: 0.25,
 		});
 	}
@@ -921,7 +921,7 @@ export default class EntityEffects {
 			context.shadowColor = `rgb(${spark.color.r}, ${spark.color.g}, ${spark.color.b})`;
 
 			if (spark.isSoul) {
-				// Souls: Simplified ethereal wisp shape
+				// Souls: Simplified ethereal wisp shape   
 				const gradient = context.createRadialGradient(
 					spark.x, spark.y, 0,
 					spark.x, spark.y, spark.size * 2
