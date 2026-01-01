@@ -70,7 +70,6 @@ export default class BossAttackingState extends State{
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
 
-            // Boss slash effect - bigger and more dramatic
             this.createSlashEffect(hitboxX + hitboxWidth / 2, hitboxY + hitboxHeight / 2, 'left');
         }else if(this.boss.direction === Direction.Right) {// Right side hitbox
             let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
@@ -82,7 +81,6 @@ export default class BossAttackingState extends State{
 
             this.boss.attackHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
 
-            // Boss slash effect - bigger and more dramatic
             this.createSlashEffect(hitboxX + hitboxWidth / 2, hitboxY + hitboxHeight / 2, 'right');
         }
     }
@@ -92,14 +90,7 @@ export default class BossAttackingState extends State{
      */
     createSlashEffect(x, y, direction) {
         if (this.boss.map && this.boss.map.entityEffects) {
-            this.boss.map.entityEffects.createEnemySlash(x, y, direction, 'boss');
-
-            // Reduced spark count for better performance (was 8, now 3)
-            this.boss.map.entityEffects.createSpark(x, y, {
-                count: 3,
-                color: { r: 255, g: 100, b: 50 },
-                speed: 4
-            });
+            this.boss.map.entityEffects.createBossSlash(x, y, direction);
         }
     }
 }

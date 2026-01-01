@@ -176,9 +176,62 @@ export default class EntityEffects {
 
 		this.createSlashTrail(x, y, direction, {
 			color,
-			size: enemyType === 'boss' ? 50 : 35, // Reduced from 60 to 50 for better performance
+			size: enemyType === 'boss' ? 50 : 35,
 			duration: 0.25,
 		});
+	}
+
+	createBossSlash(x, y, direction) {
+		let startAngle, endAngle;
+		if (direction === 'right') {
+			startAngle = -Math.PI * 0.6;
+			endAngle = Math.PI * 0.6;
+		} else {
+			startAngle = Math.PI * 0.4;
+			endAngle = Math.PI * 1.6;
+		}
+
+		this.slashTrails.push({
+			x,
+			y,
+			startAngle,
+			endAngle,
+			currentAngle: startAngle,
+			size: 40,
+			color: { r: 255, g: 100, b: 50 },
+			alpha: 1,
+			duration: 0.18,
+			timer: 0,
+			points: [],
+			optimized: true,
+			flameEffect: true, 
+		});
+
+		// Add simple flame embers (minimal particles for effect)
+		const angleRange = endAngle - startAngle;
+		for (let i = 0; i < 4; i++) {
+			const particleAngle = startAngle + (angleRange * i / 3);
+			const px = x + Math.cos(particleAngle) * 40;
+			const py = y + Math.sin(particleAngle) * 40;
+			
+			this.sparks.push({
+				x: px,
+				y: py,
+				vx: Math.cos(particleAngle) * 2,
+				vy: Math.sin(particleAngle) * 2 - 1, 
+				size: Math.random() * 2 + 2,
+				color: i % 2 === 0 ? { r: 255, g: 180, b: 60 } : { r: 255, g: 100, b: 40 },
+				alpha: 1,
+				life: 0.15,
+				timer: 0,
+				hasTrail: false,
+				trail: [],
+				rotation: 0,
+				rotationSpeed: 0,
+				shardShape: null,
+				simpleEmber: true,
+			});
+		}
 	}
 
 	// ==================== IMPACT EFFECTS ====================
@@ -701,8 +754,8 @@ export default class EntityEffects {
 			trail.currentAngle = trail.startAngle + (trail.endAngle - trail.startAngle) * Math.min(1, progress * 2);
 			trail.alpha = 1 - progress;
 
-			// Add points to trail
-			if (progress < 0.5) {
+			// Add points to trail (skip for optimized trails to save performance)
+			if (!trail.optimized && progress < 0.5) {
 				trail.points.push({
 					angle: trail.currentAngle,
 					alpha: trail.alpha,
@@ -879,31 +932,99 @@ export default class EntityEffects {
 			context.save();
 			context.translate(trail.x, trail.y);
 
-			// Outer energy trail
-			context.strokeStyle = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha * 0.7})`;
-			context.lineWidth = 6;
-			context.lineCap = 'round';
-			context.shadowBlur = 15;
-			context.shadowColor = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha})`;
+			if (trail.flameEffect) {
+				// Flame-styled boss slash with layered colors (pixel art style)
+				context.globalAlpha = trail.alpha;
+				context.lineCap = 'butt'; // Sharp edges for pixel art look
 
-			context.beginPath();
-			context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
-			context.stroke();
+				// Outer layer - Dark red/orange
+				context.strokeStyle = `rgba(180, 40, 20, ${trail.alpha})`;
+				context.lineWidth = 12;
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
 
-			// Inner bright core line
-			context.strokeStyle = `rgba(255, 255, 255, ${trail.alpha * 0.8})`;
-			context.lineWidth = 2;
-			context.shadowBlur = 8;
-			context.beginPath();
-			context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
-			context.stroke();
+				// Middle layer - Bright orange
+				context.strokeStyle = `rgba(255, 100, 40, ${trail.alpha})`;
+				context.lineWidth = 8;
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
 
+				// Inner layer - Yellow-orange hot core
+				context.strokeStyle = `rgba(255, 180, 60, ${trail.alpha})`;
+				context.lineWidth = 4;
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
+
+				// Bright core - White/yellow flash
+				context.strokeStyle = `rgba(255, 240, 200, ${trail.alpha * 0.8})`;
+				context.lineWidth = 2;
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
+
+				// Add flame "tongues" - small offset arcs for texture
+				if (trail.alpha > 0.5) {
+					context.strokeStyle = `rgba(255, 120, 50, ${trail.alpha * 0.6})`;
+					context.lineWidth = 3;
+					for (let i = 0; i < 3; i++) {
+						const offset = (i - 1) * 3;
+						context.beginPath();
+						context.arc(0, 0, trail.size + offset, trail.startAngle, trail.currentAngle);
+						context.stroke();
+					}
+				}
+
+				context.globalAlpha = 1;
+			} else if (trail.optimized) {
+				// Other optimized slashes (non-flame)
+				context.globalAlpha = trail.alpha;
+				context.strokeStyle = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, 0.8)`;
+				context.lineWidth = 4;
+				context.lineCap = 'round';
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
+				context.globalAlpha = 1;
+			} else {
+				// Full rendering for player/other attacks
+				context.strokeStyle = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha * 0.7})`;
+				context.lineWidth = 6;
+				context.lineCap = 'round';
+				context.shadowBlur = 15;
+				context.shadowColor = `rgba(${trail.color.r}, ${trail.color.g}, ${trail.color.b}, ${trail.alpha})`;
+
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
+
+				// Inner bright core line
+				context.strokeStyle = `rgba(255, 255, 255, ${trail.alpha * 0.8})`;
+				context.lineWidth = 2;
+				context.shadowBlur = 8;
+				context.beginPath();
+				context.arc(0, 0, trail.size, trail.startAngle, trail.currentAngle);
+				context.stroke();
+			}
+
+			context.shadowBlur = 0;
 			context.restore();
 		});
 	}
 
 	renderSparks() {
 		this.sparks.forEach(spark => {
+			// Simple ember rendering (fast path for boss flames)
+			if (spark.simpleEmber) {
+				context.globalAlpha = spark.alpha;
+				context.fillStyle = `rgb(${spark.color.r}, ${spark.color.g}, ${spark.color.b})`;
+				context.fillRect(Math.floor(spark.x), Math.floor(spark.y), spark.size, spark.size);
+				context.globalAlpha = 1;
+				return;
+			}
+
 			// Draw trail first
 			if (spark.hasTrail && spark.trail && spark.trail.length > 1) {
 				context.beginPath();

@@ -672,16 +672,6 @@ export default class HUD {
 		context.stroke();
 	}
 
-	// Helper: Draw skull icon
-	drawSkullIcon(x, y) {
-		context.fillStyle = 'rgba(200, 180, 150, 0.8)';
-		context.font = '14px Dungeon';
-		context.textAlign = 'center';
-		context.textBaseline = 'middle';
-		context.fillText('*!!!', x, y);
-	}
-
-	// Helper: Draw corner decoration
 	drawCornerDecoration(x, y, direction) {
 		context.fillStyle = 'rgba(150, 50, 50, 0.8)';
 		context.beginPath();
@@ -692,7 +682,6 @@ export default class HUD {
 		context.fill();
 	}
 
-	// Helper: Rounded rectangle
 	roundRect(x, y, width, height, radius) {
 		context.beginPath();
 		context.moveTo(x + radius, y);
