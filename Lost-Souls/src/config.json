@@ -2,37 +2,37 @@
 	"images": [
 		{
 			"name": "eye_attack",
-			"path": "./assets/images/Flying_eye/Attack.png",
+			"path": "./assets/images/Flying_Eye/Attack.png",
 			"width": 900,
 			"height": 150
 		},
 		{
 			"name":"eye_death",
-			"path": "./assets/images/Flying_eye/Death.png",
+			"path": "./assets/images/Flying_Eye/Death.png",
 			"width": 600,
 			"height": 150
 		},
 		{
 			"name": "eye_flight",
-			"path": "./assets/images/Flying_eye/Flight.png",
+			"path": "./assets/images/Flying_Eye/Flight.png",
 			"width": 1200,
 			"height": 150
 		},
 		{
 			"name": "eye_projectile",
-			"path": "./assets/images/Flying_eye/projectile_sprite.png",
+			"path": "./assets/images/Flying_Eye/projectile_sprite.png",
 			"width": 384,
 			"height": 48
 		},
 		{
 			"name": "eye_spin",
-			"path": "./assets/images/Flying_eye/Spin_attack.png",
+			"path": "./assets/images/Flying_Eye/Spin_attack.png",
 			"width": 1200,
 			"height": 150
 		},
 		{
 			"name": "eye_hit",
-			"path": "./assets/images/Flying_eye/Take_hit.png",
+			"path": "./assets/images/Flying_Eye/Take_hit.png",
 			"width": 600,
 			"height": 150
 		},
